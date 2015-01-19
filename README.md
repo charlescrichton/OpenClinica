@@ -21,6 +21,37 @@ OpenClinica is an open source software for Electronic Data Capture (EDC) and Cli
 - [Release notes](https://docs.openclinica.com/release-notes)
 - [Extensions/Contributions](https://community.openclinica.com/extensions)
 
+
+## Compiling
+
+### Using maven
+
+```
+mvn clean install -Dmaven.test.skip=true
+```
+
+### SSL Error on Mac OS X when compiling
+
+To overcome the following error on a MAC:
+
+```
+ sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+```
+
+Enter the following which adds the `dev.openclinica.com` SSL certificate to be recognised by Java.
+
+```bash
+echo -n | openssl s_client -connect dev.openclinica.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/dev.openclinica.cert
+export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
+sudo echo $JAVA_HOME
+sudo keytool -keystore $JAVA_HOME/jre/lib/security/cacerts -import -alias dev.openclinica.com -file /tmp/dev.openclinica.cert
+```
+
+* When asked for the `keystore password:` use  `changeit`.
+* When asked if you `trust this certificate:` answer `yes`.
+
+
+
 ## Request a feature
 
 To request a feature please submit a ticket on [Jira](https://jira.openclinica.com/) or start a discussion on the [OpenClinica Forum](http://forums.openclinica.com).
