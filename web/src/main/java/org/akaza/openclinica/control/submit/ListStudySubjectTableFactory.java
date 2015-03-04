@@ -129,18 +129,19 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
         resformat = ResourceBundleProvider.getFormatBundle(locale);
         tableFacade.setColumnProperties(columnNames);
         Row row = tableFacade.getTable().getRow();
+        /* Columns reordered by crc (2015-03-04) */
         int index = 0;
         configureColumn(row.getColumn(columnNames[index]), resword.getString("study_subject_ID"), null, null);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), resword.getString("secondary_ID"), null, null);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), resword.getString("gender"), null, null, true, false);
         ++index;
         configureColumn(row.getColumn(columnNames[index]), resword.getString("subject_status"), new StatusCellEditor(), new StatusDroplistFilterEditor());
         ++index;
         configureColumn(row.getColumn(columnNames[index]), resword.getString("site_id"), null, null);
         ++index;
         configureColumn(row.getColumn(columnNames[index]), resword.getString("rule_oid"), null, null);
-        ++index;
-        configureColumn(row.getColumn(columnNames[index]), resword.getString("gender"), null, null, true, false);
-        ++index;
-        configureColumn(row.getColumn(columnNames[index]), resword.getString("secondary_ID"), null, null);
         ++index;
         // group class columns
         for (int i = index; i < index + studyGroupClasses.size(); i++) {
@@ -321,14 +322,15 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
         return false;
     }
 
+    /* Changed by crc (2015-03-04) to reorder the columns */
     private void getColumnNames() {
         ArrayList<String> columnNamesList = new ArrayList<String>();
         columnNamesList.add("label");
+        columnNamesList.add("secondaryLabel");
+        columnNamesList.add("subject.charGender");
         columnNamesList.add("status");
         columnNamesList.add("enrolledAt");
         columnNamesList.add("oid");
-        columnNamesList.add("subject.charGender");
-        columnNamesList.add("secondaryLabel");
         for (StudyGroupClassBean studyGroupClass : getStudyGroupClasses()) {
             columnNamesList.add("sgc_" + studyGroupClass.getId());
         }
@@ -339,14 +341,15 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
         columnNames = columnNamesList.toArray(columnNames);
     }
 
+    /* Changed by crc (2015-03-04) to reorder the columns */
     private void getColumnNamesMap() {
         ArrayList<String> columnNamesList = new ArrayList<String>();
         columnNamesList.add("studySubject.label");
+        columnNamesList.add("studySubject.secondaryLabel");
+        columnNamesList.add("subject.charGender");
         columnNamesList.add("studySubject.status");
         columnNamesList.add("enrolledAt");
         columnNamesList.add("studySubject.oid");
-        columnNamesList.add("subject.charGender");
-        columnNamesList.add("studySubject.secondaryLabel");
         for (StudyGroupClassBean studyGroupClass : getStudyGroupClasses()) {
             columnNamesList.add("sgc_" + studyGroupClass.getId());
         }

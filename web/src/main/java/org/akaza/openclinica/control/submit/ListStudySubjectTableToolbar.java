@@ -101,7 +101,8 @@ public class ListStudySubjectTableToolbar extends DefaultToolbar {
          *      java.util.Locale)
          */
         String getIndexes() {
-            String result = "1,2,3,4,5";
+            /* Modified by crc so that the first 3 columns (0,1,2) are not hidden */
+            String result = "3,4,5";
             for (int i = 0; i < studyGroupClasses.size(); i++) {
                 result += "," + (5 + i + 1);
             }
