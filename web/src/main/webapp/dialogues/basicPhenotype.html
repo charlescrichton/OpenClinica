@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="US-ASCII">
+
+
+<style>
+form .form-group {
+    margin-bottom: 4px !important; 
+}
+
+.panel-heading {
+	padding: 2px 5px;
+}
+.panel-body{
+	padding:5px;
+}
+
+h1 {
+font-size: 18px !important;
+line-height: 24px !important;
+font-weight: bold !important;
+}
+
+
+.ui-dialog-buttonpane {
+	padding: .1em 1em .1em .4em !important;
+}
+
+
+.ui-button-text {
+ font-size:10px !important;
+ }
+
+.ui-dialog-title {
+	font-weight: normal !important;
+	font-size: 14px !important;
+	font-family: Tahoma, Arial, Helvetica, Sans-Serif !important;
+}
+ 
+
+</style>
+
+<script type = 'text/javascript'>
+
+	 jQuery(function(){ 
+	 		var phenotypeNameSelect = "select.allNarrowPhenotypeNamesFlat";
+	 		var phenotypeIdInput    = "input.phenotypeId";   	 
+	    	jQuery(phenotypeNameSelect).change(function(){
+	    		jQuery(phenotypeIdInput).val(jQuery(phenotypeNameSelect).val());
+	    });    
+	 });
+       
+</script>
+
+
+
+
+
+</head>
+<body>
+ 
+ 		<div class="tablebox_center">		
+ 					<div class="basicPhenotypeForm">	
+			<table border="0" cellpadding="0" cellspacing="0">
+			    <tbody>
+					<tr>
+						<td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">
+			                    				        	Phenotype Description
+			                    				        </td>
+		                    				        	<td valign="top" nowrap="nowrap">
+		                    				        		 <select id="phenotypeName" style="width:200px;" class="formfield allNarrowPhenotypeNamesFlat" ></select>
+													    </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Phenotype Id</td>
+			                    				        	<td valign="top" nowrap="nowrap">
+			                    				        		
+			                    				        		<input  id="phenotypeId"  style="width:200px;" class="phenotypeId" readonly />  			
+			                    				        		
+			                    				        		
+			                    				        	</td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+						<td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">
+			                    				        	Phenotype present
+			                    				        </td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select  id="phenotypepresent" style="width:200px;" class="formfield phenotypepresent">
+											  			  	  	<option value='unknown'>Unknown</option>
+												              	<option value='yes'>Yes</option>
+												              	<option value='no'>No</option>
+											  			  	 </select>	  			  	 
+													      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+					<tr class="aka_stripes">
+		        		<td class="aka_header_border"><b>Modifiers</b> </td>
+		    		</tr>
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Laterality</td>
+			                    				        	<td valign="top" nowrap="nowrap">
+				                    				        	<select id="laterality" tabindex="2" style="width:200px;" name="input32" class="formfield laterality">
+																	<option selected="selected" value=""></option>				  			  			
+										  			  				<option value='Bilateral'>Bilateral</option>
+										  			  				<option value='Left'>Left</option>
+										  			  				<option value='Right'>Right</option>
+										  			  				<option value='Unilateral'>Unilateral</option>	
+														         </select>
+													         
+													      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Onset</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="onset" tabindex="2" style="width:200px;" name="onset" class="formfield onset">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Embryonal onset'>Embryonal onset</option>
+									  			  				<option value='Fetal onset'>Fetal onset</option>
+									  			  				<option value='Neonatal onset'>Neonatal onset</option>
+									  			  				<option value='Infantile onset'>Infantile onset</option>	  			  				
+									  			  				<option value='Childhood onset'>Childhood onset</option>
+									  			  				<option value='Juvenile onset'>Juvenile onset</option>
+									  			  				<option value='Young onset'>Young onset</option>
+									  			  				<option value='Middle age onset'>Middle age onset</option>
+									  			  				<option value='Late onset'>Late onset</option>
+													         </select>
+												      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Progression</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="progression" tabindex="2" style="width:200px;" name="onset" class="formfield progression">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Noneprogressive'>Noneprogressive</option>
+									  			  				<option value='Progressive'>Progressive</option>	
+													         </select>
+												      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Severity</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="severity" tabindex="2" style="width:200px;" name="onset" class="formfield severity">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Borderline'>Borderline</option>
+									  			  				<option value='Mild'>Mild</option>
+									  			  				<option value='Moderate'>Moderate</option>
+									  			  				<option value='Profound'>Profound</option>
+									  			  				<option value='Severe'>Severe</option>		  	
+													         </select>
+												      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Spatial Pattern</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="spatialpattern" tabindex="2" style="width:200px;" name="onset" class="formfield spatialpattern">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Distal'>Distal</option>
+									  			  				<option value='Generalized'>Generalized</option>
+									  			  				<option value='Localized'>Localized</option>
+									  			  				<option value='Proximal'>Proximal</option>	  	
+													         </select>
+												      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+					
+					
+					
+			</tbody>
+			</table>
+	
+</div>
+
+</div>
+	</body>
+</html>
