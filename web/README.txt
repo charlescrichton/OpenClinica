@@ -125,4 +125,3 @@ Your fair use and other rights are in no way affected by the above.
 
 For the full GNU LGPL License text, see LICENSE.txt included in this package.
 
-For additional licensning see [LICENSE.md]
