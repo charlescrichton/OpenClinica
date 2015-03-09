@@ -508,7 +508,7 @@ Waltham, MA 02451
 	##Additional license
 
 	OpenClinica 3.4 with Genomics England modifications
-	Copyright (C) 2015 Charles Crichton, Oxford NIHR Biomedical Research Centre and Oxford University
+	Copyright (C) 2015 Charles Crichton, James Welch, Soheil Saifipour, Oxford NIHR Biomedical Research Centre and Oxford University
 
 	This library is free software; you can redistribute it and/or
 	modify it under the terms of the GNU Lesser General Public
