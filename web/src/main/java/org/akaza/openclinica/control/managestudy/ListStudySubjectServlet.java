@@ -320,12 +320,12 @@ public abstract class ListStudySubjectServlet extends SecureController {
         ArrayList columnArray = new ArrayList();
 
         columnArray.add(resword.getString("study_subject_ID"));
-        columnArray.add(resword.getString("subject_status"));
-
-        columnArray.add(resword.getString("OID"));
-        columnArray.add(resword.getString("gender"));
-        // new
         columnArray.add(resword.getString("secondary_ID"));
+        columnArray.add(resword.getString("gender"));
+
+        columnArray.add(resword.getString("subject_status"));
+        columnArray.add(resword.getString("OID"));
+        // new
         for (int i = 0; i < studyGroupClasses.size(); i++) {
             StudyGroupClassBean sgc = (StudyGroupClassBean) studyGroupClasses.get(i);
             columnArray.add(sgc.getName());

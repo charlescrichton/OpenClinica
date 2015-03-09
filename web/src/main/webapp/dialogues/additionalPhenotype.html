@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="US-ASCII">
+
+
+<style>
+form .form-group {
+    margin-bottom: 4px !important; 
+}
+
+.ui-tooltip {
+    white-space: pre-line;
+}
+
+.panel-heading {
+	padding: 2px 5px;
+}
+.panel-body{
+	padding:5px;
+}
+
+h1 {
+font-size: 18px !important;
+line-height: 24px !important;
+font-weight: bold !important;
+}
+
+
+
+
+.ui-dialog-buttonpane {
+	padding: .1em 1em .1em .4em !important;
+}
+
+
+.ui-button-text {
+ font-size:10px !important;
+ }
+
+.ui-dialog-title {
+	font-weight: normal !important;
+	font-size: 14px !important;
+	font-family: Tahoma, Arial, Helvetica, Sans-Serif !important;
+}
+
+
+</style>
+
+<script type = 'text/javascript'>
+
+
+
+ // $(function() {
+  //  $( "#accordion" ).accordion({
+    //    collapsible: true,
+     //   active: 2
+   // });
+  //});
+
+ 
+//<div id="accordion">
+ // <h3>Broader & Narrower Terms</h3>
+ // <div>First content panel</div>
+//</div>
+
+
+	 
+	function create_Narrower_Broader (inputElement,inputElementId, NarrowerElement,BroaderElement){
+		var cache = {};
+	   	
+	 	inputElement.autocomplete({
+			minLength : 3,
+			source : function(request, response) {
+				var term = request.term;
+				
+				if (term in cache) {
+					response(cache[term]);
+					return;
+				}
+				request["dataSourceName"] = "hp.obo";
+	
+				jQuery.getJSON("/OCService/OntologyService/LookupService", request, function(data, status, xhr) {				
+					cache[term] = data;
+					response(data);
+				});
+			},		
+			//when item is selected from the list
+			select : function(event, ui){				
+			   inputElementId.val(ui.item.id[0]).change();
+			}
+			,
+   			change: function(event,ui){
+  					//if no item is selected and invalid value is entered
+  					if(ui.item == null){
+  						jQuery(this).val("");
+   					    inputElementId.val("");
+  					}
+   			}
+			
+	});	
+};
+
+//sort phenotypes based on its value in client side
+function comparePhenotypes(p1,p2){	
+	if(p1.name < p2.name)
+		return -1;
+	else if(p1.name > p2.name)
+		return 1;
+	else
+		return 0;
+}
+
+function fill_Phenotypes(inputEelement,inputElementId,selectElement,phynotypes){
+	
+	//remove all available options
+	selectElement.find('option').remove().end();
+	
+	//make its size 5 to show the list of the items
+	selectElement.attr("size","5")
+
+	
+	//sort them before populating the list items
+	if( phynotypes == undefined )
+		return;
+		
+	
+	phynotypes.sort(comparePhenotypes);
+	
+		
+	for (var i = 0; i < phynotypes.length; i++) {	
+		
+		var tooltip =  phynotypes[i].name;
+		if(phynotypes[i].def != undefined){
+			tooltip = tooltip + "\n\n" +phynotypes[i].def;
+		}
+		
+		var option = jQuery("<option></option>").val(phynotypes[i].id).text(phynotypes[i].name);
+		if(tooltip.length > 0){
+	      option.attr("title", tooltip)
+		}
+		
+		//Take care! dbclick on options doesn't work properly on ie,
+		//try to bind this to select not option
+		//http://stackoverflow.com/questions/5152845/double-click-event-on-option-of-listbox-not-firing-in-ie
+		//option.live('dblclick',function(e){
+		//	inputEelement.val(jQuery(this).text());
+		//	inputElementId.val(jQuery(this).val()).change();
+		//});
+		selectElement.append(option);
+	}	
+}
+
+
+function fixTooltipConflict(){
+    //fix the conflict between bootstrap and jquery UI tooltip
+    //http://stackoverflow.com/questions/15790568/jquery-1-9-1-unable-to-get-property-createdocumentfragment-of-undefined-or-nul
+	var bootstrapTooltip = jQuery.fn.tooltip.noConflict();
+	jQuery.fn.bootstrapTooltip = bootstrapTooltip
+	
+	// now activate tooltip plugin from jQuery ui
+	jQuery(document).tooltip();
+}
+
+	 jQuery(function(){
+	   
+		
+		 var broaderCache  = [];
+		 var narrowerCache = [];
+		//fixTooltipConflict();
+    
+ 	 	var broaderSelectElement  = jQuery("select#broaderPhenotypes");
+		var narrowerSelectElement = jQuery("select#narrowerPhenotypes");
+		var inputElement   = jQuery("input#phenotypeName");
+ 		var inputElementId = jQuery("input#phenotypeId");
+ 		
+  		inputElementId.change(function(){ 		
+ 			
+	 		var broaderSelectElement  = jQuery("select#broaderPhenotypes");
+			var narrowerSelectElement = jQuery("select#narrowerPhenotypes");
+			
+ 		    var termId = jQuery(this).val();
+ 		    
+ 		    
+			//call the BroaderTermLookupService & load all the broaderTerms associated to this element
+			var sendparams = { dataSourceName: "hp.obo", termId:termId};
+			
+			//load all broaderPhenotypeNames
+			if (broaderCache[sendparams.termId] == undefined){
+				jQuery.getJSON("/OCService/OntologyService/BroaderTermLookupService", sendparams, function(data, status, xhr) {
+					broaderCache[sendparams.termId] = data;
+					fill_Phenotypes(inputElement,inputElementId,broaderSelectElement,data);
+				});
+			}else{
+				var data = broaderCache[sendparams.termId];
+				fill_Phenotypes(inputElement,inputElementId,broaderSelectElement,data);
+			}
+			
+			//load all narrowerPhenotypeNames
+			if (narrowerCache[sendparams.termId] == undefined){
+				jQuery.getJSON("/OCService/OntologyService/NarrowerTermLookupService", sendparams, function(data, status, xhr) {
+					narrowerCache[sendparams.termId] = data;
+					fill_Phenotypes(inputElement,inputElementId,narrowerSelectElement,data);
+				});	
+			}else{
+				var data = narrowerCache[sendparams.termId];
+				fill_Phenotypes(inputElement,inputElementId,narrowerSelectElement,data);
+			}
+				
+ 		});
+ 		
+ 		
+ 		//bind option dbclick on select Not on option
+		narrowerSelectElement.dblclick(function () {
+		 	var selected = jQuery(this).find("option:selected");
+		 	if (selected!=undefined && selected.length>0){
+		 		var inputElement 	= jQuery("input#phenotypeName");
+ 				var inputElementId  = jQuery("input#phenotypeId");
+	   	 		inputElement.val(selected.text());
+		    	inputElementId.val(selected.val()).change();
+		    }
+		});
+		broaderSelectElement.dblclick(function () {
+			var selected =  jQuery(this).find("option:selected");
+		 	if (selected!=undefined && selected.length>0){
+		 		var inputElement   = jQuery("input#phenotypeName");
+ 				var inputElementId = jQuery("input#phenotypeId");
+	   	 		inputElement.val(selected.text());
+		    	inputElementId.val(selected.val()).change();
+		    }
+		});
+ 		
+		create_Narrower_Broader(inputElement,inputElementId,narrowerSelectElement,broaderSelectElement);
+	    
+	 });
+
+	
+	
+       
+</script>
+
+
+</head>
+<body>
+ 
+  <div class="additionalPhenotypeForm">                
+   	
+ 		<div class="tablebox_center">		
+ 						
+			<table border="0" cellpadding="0" cellspacing="0">
+			    <tbody>
+					<tr>
+						<td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">
+			                    				        	Phenotype Description
+			                    				        </td>
+		                    				        	<td valign="top" nowrap="nowrap">
+		                    				        		 <input id="phenotypeName" style="width:200px;"  class="formfield allPhenotypeNames" placeholder="Enter Phenotype name"></input>
+													    </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Phenotype Id</td>
+			                    				        	<td valign="top" nowrap="nowrap">
+			                    				        		<input  id="phenotypeId"  style="width:200px;" class="phenotypeId" readonly />
+			                    				        	</td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+						<td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    						<td valign="top" nowrap="nowrap">
+		                    				        		Broader Terms</br>
+		                    				        		<select id="broaderPhenotypes" size="5" style="overflow:auto;padding:5px;cursor:pointer;width:320px;margin-top:2px;" class="formfield broaderPhenotypeNames"></select>
+													    </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+						<td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    						<td valign="top" nowrap="nowrap">
+		                    				        			Narrower Terms </br>
+ 		                    				        		 <select id="narrowerPhenotypes" size="5" style="overflow:auto;padding:5px;cursor:pointer;width:320px;margin-top:2px;" class="formfield broaderPhenotypeNames"></select>
+													    </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+						<td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">
+			                    				        	Phenotype present
+			                    				        </td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select  id="phenotypepresent" style="width:200px;" class="formfield phenotypepresent">
+											  			  	  	<option value='unknown'>Unknown</option>
+												              	<option value='yes'>Yes</option>
+												              	<option value='no'>No</option>
+											  			  	 </select>	  			  	 
+													      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+					<tr class="aka_stripes">
+		        		<td class="aka_header_border"><b>Modifiers</b> </td>
+		    		</tr>
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Laterality</td>
+			                    				        	<td valign="top" nowrap="nowrap">
+				                    				        	<select id="laterality" tabindex="2" style="width:200px;" name="input32" class="formfield laterality">
+																	<option selected="selected" value=""></option>				  			  			
+										  			  				<option value='Bilateral'>Bilateral</option>
+										  			  				<option value='Left'>Left</option>
+										  			  				<option value='Right'>Right</option>
+										  			  				<option value='Unilateral'>Unilateral</option>	
+														         </select>													         
+													      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Onset</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="onset" tabindex="2" style="width:200px;" name="onset" class="formfield onset">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Embryonal onset'>Embryonal onset</option>
+									  			  				<option value='Fetal onset'>Fetal onset</option>
+									  			  				<option value='Neonatal onset'>Neonatal onset</option>
+									  			  				<option value='Infantile onset'>Infantile onset</option>	  			  				
+									  			  				<option value='Childhood onset'>Childhood onset</option>
+									  			  				<option value='Juvenile onset'>Juvenile onset</option>
+									  			  				<option value='Young onset'>Young onset</option>
+									  			  				<option value='Middle age onset'>Middle age onset</option>
+									  			  				<option value='Late onset'>Late onset</option>
+													         </select>
+												      	</td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Progression</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="progression" tabindex="2" style="width:200px;" name="onset" class="formfield progression">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Noneprogressive'>Noneprogressive</option>
+									  			  				<option value='Progressive'>Progressive</option>			
+													         </select>
+												     	 </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Severity</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="severity" tabindex="2" style="width:200px;" name="onset" class="formfield severity">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Borderline'>Borderline</option>
+									  			  				<option value='Mild'>Mild</option>
+									  			  				<option value='Moderate'>Moderate</option>
+									  			  				<option value='Severe'>Severe</option>
+									  			  				<option value='Profound'>Profound</option>
+													         </select>
+												      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+					<tr>
+					    <td class="table_cell_left">
+					        <table border="0">
+					            <tbody>
+					            	<tr>
+					                	<td valign="top">
+					                		<table border="0" cellspacing="0" cellpadding="1">
+			                    				<tbody>
+			                    					<tr>
+			                    				        <td valign="top" class="aka_text_block">Spatial Pattern</td>
+		                    				        	<td valign="top" nowrap="nowrap">
+			                    				        	<select id="spatialpattern" tabindex="2" style="width:200px;" name="onset" class="formfield spatialpattern">
+																<option selected="selected" value=""></option>	
+									  			  				<option value='Distal'>Distal</option>
+									  			  				<option value='Generalized'>Generalized</option>
+									  			  				<option value='Localized'>Localized</option>
+									  			  				<option value='Proximal'>Proximal</option>	  	
+													         </select>
+												      </td>
+			                        				</tr>
+			                        			</tbody>
+			                        		</table>
+			                			</td>
+			                		</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+					
+					
+			</tbody>
+		</table>
+	</div>
+  </div>
+</body>
+</html>

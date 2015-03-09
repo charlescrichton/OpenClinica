@@ -38,6 +38,14 @@ public class StudySubjectBean extends AuditableEntityBean {
 
     private Date enrollmentDate;
 
+    public String getGelForenames() {
+        return gelForenames;
+    }
+
+    public void setGelForenames(String gelForenames) {
+        this.gelForenames = gelForenames;
+    }
+
     private String secondaryLabel = "";
 
     private String uniqueIdentifier = "";// not in the table, for display
@@ -56,7 +64,67 @@ public class StudySubjectBean extends AuditableEntityBean {
     private ArrayList studyGroupMaps;
     
     private Date eventStartDate;//not in DB, for adding subject from subject matrix
-    
+
+    //gel_family_id VARCHAR(200);
+    private String gelFamilyId;
+
+    //gel_surname VARCHAR(100);
+    private String gelSurname;
+
+    //gel_forenames VARCHAR(300);
+    private String gelForenames;
+
+
+
+    public String getGelFamilyId() {
+        return gelFamilyId;
+    }
+
+    public void setGelFamilyId(String gelFamilyId) {
+        this.gelFamilyId = gelFamilyId;
+    }
+
+    public String getGelSurname() {
+        return gelSurname;
+    }
+
+    public void setGelSurname(String gelSurname) {
+        this.gelSurname = gelSurname;
+    }
+
+    public String getGelNhsNumber() {
+        return gelNhsNumber;
+    }
+
+    public void setGelNhsNumber(String gelNhsNumber) {
+        this.gelNhsNumber = gelNhsNumber;
+    }
+
+    public String getGelHospitalNumber() {
+        return gelHospitalNumber;
+    }
+
+    public void setGelHospitalNumber(String gelHospitalNumber) {
+        this.gelHospitalNumber = gelHospitalNumber;
+    }
+
+    public boolean isGelSlfDownloaded() {
+        return gelSlfDownloaded;
+    }
+
+    public void setGelSlfDownloaded(boolean gelSlfDownloaded) {
+        this.gelSlfDownloaded = gelSlfDownloaded;
+    }
+
+    //gel_nhs_number VARCHAR(20);
+    private String gelNhsNumber;
+
+    //gel_hospital_number VARCHAR(200);
+    private String gelHospitalNumber;
+
+    //gel_slf_downloaded BOOLEAN DEFAULT FALSE;
+    private boolean gelSlfDownloaded;
+
     /**
      * The OID, used for export and import of data.
      */
