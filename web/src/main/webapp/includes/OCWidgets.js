@@ -374,7 +374,7 @@ jQuery.fn.additionalOntologyTable = function(){
 				//add edit button next to the last column item
 				row.find("td:last").after("<td class='aka_padding_norm aka_cellBorders' style='text-align: center;'></td>");
 				
-				var editBtn = jQuery("<button id='btnEdit'>Advanced Edit</button>");
+				var editBtn = jQuery("<button id='btnEdit'>Edit</button>");
 				editBtn.bind('click',function(event){		
 						//the row in which the Edit button is clicked
 						var currentRow = jQuery(this).parent('td').parent('tr');	
@@ -609,7 +609,7 @@ function add_newRow_additional(lastRow, columns){
 	//add edit button next to the last column item
 	lastRow.find("td:last").after("<td class='aka_padding_norm aka_cellBorders' style='text-align: center;'></td>");
 	
-	var editBtn = jQuery("<button  id='btnEdit'>Advanced Edit</button>");
+	var editBtn = jQuery("<button  id='btnEdit'>Edit</button>");
 	editBtn.bind('click',function(event){		
 			//the row in which the Edit button is clicked
 			var currentRow = jQuery(this).parent('td').parent('tr');
@@ -1112,99 +1112,6 @@ jQuery.fn.valueLookup = function (serviceURL) {
 
 
 
-jQuery.fn.probandForm = function (formType) {
-	var $self = jQuery(this);
-   // var study = jQuery.trim(jQuery("td b:contains('Study:')").parent("td").next("td").text());
-    var study = jQuery("span[data-id=SpecificDisease]").parent().parent().find("input").val();
-
-    if (formType == undefined || !formType){
-    	formType ="proband";
-    }
-    var inputParams = {
-	    disease : study
-	}; 	
-    
-    
-    //it is in NEW mode
-    //in IE, it sometimes adds rows later, so we will have 2 and then a new row will be added!!!
-    if( $self.find("tbody tr").length == 2 || $self.find("tbody tr").length == 3){
-    	   			
-		jQuery.ajax({
-			url:            '/OCService/lookupServices/EligibilityService',
-			async :         false,
-			dataType :      'json',
-			data : inputParams,
-			success :       function(data){
-				
-			    //hide the delete button column in head  
-			    $self.find('thead tr:first th:nth-child(3)').hide();
-			    //hide the delete button column in body
-			    $self.find('tbody tr:first td:nth-child(3)').hide();
-			    
-			    var results = data.result;			
-			    for(var index = 0; index < results.length; index++){			    	
-			    	var result = results[index];
-			    	
-			    	//in NEW mode, there is an empty row, so just we need to modify it					
-			    	if(index == 0){
-				    	//change the first row which is actually empty
-				    	var lastRow = $self.find("tbody tr:first");
-				    	var input = lastRow.find("td:first input[type=text][type!='hidden']");	    	
-				    	input.val(result);
-				    	input.hide();				    	
-				    	jQuery("<span>"+ result +"</span>").insertAfter(input);
-				    	
-			    	}else{			    		
-
-					    var btn = $self.find("button:contains('Add')");
-					    btn.trigger('click');
-
-				    	var lastRow = $self.find("tbody tr:nth-child("+ (index+1) +")");//.prev().prev();
-				    	//hide delete column
-				    	lastRow.find('td:nth-child(3)').hide();
-				    	var input = lastRow.find("td:first input[type=text][type!='hidden']");
-				    	input.val(result);
-				    	input.hide();
-				    	jQuery("<span>"+ result +"</span>").insertAfter(input);
-			    	}
-			    }
-			    $self.find('thead').hide();
-			}
-		
-		});
-    	
-    }else{
-    	
-    	
-    	 //hide the delete button column in head  
-        $self.find('thead tr:first th:nth-child(3)').hide();
-        //hide the delete button column in body
-        $self.find('tbody tr:first td:nth-child(3)').hide();
-        
-    	var rows = $self.find("tbody tr:visible"); 
-    	//rows.length-1 as those last rows (blank+add button) still exists and we will remove them later
-    	for(var i = 0; i < rows.length-1; i++){
-    		
-    		//hide the delete button column
-    		jQuery(rows[i]).find('td:nth-child(3)').hide();    	
-    		
-    		//hide the input
-	    	var input = jQuery(rows[i]).find("td:first input[type=text][type!='hidden']");	    	
-	    	input.hide();
-	    	
-	    	//add the question as a plain text
-	    	jQuery("<span>"+ input.val() +"</span>").insertAfter(input);
-	    }      	
-    }    
-    
-    //hide the last row which contains the Add button & the empty row
-   
-
-    $self.find("tbody tr:last").prev().hide();    
-    $self.find("tbody tr:last").hide();
-}
-
-
 jQuery.fn.diseaseSelector = function($subDiseaseInput, $specificDiseaseInput){
 	var $this = this;
 	
@@ -1220,6 +1127,23 @@ jQuery.fn.diseaseSelector = function($subDiseaseInput, $specificDiseaseInput){
 		//$subDiseaseInput.attr('disabled', 'disabled');
 		//$specificDiseaseInput.attr('disabled', 'disabled');
  
+ 		
+		//@Eligibility
+		//If we are in clincial Tab, load the Eligibity version
+		if ( jQuery("span[data-id='Hidden_1_ParticipantType']").length > 0){
+			
+			//Load all the diseases and then apply the eligibility
+			//we have to load the diseases to find the eligibility version and date for creating the Link
+			 jQuery.ajax({
+					url:            '/OCService/lookupServices/DiseaseLookup',
+					async :         false,
+					success :       function(data){
+					    Apply_Eligibility('edit',$this.val(),$subDiseaseInput.val(),$specificDiseaseInput.val(),data.result);
+					},
+						dataType :      'json'					    						
+				}); 
+		}
+				
 		jQuery.each(jQuery(".aka_group_header:contains('Basic Phenotyping')"), function(index, hd) {
 		    //if it is IE, we need to have a short delay before loading the list
 		    //as it seems that OC adds two empty rows in IE9,11 and then removes one after a random number of seconds
@@ -1240,19 +1164,6 @@ jQuery.fn.diseaseSelector = function($subDiseaseInput, $specificDiseaseInput){
 		    }else{
 		    	jQuery(hd).next("table").additionalOntologyTable();
 		    }
-		});
-		jQuery.each(jQuery(".aka_group_header:contains('Eligibility')"), function(index, hd) {
-    		 //if it is IE, we need to have a short delay before loading the list
-		    //as it seems that OC adds two empty rows in IE9,11 and then removes one after a random number of seconds
-		    //and also the btn.trigger('click') does not work before passing this delay!, so adding
-    		//new row doesn't work if we do not add this delay!
-    		var formType = 'proband';//findEligibilityFormType()
-    		var msie = window.navigator.userAgent.indexOf("MSIE ");
-		    if (msie > 0){  
-		    	setTimeout(function(){ jQuery(hd).next("table").probandForm();	 }, 1000);
-		    }else{
-		    	jQuery(hd).next("table").probandForm(formType);	
-		    }	
 		});
 		
 		return;
@@ -1283,123 +1194,121 @@ jQuery.fn.diseaseSelector = function($subDiseaseInput, $specificDiseaseInput){
 	    });
 	    populateSelect($diseaseGroupSelect, diseaseGroupList);
 	    $diseaseGroupSelect.on("change keyup", function(val){
-		var selectedDiseaseGroup = $diseaseGroupSelect.val();
-		$this.val(selectedDiseaseGroup);
-		if(selectedDiseaseGroup == "")
-		{
-		    populateSelect($subDiseaseSelect,[]);
-		    populateSelect($specificDiseaseSelect,[]);
-
-		    // set the bottom two drop-downs to read-only
-		    $subDiseaseSelect.attr('readonly', true);
-		    $specificDiseaseSelect.attr('readonly', true);
-		    $diseaseButton.hide();
-		}
-		else{
-		    var subgroupList = [];
-		    var selectedDisease = jQuery.grep(res, function(e){ return e.name == selectedDiseaseGroup; })[0];
-		    jQuery.each(selectedDisease.subGroups, function(idx, sg){
-			subgroupList.push({val: sg.name, desc: sg.name});
-		    });
-		    populateSelect($subDiseaseSelect, subgroupList); 
-		    
-		    $subDiseaseSelect.attr('readonly', false);
-		    $specificDiseaseSelect.attr('readonly', true);
-		    $diseaseButton.hide();
-		    
-		}
+			var selectedDiseaseGroup = $diseaseGroupSelect.val();
+			$this.val(selectedDiseaseGroup);
+			if(selectedDiseaseGroup == "")
+			{
+			    populateSelect($subDiseaseSelect,[]);
+			    populateSelect($specificDiseaseSelect,[]);
+	
+			    // set the bottom two drop-downs to read-only
+			    $subDiseaseSelect.attr('readonly', true);
+			    $specificDiseaseSelect.attr('readonly', true);
+			    $diseaseButton.hide();
+			}
+			else{
+			    var subgroupList = [];
+			    var selectedDisease = jQuery.grep(res, function(e){ return e.name == selectedDiseaseGroup; })[0];
+			    jQuery.each(selectedDisease.subGroups, function(idx, sg){
+			    	subgroupList.push({val: sg.name, desc: sg.name});
+			    });
+			    populateSelect($subDiseaseSelect, subgroupList); 
+			    
+			    $subDiseaseSelect.attr('readonly', false);
+			    $specificDiseaseSelect.attr('readonly', true);
+			    $diseaseButton.hide();
+			    
+			}
 		
 	    });
 	    
 	    $subDiseaseSelect.on("change keyup", function(val){
-		var selectedDiseaseGroup = $diseaseGroupSelect.val();
-		var selectedSubGroup = $subDiseaseSelect.val();
-		$subDiseaseInput.val(selectedSubGroup);
-
-		if(selectedSubGroup == "")
-		{
-		    populateSelect($specificDiseaseSelect,[]);
-		    // set the bottom drop-downs to read-only
-		    $specificDiseaseSelect.attr('readonly', true);
-		    $diseaseButton.hide();
-		}
-		else{
-		    var specificDiseaseList = [];
-		    var selectedDisease = jQuery.grep(res, function(e){ return e.name == selectedDiseaseGroup; })[0];
-		    var selectedSubgroup = jQuery.grep(selectedDisease.subGroups, function(e){ return e.name == selectedSubGroup; })[0];
-		    jQuery.each(selectedSubgroup.specificDisorders, function(idx, sd){
-			specificDiseaseList.push({val: sd.name, desc: sd.name});
-		    });
-		    populateSelect($specificDiseaseSelect, specificDiseaseList);
-		    
-		    $specificDiseaseSelect.attr('readonly', false);
-		    $diseaseButton.hide();
-		    
-		}
+			var selectedDiseaseGroup = $diseaseGroupSelect.val();
+			var selectedSubGroup = $subDiseaseSelect.val();
+			$subDiseaseInput.val(selectedSubGroup);
+	
+			if(selectedSubGroup == "")
+			{
+			    populateSelect($specificDiseaseSelect,[]);
+			    // set the bottom drop-downs to read-only
+			    $specificDiseaseSelect.attr('readonly', true);
+			    $diseaseButton.hide();
+			}
+			else{
+			    var specificDiseaseList = [];
+			    var selectedDisease = jQuery.grep(res, function(e){ return e.name == selectedDiseaseGroup; })[0];
+			    var selectedSubgroup = jQuery.grep(selectedDisease.subGroups, function(e){ return e.name == selectedSubGroup; })[0];
+			    jQuery.each(selectedSubgroup.specificDisorders, function(idx, sd){
+			    	specificDiseaseList.push({val: sd.name, desc: sd.name});
+			    });
+			    populateSelect($specificDiseaseSelect, specificDiseaseList);
+			    
+			    $specificDiseaseSelect.attr('readonly', false);
+			    $diseaseButton.hide();
+			    
+			}
 		
 	    });
 	    $specificDiseaseSelect.on("change keyup", function(val){
-		var selectedSpecificDisease = $specificDiseaseSelect.val();
-		$specificDiseaseInput.val(selectedSpecificDisease);
-		if(selectedSpecificDisease == ""){
-		    $diseaseButton.hide();
-		}
-		else{
-		    $diseaseButton.show();
-		}    
+			var selectedSpecificDisease = $specificDiseaseSelect.val();
+			
+			
+			//@Eligibility
+			//If we are in clincial Tab, load the Eligibity version
+			if ( jQuery("span[data-id='Hidden_1_ParticipantType']").length > 0){				
+				var selectedDiseaseGroup = $diseaseGroupSelect.val();
+				var selectedSubGroup = $subDiseaseSelect.val();
+				var selectedSpecificDisease = $specificDiseaseSelect.val();				
+				Apply_Eligibility('new',selectedDiseaseGroup,selectedSubGroup,selectedSpecificDisease,res);
+			}
+			
+			
+			$specificDiseaseInput.val(selectedSpecificDisease);
+			if(selectedSpecificDisease == ""){
+			    $diseaseButton.hide();
+			}
+			else{
+			    $diseaseButton.show();
+			}    
 		
 	    });
 	    $diseaseButton.on("click keyup", function(){
-	    //show save button
-	    jQuery("input[value='Save']").show();
-		$diseaseGroupSelect.attr('readonly', true);
-		$subDiseaseSelect.attr('readonly', true);
-		$specificDiseaseSelect.attr('readonly', true);
-		$diseaseGroupSelect.attr('disabled', 'disabled');
-		$subDiseaseSelect.attr('disabled', 'disabled');
-		$specificDiseaseSelect.attr('disabled', 'disabled');
+		    //show save button
+		    jQuery("input[value='Save']").show();
+			$diseaseGroupSelect.attr('readonly', true);
+			$subDiseaseSelect.attr('readonly', true);
+			$specificDiseaseSelect.attr('readonly', true);
+			$diseaseGroupSelect.attr('disabled', 'disabled');
+			$subDiseaseSelect.attr('disabled', 'disabled');
+			$specificDiseaseSelect.attr('disabled', 'disabled');
+			
+			$diseaseButton.hide();
+			showSection("PT_21", "FH_10");
+			showRepeatingGroup("Basic Phenotyping");
+			showRepeatingGroup("Additional Phenotyping");
+			
+			jQuery.each(jQuery(".aka_group_header:contains('Basic Phenotyping')"), function(index, hd) {
+			    //if it is IE, we need to have a short delay before loading the list
+			    //as it seems that OC adds two empty rows in IE9,11 and then removes one after a random number of seconds
+			var msie = window.navigator.userAgent.indexOf("MSIE ");
+			    if (msie > 0){  
+			    	setTimeout(function(){ jQuery(hd).next("table").basicOntologyTable(); }, 2000);
+			    }else{
+			    	jQuery(hd).next("table").basicOntologyTable();
+			    }
+			});
 		
-		$diseaseButton.hide();
-		showSection("PT_21", "FH_10");
-		showRepeatingGroup("Basic Phenotyping");
-		showRepeatingGroup("Additional Phenotyping");
-		
-		jQuery.each(jQuery(".aka_group_header:contains('Basic Phenotyping')"), function(index, hd) {
-		    //if it is IE, we need to have a short delay before loading the list
-		    //as it seems that OC adds two empty rows in IE9,11 and then removes one after a random number of seconds
-		var msie = window.navigator.userAgent.indexOf("MSIE ");
-		    if (msie > 0){  
-			setTimeout(function(){ jQuery(hd).next("table").basicOntologyTable(); }, 2000);
-		    }else{
-			jQuery(hd).next("table").basicOntologyTable();
-		    }
-		});
+			jQuery.each(jQuery(".aka_group_header:contains('Additional Phenotyping')"), function(index, hd) {
+			    //if it is IE, we need to have a short delay before loading the list
+			    //as it seems that OC adds two empty rows in IE9,11 and then removes one after a random number of seconds
+			    var msie = window.navigator.userAgent.indexOf("MSIE ");
+			    if (msie > 0){  
+			    	setTimeout(function(){ jQuery(hd).next("table").additionalOntologyTable(); }, 2000);
+			    }else{
+			    	jQuery(hd).next("table").additionalOntologyTable();
+			    }
+			});
 	
-		jQuery.each(jQuery(".aka_group_header:contains('Additional Phenotyping')"), function(index, hd) {
-		    //if it is IE, we need to have a short delay before loading the list
-		    //as it seems that OC adds two empty rows in IE9,11 and then removes one after a random number of seconds
-		    var msie = window.navigator.userAgent.indexOf("MSIE ");
-		    if (msie > 0){  
-			setTimeout(function(){ jQuery(hd).next("table").additionalOntologyTable(); }, 2000);
-		    }else{
-			jQuery(hd).next("table").additionalOntologyTable();
-		    }
-		});
-		jQuery.each(jQuery(".aka_group_header:contains('Eligibility')"), function(index, hd) {
-    		    //if it is IE, we need to have a short delay before loading the list
-		    //as it seems that OC adds two empty rows in IE9,11 and then removes one after a random number of seconds
-		    //and also the btn.trigger('click') does not work before passing this delay!, so adding
-    		    //new row doesn't work if we do not add this delay!
-    		    var formType = 'proband';//findEligibilityFormType()
-    		    var msie = window.navigator.userAgent.indexOf("MSIE ");
-		    if (msie > 0){  
-			setTimeout(function(){ jQuery(hd).next("table").probandForm();	 }, 1000);
-		    }else{
-			jQuery(hd).next("table").probandForm(formType);	
-		    }	
-		});
-
-		
 	    });
 	    
 	    $diseaseGroupSelect.trigger("change");
@@ -1408,6 +1317,66 @@ jQuery.fn.diseaseSelector = function($subDiseaseInput, $specificDiseaseInput){
     });
     
     
+}
+
+function Apply_Eligibility(mode,selectedDiseaseGroup,selectedSubGroup,selectedSpecificDisease,allDiseases){
+	
+	//@Eligibility, hide Eligibility verson input
+	jQuery("[data-id='PB_8']").closest('td.table_cell_left').hide();
+	
+	
+	var eligibityVersionInput= jQuery("[data-id='PB_8']").closest('table').find('input:text');
+	var eligibityRadioText	 = jQuery("[data-id='PB_9']").closest('table').find("td:Contains('Eligible')");
+	
+	//give it more space to display the text
+	eligibityRadioText.removeClass('aka_text_block');
+	
+    
+	//find the eligibility version from the selected DiseaseGroup/Disease/Disorder
+	var Disease_JSON_Object = jQuery.grep(allDiseases, function(e){ return e.name == selectedDiseaseGroup; })[0];
+	var Subgroup_JSON_Object = jQuery.grep(Disease_JSON_Object.subGroups, function(e){ return e.name == selectedSubGroup; })[0];
+	var Disorder_JSON_Object = jQuery.grep(Subgroup_JSON_Object.specificDisorders, function(e){ return e.name == selectedSpecificDisease; })[0];
+
+	var eligibilityDate	= Disorder_JSON_Object.eligibilityQuestion.date;
+	var eligibilityVersion = Disorder_JSON_Object.eligibilityQuestion.version;
+	var elogibilityId = Disorder_JSON_Object.id;
+
+	//If it is in NEW mode
+	if(mode == 'new'){
+		//Set the version value into the input 
+		jQuery("[data-id='PB_8']").closest('table').find('input:text').val(eligibilityVersion);		
+		//unchecked all radio
+		jQuery("[data-id='PB_9']").closest('table').find('input:radio').prop('checked', false);
+	}
+	
+	//create the link
+	var eligibilityLink =  "/OCService/eligibility/default.html";// + elogibilityId + "-v" + eligibilityVersion + ".html"; 
+
+	//create the display text
+	var displayStr = "";
+	
+	//Check if the link exists :)
+	jQuery.ajax({
+	    url:eligibilityLink,
+	    type:'HEAD',
+	    async : false,
+	    error: function()
+	    {
+	    	displayStr = "Is the patient eligible for this study?<br>" +
+	    	"<a class='eligibilityLink' onclick=\" alert('Eligibility criteria is not available!');return false;\" href='"+ eligibilityLink +"'>Click here</a> to read the eligibility criteria (last updated " + eligibilityDate  + ")";
+	    	
+	    },
+	    success: function()
+	    {
+	    	displayStr = "Is the patient eligible for this study?<br>" +
+	    	"<a class='eligibilityLink' target='_blank' href='"+ eligibilityLink +"'>Click here</a> to read the eligibility criteria (last updated " + eligibilityDate  + ")";
+	    	
+	    }
+	});
+	
+	
+	//set the text to the radio button text
+	eligibityRadioText.html(displayStr);
 }
 
 
@@ -1560,14 +1529,15 @@ jQuery.fn.pdfButton = function (text){
    
     hideSection("Hidden_R_2", "Hidden_R_11");
     getQuestionTr("Hidden_Cons_2").hide();
+    getQuestionTr("Hidden_PB_9").hide();
     getQuestionTr("Hidden_2_ParticipantType").hide();
         	
-    var yesRadio = $self.find("input:radio[value='yes']")
-    var noRadio = $self.find("input:radio[value='no']")
+    var yesRadio = $self.find("input:radio[value='yes']");
+    var noRadio = $self.find("input:radio[value='no']");
     
-    yesRadio.hide()
-    noRadio.hide()
-    $self.hide()
+    yesRadio.hide();
+    noRadio.hide();
+    $self.hide();
     $self.prev('td').empty().text("Click here to download the sample linkage form"); 
     
     
@@ -1579,9 +1549,7 @@ jQuery.fn.pdfButton = function (text){
     var forenames	= jQuery("span[data-id='Hidden_R_10']").parent().parent().find('input');
     var gender 		= jQuery("span[data-id='Hidden_R_11']").parent().parent().find('select');
     var consentGiven_Yes = jQuery("span[data-id='Hidden_Cons_2']").parent().parent().find("input[value='yes']:checked");
-    var eligibilityTable = jQuery("span[data-id='Hidden_PB_8']").closest('table');
-    var eligibility_All_items_count = eligibilityTable.find("input:radio:not(:disabled)").length / 2;
-    var eligibility_Yes_items_count = eligibilityTable.find("input:radio:not(:disabled)[value='yes']:checked").length;
+    var eligibile_Yes = jQuery("span[data-id='Hidden_PB_9']").parent().parent().find("input[value='yes']:checked");
     var participantType_Proband	 = jQuery("span[data-id='Hidden_2_ParticipantType']").parent().parent().find("input[value='Proband']:checked");
     var participantType_Relative  = jQuery("span[data-id='Hidden_2_ParticipantType']").parent().parent().find("input[value='Relative']:checked");
     var hospitalNumber = jQuery("span[data-id='Hidden_R_7']").parent().parent().find('input');
@@ -1593,6 +1561,18 @@ jQuery.fn.pdfButton = function (text){
     var clinicId = "Demo";
     if(jQuery.trim(study_identifier).length>0 &&  study_identifier.split("-").length > 0)
     	clinicId = study_identifier.split("-")[0];
+    
+    
+    //validate NHS number
+    var nhsNumberIsValid = false;
+    if(nhsNumber.length > 0){
+    	try {
+    		nhsNumberIsValid =  validateNhsNumber(nhsNumber.val())
+	    }
+	    catch(err) {
+	    	nhsNumberIsValid  = false;
+	    }
+    }    
     
     var linkParameters = "participantId="+encodeURIComponent(participantId) +"&" + 
     					 "nhsNumber="	+ encodeURIComponent(nhsNumber.val()) 	+ "&"+
@@ -1607,6 +1587,8 @@ jQuery.fn.pdfButton = function (text){
     
     var pdfButton = jQuery("<button class='button_xlong' style='margin-left:55px;'>Download Sample Linkage Form</button>");
     pdfButton.on('click',function(event){	
+    		
+    		//check the printed button
     		yesRadio.prop('checked', true);
     		
     		if(jQuery.trim(participantId).length == 0){
@@ -1633,18 +1615,17 @@ jQuery.fn.pdfButton = function (text){
     
     if (familyId.length > 0 && familyId.val().length > 0 && 
     	dateOfBirth.length >0 && dateOfBirth.val().length > 0 &&
-        nhsNumber.length > 0 && nhsNumber.val().length > 0 &&
+        nhsNumber.length > 0 && nhsNumber.val().length > 0 && nhsNumberIsValid == true && 
         surname.length >0 && surname.val().length > 0 &&
         forenames.length>0 && forenames.val().length > 0 &&
         gender.length>0 && gender.val().length > 0 &&
-        hospitalNumber.length>0 && hospitalNumber.val().length>0 &&
         consentGiven_Yes.length >0 && // consent given is YES.
         (
-           (participantType_Proband.length > 0 && eligibility_All_items_count == eligibility_Yes_items_count) || //if is is Proband, then all eligibilities should be YES
+           (participantType_Proband.length > 0 && eligibile_Yes.length > 0) || //if is is Proband, then all eligibilities should be YES
 	       (participantType_Proband.length <= 0)
         ) &&
         (participantType_Proband.length + participantType_Relative.length > 0) && //one of these should have been selected, Proband or Relative
-        formatOCDate(dateOfBirth.val()) < getToday() ) // Born before Today! 
+        formatOCDate(dateOfBirth.val()) <= getToday() ) // Born Today or before Today! 
     	{
     		pdfButton.removeAttr("disabled");
     		pdfButton.val('Download Sample Linkage Form');
@@ -1662,21 +1643,22 @@ jQuery.fn.pdfButton = function (text){
     			errorMessage = errorMessage + "&#149; Date of birth is blank! <br>";
     		if(nhsNumber.val().length == 0)
     			errorMessage = errorMessage + "&#149; NHS Number is blank! <br>";
+    		if(nhsNumber.val().length > 0 && nhsNumberIsValid == false)
+    			errorMessage = errorMessage + "&#149; NHS Number is not valid! <br>";
+    		
     		if(surname.val().length == 0)
     			errorMessage = errorMessage + "&#149; Surname is blank! <br>";
     		if(forenames.val().length == 0)
     			errorMessage = errorMessage + "&#149; Forenames is blank! <br>";
-    		if(hospitalNumber.val().length == 0)
-    			errorMessage = errorMessage + "&#149; Hospital Number is blank! <br>";
     		if(gender.val().length == 0)
     			errorMessage = errorMessage + "&#149; Gender is not selected! <br>";
     		if(consentGiven_Yes.length == 0)
     			errorMessage = errorMessage + "&#149; Consent is not given! <br>";
-    		if(participantType_Proband.length > 0 && eligibility_All_items_count != eligibility_Yes_items_count)
+    		if(participantType_Proband.length > 0 && eligibile_Yes.length == 0)
     			errorMessage = errorMessage + "&#149; Not Eligible! <br>";
     		if(participantType_Proband.length + participantType_Relative.length == 0)
     			errorMessage = errorMessage + "&#149; Participant type is not specified! <br>";
-            if (formatOCDate(dateOfBirth.val()) >= getToday() ) 
+            if (formatOCDate(dateOfBirth.val()) > getToday() ) 
     			errorMessage = errorMessage + "&#149; Invalid date of birth!<br>";
             
             pdfButton.after("<p style='margin-left:55px;color:red;font-weight: bold;'>"+ errorMessage +"</p>");    		   		     	     
@@ -1916,20 +1898,24 @@ jQuery(document).ready(function() {
     	
         getQuestionTr("Hidden_1_ParticipantType").hide();
         getQuestionTr("Hidden_REL_3").hide();
-
+        
     	
-    	//if it is a relative, just hide or disable Elogibility
+    	//Check if it is Proband or Relative
     	var selectedItem = jQuery(sp).parent().parent().find("input:radio:checked");
     	
     	
     	//if it is Proband, then add red * to those eligibility questions
     	if (selectedItem.length > 0 && selectedItem.val() == 'Proband' ){
-    		var flag = jQuery("[data-id='PB_8']").closest('table').find("input:radio[value='no']").next().next('a');
+    		var flagEligibility_Verion  = jQuery("[data-id='PB_8']").parent().parent().find('a:not(.eligibilityLink)');
+    		var flagEligibility_Answer = jQuery("[data-id='PB_9']").parent().parent().find('a:not(.eligibilityLink)');
+    		
     		//add the red * after the flag, if it exists
-    		if(flag.length > 0){
-    			flag.before("<span class='alert'>*</span>");
-    		}else{
-    			jQuery("[data-id='PB_8']").closest('table').find("input:radio[value='no']").before("<span class='alert'>*</span>");
+    		if(flagEligibility_Verion.length > 0){
+    			flagEligibility_Verion.before("<span class='alert'>*</span>");
+    		}
+    		
+    		if(flagEligibility_Answer.length > 0){
+    			flagEligibility_Answer.before("<span class='alert'>*</span>");
     		}
     	}    
     	else if (selectedItem.length > 0 && selectedItem.val() == 'Relative' ){
@@ -1958,45 +1944,57 @@ jQuery(document).ready(function() {
             	getQuestionTr("DiseaseSubgroup").hide();
             	getQuestionTr("SpecificDisease").hide();
             	hideSection("PT_21", "PT_24");
-            	hideSection("RC_1", "PC_4");
+            	hideSection("RC_1", "RC_4");           
             	jQuery("input[value='Save']").show();      
             	
-            	var disStr = selectInput.val();
-            	if(disStr == "")
-            		'The Disease status in the Family tab is Blank, so there are no questions on this tab';
+            	var disStr = "";
+            	if(selectInput.val() == "")
+            		disStr = "The Disease status in the Family tab is 'Blank',<br> so there are no questions on this tab.";
             	else
-            		'The Disease status in the Family tab is ' + selectInput.val() +' so there are no questions on this tab';
+            		disStr= "The Disease status in the Family tab is '" + selectInput.val() +"',<br> so there are no questions on this tab.";
             	
             	        	
-            	//var td = jQuery("td.aka_header_border:contains('Disease')");
-            	//td.html("<p style='text-align:left'> Hi </p>")
+            	var td = jQuery("td.table_cell_left.aka_stripes:contains('Disease') b");
+            	td.html(disStr);
             	
             	
             	
             }else if (selectInput.val() == 'AffectedSame' || selectInput.val() == 'AffectedOther'){
+            
             	
-            	getQuestionTr("DiseaseGroup").show();
-            	getQuestionTr("DiseaseSubgroup").show();
-            	getQuestionTr("SpecificDisease").show();
-            	showSection("PT_21", "PT_24");
-            	showSection("RC_1", "PC_4");
-            	jQuery("input[value='Save']").show();               	
+            	//get the value of the DiseaseGroup to find, it is in New or Edit mode
+            	var diseaseInput = jQuery("span[data-id=DiseaseGroup]").parent().parent().find("input");
+            	
+            	//if new then do not show
+            	if(diseaseInput.val() == ''){
+            		getQuestionTr("DiseaseGroup").show();
+            		getQuestionTr("DiseaseSubgroup").show();
+            		getQuestionTr("SpecificDisease").show();
+            		hideSection("PT_21", "PT_24");
+            		hideSection("RC_1", "RC_4");
+            		jQuery("input[value='Save']").hide();
+            	}else{
+            		getQuestionTr("DiseaseGroup").show();
+            		getQuestionTr("DiseaseSubgroup").show();
+            		getQuestionTr("SpecificDisease").show();
+            		showSection("PT_21", "PT_24");
+            		showSection("RC_1", "PR_4");
+            		jQuery("input[value='Save']").show();
+            	}
             }
     		
-        	//hide table header
-        	jQuery("[data-id='PB_8']").closest('table').prev('div.aka_group_header').hide();
-        	
-        	//UnCheck all input:radio in Eligibility section, in case if Participant was proband and these were checked
-        	jQuery("[data-id='PB_8']").closest('table').find('input:radio').prop('checked', false);
-        	
-        	//hide table
-        	jQuery("[data-id='PB_8']").closest('table').hide();
+        	//@Eligibility, hide table header
+            jQuery("td.aka_stripes:contains('Eligibility')").hide();
+            
+        	//@Eligibility, UnCheck all input:radio in Eligibility section, in case if Participant was proband before and these were checked
+        	jQuery("[data-id='PB_9']").closest('table').find('input:radio').prop('checked', false);
+            jQuery("[data-id='PB_8']").closest('table').find('input:text').val('');
+            
+            //@Eligibility, hide Eligibility table
+        	jQuery("[data-id='PB_8']").closest('td.table_cell_left').hide();
+        	jQuery("[data-id='PB_9']").closest('td.table_cell_left').hide();
         }else{
         	
-        	//if none is selected
-        	//just hide relative-affected
-            getQuestionTr("Hidden_REL_3").hide();
-
         	//return the diseaseSelector back to its normal Select status
         	//remove all the selector            	
         	jQuery("span[data-id=DiseaseGroup]").parent().parent().find("select").remove();
@@ -2010,62 +2008,26 @@ jQuery(document).ready(function() {
          	subDiseaseInput.val('');
          	specificDiseaseInput.val('');   	        
          	diseaseInput.diseaseSelector(subDiseaseInput, specificDiseaseInput);
-         	
 	         	
-            getQuestionTr("RelativeAffected").hide();
-            getQuestionTr("DiseaseGroup").hide();
-	        getQuestionTr("DiseaseSubgroup").hide();
-	        getQuestionTr("SpecificDisease").hide();
+        	getQuestionTr("DiseaseGroup").hide();
+        	getQuestionTr("DiseaseSubgroup").hide();
+        	getQuestionTr("SpecificDisease").hide();
+        	hideSection("PT_21", "PT_24");
+        	hideSection("RC_1", "RC_4");
+        	jQuery("input[value='Save']").show(); 
+        	
+        	
+        	var disStr = " The Participant type in the Family tab is not specified. So there are no questions on this tab.";
+		  	var td = jQuery("td.table_cell_left.aka_stripes:contains('Disease') b");
+        	td.html(disStr);       	
+        	
+        	
+        	//@Eligibility, hide Eligibility table
+        	jQuery("[data-id='PB_8']").closest('td.table_cell_left').hide();
+        	jQuery("[data-id='PB_9']").closest('td.table_cell_left').hide();
         }
     });
     
-    
-    
-    // Hide or Disable Participant Type in Clinical section
-    jQuery.each(jQuery("span[data-id='RelativeAffected']"), function(index, sp) {
-    	
-    	
-    	var radioInput = jQuery("span[data-id='RelativeAffected']").parent().parent().find("input:radio");
-    	
-    	radioInput.change(function(){
-    	    if(jQuery(this).val() == 'yes'){
-    	    	//showSection("PT_21", "PT_24");
-   	            getQuestionTr("DiseaseGroup").show();
-   	            getQuestionTr("DiseaseSubgroup").show();
-   	         	getQuestionTr("SpecificDisease").show(); 
-   	         	jQuery("input[value='Save']").hide();
-    	    	
-    	    }else if (jQuery(this).val() == 'no'){
-    	    	
-    	    	hideSection("PT_21", "PT_24");
-            	hideSection("RC_1", "PC_4");
 
-            	//return the diseaseSelector back to its normal Select status
-            	//remove all the selector            	
-            	jQuery("span[data-id=DiseaseGroup]").parent().parent().find("select").remove();
-   	         	jQuery("span[data-id=DiseaseSubgroup]").parent().parent().find("select").remove();
-   	         	jQuery("span[data-id=SpecificDisease]").parent().parent().find("select").remove();
-   	         	
-   	         	var diseaseInput = jQuery("span[data-id=DiseaseGroup]").parent().parent().find("input");
-   	         	var subDiseaseInput = jQuery("span[data-id=DiseaseSubgroup]").parent().parent().find("input");
-   	         	var specificDiseaseInput = jQuery("span[data-id=SpecificDisease]").parent().parent().find("input");
-   	         	diseaseInput.val('');
-   	         	subDiseaseInput.val('');
-   	         	specificDiseaseInput.val('');   	        
-   	         	diseaseInput.diseaseSelector(subDiseaseInput, specificDiseaseInput);
-   	      
-   	            getQuestionTr("DiseaseGroup").hide();
-   	            getQuestionTr("DiseaseSubgroup").hide();
-   	         	getQuestionTr("SpecificDisease").hide();
-   	         	jQuery("input[value='Save']").show();    	 
-   	         	
-   	         	
-    	    }
-    	});
-    	
-    	
-    	
-    	
-    });
 
 });
