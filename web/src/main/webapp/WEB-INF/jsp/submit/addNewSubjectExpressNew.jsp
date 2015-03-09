@@ -109,7 +109,8 @@
     </tr>
     <c:choose>
     <c:when test="${study.studyParameterConfig.subjectPersonIdRequired =='required'}">
-    <tr valign="top">
+		<!--
+    <tr valign="top" style="display:none;">
         <td class="formlabel"><fmt:message key="person_ID" bundle="${resword}"/>:</td>
         <td valign="top">
             <table border="0" cellpadding="0" cellspacing="0">
@@ -123,8 +124,11 @@
             </table>
         </td>
     </tr>
+			-->
+			 <input type="hidden" name="uniqueIdentifier" value="<c:out value="${uniqueIdentifier}"/>">
     </c:when>
     <c:when test="${study.studyParameterConfig.subjectPersonIdRequired =='optional'}">
+		<!--
     <tr valign="top">
         <td class="formlabel"><fmt:message key="person_ID" bundle="${resword}"/>:</td>
         <td valign="top">
@@ -141,13 +145,15 @@
             </table>
         </td>
     </tr>
+			-->
+			 <input type="hidden" name="uniqueIdentifier" value="<c:out value="${uniqueIdentifier}"/>">
     </c:when>
     <c:otherwise>
       <input type="hidden" name="uniqueIdentifier" value="<c:out value="${uniqueIdentifier}"/>">
     </c:otherwise>
     </c:choose>
 
-    <tr valign="top">
+    <tr valign="top" style="display:none;">
 
         <td class="formlabel">
             <fmt:message key="enrollment_date" bundle="${resword}"/>:
@@ -177,7 +183,7 @@
         </td>
     </tr>
 
-    <tr valign="top">
+    <tr valign="top" style="display:none;">
         <c:if test="${study.studyParameterConfig.genderRequired !='not used'}">
         <td class="formlabel"><fmt:message key="gender" bundle="${resword}"/>:</td>
         <td valign="top">
@@ -225,7 +231,7 @@
 
     <c:choose>
     <c:when test="${study.studyParameterConfig.collectDob == '1'}">
-    <tr valign="top">
+    <tr valign="top" style="display:none;">
         <td class="formlabel"><fmt:message key="date_of_birth" bundle="${resword}"/>:</td>
         <td valign="top">
             <table border="0" cellpadding="0" cellspacing="0">
@@ -304,7 +310,7 @@
     </tr>
 </c:if>
 
-    <tr valign="top">
+    <tr valign="top" style="display:none;">
         <td class="formlabel"><fmt:message key="SED_2" bundle="${resword}"/>:</td>
         <td valign="top">
             <table border="0" cellpadding="0" cellspacing="0">
@@ -312,8 +318,8 @@
                     <div class="formfieldM_BG">
                         <select name="studyEventDefinition" class="formfieldM">
                             <option value="">-<fmt:message key="select" bundle="${resword}"/>-</option>
-                            <c:forEach var="event" items="${allDefsArray}">
-                                <option <c:if test="${studyEventDefinition == event.id}">SELECTED</c:if> value="<c:out value="${event.id}"/>"><c:out value="${event.name}" />
+                            <c:forEach var="event" items="${allDefsArray}" varStatus="loop">
+                                <option <c:if test="${studyEventDefinition == event.id || (loop.index == 0)}">SELECTED</c:if> value="<c:out value="${event.id}"/>"><c:out value="${event.name}" />
                                 </option>
                             </c:forEach>
                         </select>
@@ -329,7 +335,7 @@
         </td>
     </tr>
 
-    <tr valign="top">
+    <tr valign="top" style="display:none;">
         <td class="formlabel">
             <fmt:message key="start_date" bundle="${resword}"/>:
         </td>

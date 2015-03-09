@@ -87,8 +87,22 @@
             <c:otherwise>
               
             </c:otherwise>
-        </c:choose></b>  &nbsp;&nbsp;</span> </h1> </td><td>
-		<h1><span class="title_manage"> <c:out value="${studySubject.label}" />&nbsp;&nbsp; </span></h1></td></tr></table>
+        </c:choose></b>  &nbsp;&nbsp;</span> </h1> 
+</td><td>
+		<h3> <span id="participant_id" class="title_manage"><c:out value="${studySubject.label}" /></span>&nbsp;&nbsp;</h3>
+	</td></tr></table>
+	<tr><td>			
+		<h2><span id="registration_id" study-identifier="${study.abbreviatedIdentifier}" 
+			  style="color:#638abb;"
+			 >Registration ID:&nbsp;
+			<c:choose>
+				<c:when test="${studySubject.secondaryLabel.trim().length()==0}">&lt;Not set&gt;</c:when>
+				<c:otherwise><c:out value="${studySubject.secondaryLabel}" /></c:otherwise>
+			</c:choose>
+	</span></h2>
+	</td>
+	</tr>
+	</table>
 </div>
 
 <form name="crfForm" method="POST" action="InitialDataEntry" onLoad = document.getElementById('CRF_infobox_closed').style.display='block';document.getElementById('CRF_infobox_open').style.display='none'" >

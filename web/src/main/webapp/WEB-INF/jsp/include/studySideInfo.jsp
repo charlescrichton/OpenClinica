@@ -24,12 +24,15 @@
     </c:choose>
     <c:out value="${study.name}"/></a>
 
+
     <br><br>    
     <c:if test="${studySubject != null}">
     <b><a href="ViewStudySubject?id=<c:out value="${studySubject.id}"/>"><fmt:message key="study_subject_ID" bundle="${resword}"/></a>:</b>&nbsp; <c:out value="${studySubject.label}"/>
 
     <br><br>
     </c:if>
+
+<!--
         <c:set var="dteFormat"><fmt:message key="date_format_string" bundle="${resformat}"/></c:set>
 
     <b><fmt:message key="start_date" bundle="${resword}"/>:</b>&nbsp;
@@ -64,6 +67,7 @@
     <b><fmt:message key="protocol_verification" bundle="${resword}"/>:</b>&nbsp; 
     <fmt:formatDate value="${study.protocolDateVerification}" pattern="${dteFormat}"/>  
     
+-->
 
     </c:when>
    <c:otherwise>

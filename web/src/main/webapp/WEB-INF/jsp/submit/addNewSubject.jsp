@@ -126,6 +126,7 @@
 	</tr>
 	<c:choose>
 	<c:when test="${study.studyParameterConfig.subjectPersonIdRequired =='required'}">
+		<!--
 	<tr valign="top">
 	  	<td class="formlabel"><fmt:message key="person_ID" bundle="${resword}"/>:</td>
 		<td valign="top">
@@ -143,8 +144,11 @@
 			</table>
 		</td>
 	</tr>
+			-->
+			 <input type="hidden" name="uniqueIdentifier" value="<c:out value="${uniqueIdentifier}"/>">
 	</c:when>
 	<c:when test="${study.studyParameterConfig.subjectPersonIdRequired =='optional'}">
+		<!--
 	<tr valign="top">
 	  	<td class="formlabel"><fmt:message key="person_ID" bundle="${resword}"/>:</td>
 		<td valign="top">
@@ -161,13 +165,15 @@
 			</table>
 		</td>
 	</tr>
+			-->
+			 <input type="hidden" name="uniqueIdentifier" value="<c:out value="${uniqueIdentifier}"/>">
 	</c:when>
 	<c:otherwise>
 	  <input type="hidden" name="uniqueIdentifier" value="<c:out value="${uniqueIdentifier}"/>">
 	</c:otherwise>
 	</c:choose>
 
-	<tr valign="top">
+	<tr valign="top" style="display:none;">
 	  	<td class="formlabel"><fmt:message key="secondary_ID" bundle="${resword}"/></td>
 		<td valign="top">
 			<table border="0" cellpadding="0" cellspacing="0">
@@ -183,10 +189,10 @@
 			</table>
 		</td>
 	</tr>
-	<tr valign="top">
+	<tr valign="top" style="display: none;">
 
 		<td class="formlabel">
-            <c:if test="${study.parentStudyId == 0}">
+            <c:if test="${study.parentStudyId== 0}">
                 <fmt:message key="date_of_enrollment_for_study" bundle="${resword}"/>'
                 <c:out value="${study.name}" /> ' :
             </c:if>
@@ -228,7 +234,7 @@
 	  	</td>
 	</tr>
 
-	<tr valign="top">
+	<tr valign="top" style="display:none;">
         <c:if test="${study.studyParameterConfig.genderRequired !='not used'}">
         <td class="formlabel"><fmt:message key="gender" bundle="${resword}"/>:</td>
 		<td valign="top">
