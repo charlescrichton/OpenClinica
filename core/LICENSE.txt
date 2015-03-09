@@ -524,7 +524,5 @@ Waltham, MA 02451
 	License along with this library; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-	Oxford NIHR Biomedical Research Centre, Oxford University, hereby disclaims all copyright interest in
-	the library `OpenClinica 3.4 with modification' modified by Charles Crichton.
 	
 	
