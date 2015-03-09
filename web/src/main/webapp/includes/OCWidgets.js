@@ -1784,27 +1784,49 @@ jQuery(document).ready(function() {
     	//it is in EDIT mode
     	if(input.val().length > 0){
         	var consentSelect = jQuery(sp).parent().parent().find("input").valueLookup("/OCService/lookupServices/ConsentForm");
+        	jQuery("span[data-id='Cons_3']").parent().parent().find('select').css("width", "300px");
+
      	   	consentSelect.attr('disabled','disabled');
      	   	var mainTable =jQuery(".aka_group_header:contains('Consent details')").next('table') 
      	   	var rows = mainTable.find("tbody tr");
      	 
+     	   	//hide add button
 			var btn = mainTable.find("button:contains('Add')");
 			btn.hide();		
 			
+			//hide delete column
 			mainTable.find('thead tr:first th:nth-child(3)').hide();
 			mainTable.find('tbody tr:first td:nth-child(3)').hide();
    			
+			//replcae inputs with plain text
      	   for(var index = 0; index < rows.length-2; index++){     		   
 				jQuery(rows[index]).find('td:nth-child(3)').hide();
 				var input = jQuery(rows[index]).find("td:first input[type=text][type!='hidden']");				
 				input.hide();
 				jQuery("<span>"+ input.val() +"</span>").insertAfter(input);
-     	   }    
+     	   }
+     	   
+     	   //if the table is empty and there NOT any rows, hide the table as well
+     	   if(rows.length <=3 ){
+     		   
+			  //find the delete button column in head and press it to remove the default row
+     		  mainTable.find('tbody').find('button.button_remove').trigger('click');						
+     		  
+     		  //hide the table
+     		  mainTable.hide();
+     		  
+			  //hide the header as there is no element in the table
+     		  mainTable.find('tbody').parent().parent().find("div.aka_group_header:contains('Consent details')").hide();
+     		  
+     	   }
+     		
      	   	return;    		
     	}
     	
     	var consentSelect = jQuery(sp).parent().parent().find("input").valueLookup("/OCService/lookupServices/ConsentForm");
-        var PISrow = jQuery("span[data-id=Cons_4]");
+    	jQuery("span[data-id='Cons_3']").parent().parent().find('select').css("width", "300px");
+    	var PISrow = jQuery("span[data-id=Cons_4]");
+    	
 
         var $consentShowButton = jQuery("<input type=\"button\" class=\"button_xlong\" value=\"Select consent and continue...\"/>");
         input.closest('table').after($consentShowButton);
@@ -1840,7 +1862,6 @@ jQuery(document).ready(function() {
 				for(var index = 0; index < results.length; index++){			    	
 				    var result = results[index];
 				    
-				    //in NEW mode, there is an empty row, so just we need to modify it					
 				    if(index == 0){
 						//change the first row which is actually empty
 						var lastRow = $self.find("tbody tr:first");
@@ -1861,7 +1882,15 @@ jQuery(document).ready(function() {
 						input.val(result);
 						input.hide();
 						jQuery("<span>"+ result +"</span>").insertAfter(input);
-			    }
+				    }
+				}
+				
+				//just remove the default consent question which is mandatory otherwise it will not save
+				if(results.length == 0){
+					//find the delete button column in head and press it to remove the default row
+					$self.find('tbody').find('button.button_remove').trigger('click');						
+					//hide the header as there is no element in the table
+					$self.find('tbody').parent().parent().find("div.aka_group_header:contains('Consent details')").hide();
 				}
 				$self.find('thead').hide();
 				$self.find("tr:last").prev().hide();    
@@ -1879,6 +1908,7 @@ jQuery(document).ready(function() {
 
     jQuery.each(jQuery("span[data-id=Cons_4]"), function (index, sp) {
     	jQuery(sp).parent().parent().find("input").valueLookup("/OCService/lookupServices/PIS");
+    	jQuery("span[data-id='Cons_4']").parent().parent().find('select').css("width", "300px");
 	});
 
     jQuery.each(jQuery("span[data-id=WD_3]"), function (index, sp) {
