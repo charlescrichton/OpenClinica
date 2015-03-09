@@ -6,6 +6,30 @@
  *
  *--------------------------------------------------------------------------*/
 
+function ifMSIE() {
+	var ua = window.navigator.userAgent;
+	var msie = ua.indexOf("MSIE ");
+	
+	if (msie > 0){   // If Internet Explorer, return version number
+	    return true;}
+	return false;
+ }
+//http://stackoverflow.com/questions/10484467/ie-8-object-doesnt-support-property-or-method-getelementsbyclassname
+//this will fix prototype error in ie8-11 in getElementsByClassName
+if (ifMSIE()){
+	document.getElementsByClassName =  function(class_names) {
+	    // Turn input in a string, prefix space for later space-dot substitution
+	    class_names = (' ' + class_names)
+	        // Escape special characters
+	        .replace(/[~!@$%^&*()_+\-=,./';:"?><[\]{}|`#]/g, '\\$&')
+	        // Normalize whitespace, right-trim
+	        .replace(/\s*(\s|$)/g, '$1')
+	        // Replace spaces with dots for querySelectorAll
+	        .replace(/\s/g, '.');
+	    return this.querySelectorAll(class_names);
+	};
+}
+
 var Prototype = {
 
   Version: '1.7.1',

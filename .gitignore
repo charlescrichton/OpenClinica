@@ -9,3 +9,7 @@ release.properties
 .settings/
 .idea/
 OpenClinica.iml
+ZipUpOpenClinica.sh
+core/OpenClinica-core.iml
+web/OpenClinica-web.iml
+ws/OpenClinica-ws.iml

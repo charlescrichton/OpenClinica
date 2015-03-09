@@ -81,6 +81,10 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         // date_updated | date |
         // owner_id | numeric |
         // update_id | numeric |
+        // oc oid | string
+
+        //gel_family_id | gel_surname |
+        //        gel_forenames | gel_nhs_number | gel_hospital_number | gel_slf_downloaded
 
         this.unsetTypeExpected();
         int ind = 1;
@@ -109,10 +113,31 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         ind++; // update_id
         this.setTypeExpected(ind, TypeNames.STRING);
         ind++; // oc oid
+
+
+
+        //gel_* columns
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.BOOL);
+        ind++; //
+
+
+        //Not sure what these are - but they go at the end!
         this.setTypeExpected(ind, TypeNames.STRING);
         ind++; //
         this.setTypeExpected(ind, TypeNames.INT);
         ind++; //
+
+
     }
 
     public void setTypesExpectedFilter() {
@@ -144,6 +169,22 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         ind++; // update_id
         this.setTypeExpected(ind, TypeNames.STRING);
         ind++; // oc oid
+
+        //gel_* columns
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.BOOL);
+        ind++; //
+
+        //These go at the end
         this.setTypeExpected(ind, TypeNames.DATE);
         ind++;
         this.setTypeExpected(ind, TypeNames.STRING);
@@ -155,6 +196,7 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
 
     }
 
+    /*
     public void setDNTypesExpected() {
 
         this.unsetTypeExpected();
@@ -191,7 +233,26 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         this.setTypeExpected(ind, TypeNames.STRING);
         ind++; //
 
+//        | gel_family_id | gel_surname |
+//                gel_forenames | gel_nhs_number | gel_hospital_number | gel_slf_downloaded
+
+        //gel_* columns
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.STRING);
+        ind++; //
+        this.setTypeExpected(ind, TypeNames.BOOL);
+        ind++; //
+
+
     }
+*/
 
     /**
      * <p>
@@ -217,6 +278,21 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         eb.setStudyName((String) hm.get("unique_identifier"));
 //        eb.setEventStartDate((Date) hm.get("date_start"));
         // eb.setActive(true);
+
+
+        eb.setGelFamilyId((String) hm.get("gel_family_id"));
+        eb.setGelSurname((String) hm.get("gel_surname"));
+        eb.setGelForenames((String) hm.get("gel_forenames"));
+        eb.setGelHospitalNumber((String) hm.get("gel_hospital_number"));
+        eb.setGelNhsNumber((String) hm.get("gel_nhs_number"));
+
+        Boolean isSlfDownloaded = (Boolean) hm.get("gel_slf_downloaded");
+        if (isSlfDownloaded == null) {
+            isSlfDownloaded = false;
+        }
+
+        eb.setGelSlfDownloaded(isSlfDownloaded);
+
         return eb;
     }
 

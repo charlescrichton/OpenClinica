@@ -43,6 +43,7 @@ import org.jmesa.limit.SortSet;
 import org.jmesa.view.component.Row;
 import org.jmesa.view.editor.BasicCellEditor;
 import org.jmesa.view.editor.CellEditor;
+import org.jmesa.view.editor.DateCellEditor;
 import org.jmesa.view.html.HtmlBuilder;
 import org.jmesa.view.html.editor.DroplistFilterEditor;
 
@@ -78,7 +79,7 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
     private UserAccountBean currentUser;
     private final boolean showMoreLink;
     private ResourceBundle resword;
-    private ResourceBundle resformat;
+    private ResourceBundle resformat ;
     private final ResourceBundle resterms = ResourceBundleProvider.getTermsBundle();
 
 
@@ -125,23 +126,46 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
     }
     @Override
     protected void configureColumns(TableFacade tableFacade, Locale locale) {
-        resword = ResourceBundleProvider.getWordsBundle(locale);
-        resformat = ResourceBundleProvider.getFormatBundle(locale);
+
+        if (resword == null) {
+            resword = ResourceBundleProvider.getWordsBundle(locale);
+        }
+
+        if (resformat == null) {
+            resformat = ResourceBundleProvider.getFormatBundle(locale);
+        }
+
+        //resformat = ResourceBundleProvider.getFormatBundle(locale);
         tableFacade.setColumnProperties(columnNames);
         Row row = tableFacade.getTable().getRow();
+        /* Columns reordered by crc (2015-03-04) */
         int index = 0;
         configureColumn(row.getColumn(columnNames[index]), resword.getString("study_subject_ID"), null, null);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), "Family ID", null, null, true, true);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), "Surname", null, null, true, true);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), "Forenames", null, null, true, true);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), "Date of Birth", null, null ,true, false);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), "NHS Number", null, null, true, true);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), "Hospital Number", null, null, true, true);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), resword.getString("gender"), null, null, true, false);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), "SLF Downloaded", null, null, true, true);
+        ++index;
+        configureColumn(row.getColumn(columnNames[index]), resword.getString("secondary_ID"), null, null);
         ++index;
         configureColumn(row.getColumn(columnNames[index]), resword.getString("subject_status"), new StatusCellEditor(), new StatusDroplistFilterEditor());
         ++index;
         configureColumn(row.getColumn(columnNames[index]), resword.getString("site_id"), null, null);
         ++index;
-        configureColumn(row.getColumn(columnNames[index]), resword.getString("rule_oid"), null, null);
-        ++index;
-        configureColumn(row.getColumn(columnNames[index]), resword.getString("gender"), null, null, true, false);
-        ++index;
-        configureColumn(row.getColumn(columnNames[index]), resword.getString("secondary_ID"), null, null);
-        ++index;
+        //configureColumn(row.getColumn(columnNames[index]), resword.getString("rule_oid"), null, null);
+        //++index;
         // group class columns
         for (int i = index; i < index + studyGroupClasses.size(); i++) {
             StudyGroupClassBean studyGroupClass = studyGroupClasses.get(i - index);
@@ -172,13 +196,15 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
         getColumnNamesMap();
         tableFacade.addFilterMatcher(new MatcherKey(Character.class), new CharFilterMatcher());
         tableFacade.addFilterMatcher(new MatcherKey(Status.class), new StatusFilterMatcher());
+        tableFacade.addFilterMatcher(new MatcherKey(Boolean.class), new BooleanFilterMatcher());
+
         // tableFacade.addFilterMatcher(new MatcherKey(Integer.class), new
         // SubjectEventStatusFilterMatcher());
 
-        for (int i = 6; i < 6 + studyGroupClasses.size(); i++) {
+        for (int i = 12; i < 12 + studyGroupClasses.size(); i++) {
             tableFacade.addFilterMatcher(new MatcherKey(Integer.class, columnNames[i]), new SubjectGroupFilterMatcher());
         }
-        for (int i = 6 + studyGroupClasses.size(); i < columnNames.length - 1; i++) {
+        for (int i = 12 + studyGroupClasses.size(); i < columnNames.length - 1; i++) {
             tableFacade.addFilterMatcher(new MatcherKey(Integer.class, columnNames[i]), new SubjectEventStatusFilterMatcher());
         }
 
@@ -191,6 +217,78 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
 
         tableFacade.setToolbar(new ListStudySubjectTableToolbar(getStudyEventDefinitions(), getStudyGroupClasses(), addSubjectLinkShow, showMoreLink));
     }
+
+    /*
+    private static HashMap<Object,Object> parseSecondaryLabel(String secondaryID) {
+        HashMap<Object,Object> theItem = new HashMap<Object, Object>();
+
+        //Expecting either an empty string, or the following form:
+        //SURNAME, Fornames [FamilyID] NHSNumber Hospital Number
+
+        String surname = "";
+        String forenames = "";
+        String familyId = "";
+        String nhsNumber = "";
+        String hospitalNumber ="";
+
+
+        try {
+
+            String trimmedId = secondaryID.trim();
+
+            if (!trimmedId.equals("")) {
+
+                //Find the first ','
+                int firstComma = trimmedId.indexOf(',');
+                if (firstComma > 0) {
+                    surname = trimmedId.substring(0, firstComma).trim();
+                }
+
+                //Remove the surname
+                String noSurnameID = trimmedId.substring(firstComma + 1).trim();
+
+                //Find the first '['
+                int firstOpenBracket = noSurnameID.indexOf('[');
+                if (firstOpenBracket > 0) {
+                    forenames = noSurnameID.substring(0, firstOpenBracket - 1).trim();
+                }
+
+                //Find the first ']'
+                int firstCloseBracket = noSurnameID.indexOf(']');
+                if (firstOpenBracket > 0) {
+                    familyId = noSurnameID.substring(firstOpenBracket + 1, firstCloseBracket).trim();
+                }
+
+                String noFamilyID = noSurnameID.substring(firstCloseBracket + 1).trim();
+                int spaceAfterNHSNumber = noFamilyID.indexOf(' ');
+                if (spaceAfterNHSNumber > 0) {
+                    nhsNumber = noFamilyID.substring(0, spaceAfterNHSNumber).trim();
+                    hospitalNumber = noFamilyID.substring(spaceAfterNHSNumber).trim();
+                }
+            }
+        }
+        catch(Throwable e) {
+            e.printStackTrace();
+        }
+
+        theItem.put(BESPOKE_FAMILY_ID, familyId);
+        theItem.put(BESPOKE_SURNAME, surname);
+        theItem.put(BESPOKE_FORENAMES, forenames);
+        theItem.put(BESPOKE_NHS_NUMBER, nhsNumber);
+        theItem.put(BESPOKE_HOSPITAL_NUMBER, hospitalNumber);
+
+        return theItem;
+    }
+    */
+
+    public final static String BESPOKE_FAMILY_ID = "familyId";
+    public final static String BESPOKE_SURNAME = "surname";
+    public final static String BESPOKE_FORENAMES = "forenames";
+    public final static String BESPOKE_DOB = "dob";
+    public final static String BESPOKE_NHS_NUMBER = "nhsNumber";
+    public final static String BESPOKE_HOSPITAL_NUMBER = "hospitalNumber";
+    public final static String BESPOKE_SLF_DOWNLOADED = "slfDownloaded";
+
 
     @Override
     public void setDataAndLimitVariables(TableFacade tableFacade) {
@@ -220,9 +318,20 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
             theItem.put("studySubject.oid", studySubjectBean.getOid());
             theItem.put("studySubject.secondaryLabel", studySubjectBean.getSecondaryLabel());
 
+            theItem.put(BESPOKE_FAMILY_ID, studySubjectBean.getGelFamilyId());
+            theItem.put(BESPOKE_FORENAMES, studySubjectBean.getGelForenames());
+            theItem.put(BESPOKE_SURNAME, studySubjectBean.getGelSurname());
+            theItem.put(BESPOKE_HOSPITAL_NUMBER, studySubjectBean.getGelHospitalNumber());
+            theItem.put(BESPOKE_NHS_NUMBER, studySubjectBean.getGelNhsNumber());
+            theItem.put(BESPOKE_SLF_DOWNLOADED, studySubjectBean.isGelSlfDownloaded());
+
+//            theItem.putAll(parseSecondaryLabel(studySubjectBean.getSecondaryLabel()));
+
             SubjectBean subjectBean = (SubjectBean) getSubjectDAO().findByPK(studySubjectBean.getSubjectId());
             theItem.put("subject", subjectBean);
             theItem.put("subject.charGender", subjectBean.getGender());
+            theItem.put(BESPOKE_DOB, formatDate(subjectBean.getDateOfBirth()));
+
 
             // Get All study events for this study subject and then put list in
             // HashMap with study event definition id as
@@ -321,14 +430,24 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
         return false;
     }
 
+    /* Changed by crc (2015-03-04) to reorder the columns */
     private void getColumnNames() {
         ArrayList<String> columnNamesList = new ArrayList<String>();
         columnNamesList.add("label");
+
+        columnNamesList.add(BESPOKE_FAMILY_ID);
+        columnNamesList.add(BESPOKE_SURNAME);
+        columnNamesList.add(BESPOKE_FORENAMES);
+        columnNamesList.add(BESPOKE_DOB);
+        columnNamesList.add(BESPOKE_NHS_NUMBER);
+        columnNamesList.add(BESPOKE_HOSPITAL_NUMBER);
+        columnNamesList.add("subject.charGender");
+        columnNamesList.add(BESPOKE_SLF_DOWNLOADED);
+
+        columnNamesList.add("secondaryLabel");
         columnNamesList.add("status");
         columnNamesList.add("enrolledAt");
-        columnNamesList.add("oid");
-        columnNamesList.add("subject.charGender");
-        columnNamesList.add("secondaryLabel");
+        //columnNamesList.add("oid");
         for (StudyGroupClassBean studyGroupClass : getStudyGroupClasses()) {
             columnNamesList.add("sgc_" + studyGroupClass.getId());
         }
@@ -339,14 +458,26 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
         columnNames = columnNamesList.toArray(columnNames);
     }
 
+    /* Changed by crc (2015-03-04) to reorder the columns */
     private void getColumnNamesMap() {
         ArrayList<String> columnNamesList = new ArrayList<String>();
+
         columnNamesList.add("studySubject.label");
+
+        columnNamesList.add(BESPOKE_FAMILY_ID);
+        columnNamesList.add(BESPOKE_SURNAME);
+        columnNamesList.add(BESPOKE_FORENAMES);
+        columnNamesList.add(BESPOKE_DOB);
+        columnNamesList.add(BESPOKE_NHS_NUMBER);
+        columnNamesList.add(BESPOKE_HOSPITAL_NUMBER);
+        columnNamesList.add("subject.charGender");
+        columnNamesList.add(BESPOKE_SLF_DOWNLOADED);
+
+        columnNamesList.add("studySubject.secondaryLabel");
         columnNamesList.add("studySubject.status");
         columnNamesList.add("enrolledAt");
-        columnNamesList.add("studySubject.oid");
-        columnNamesList.add("subject.charGender");
-        columnNamesList.add("studySubject.secondaryLabel");
+
+        //columnNamesList.add("studySubject.oid");
         for (StudyGroupClassBean studyGroupClass : getStudyGroupClasses()) {
             columnNamesList.add("sgc_" + studyGroupClass.getId());
         }
@@ -530,6 +661,18 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
     private class CharFilterMatcher implements FilterMatcher {
         public boolean evaluate(Object itemValue, String filterValue) {
             String item = StringUtils.lowerCase(String.valueOf(itemValue));
+            String filter = StringUtils.lowerCase(String.valueOf(filterValue));
+            if (StringUtils.contains(item, filter)) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private class BooleanFilterMatcher implements FilterMatcher {
+        public boolean evaluate(Object itemValue, String filterValue) {
+            String item = StringUtils.lowerCase(Boolean.valueOf(String.valueOf(itemValue)).toString());
             String filter = StringUtils.lowerCase(String.valueOf(filterValue));
             if (StringUtils.contains(item, filter)) {
                 return true;
@@ -1329,9 +1472,20 @@ public class ListStudySubjectTableFactory extends AbstractTableFactory {
     }
 
     private String formatDate(Date date) {
-        String format = resformat.getString("date_format_string");
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        return sdf.format(date);
+
+        if (resformat == null) {
+            resformat = ResourceBundleProvider.getFormatBundle(locale);
+        }
+
+        try {
+            String format = resformat.getString("date_format_string");
+            logger.info("resformat.getString(\"date_format_string\") = "+format);
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            return sdf.format(date);
+        } catch (Throwable e) {
+            logger.error("Problem with data format",e);
+            return "";
+        }
     }
 
 }
