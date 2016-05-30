@@ -19,12 +19,16 @@ public class ActionProcessorFacade {
             return new DiscrepancyNoteActionProcessor(ds, ruleActionRunLogDao, ruleSetRule);
         case EMAIL:
             return new EmailActionProcessor(ds, mailSender, ruleActionRunLogDao, ruleSetRule);
+        case NOTIFICATION:
+            return new NotificationActionProcessor(ds, mailSender, ruleSetRule);
         case SHOW:
             return new ShowActionProcessor(ds, itemMetadataService, ruleSet);
         case HIDE:
             return new HideActionProcessor(ds, itemMetadataService, ruleSet);
         case INSERT:
             return new InsertActionProcessor(ds, itemMetadataService, ruleActionRunLogDao, ruleSet, ruleSetRule);
+        case RANDOMIZE:
+            return new RandomizeActionProcessor(ds, itemMetadataService, ruleActionRunLogDao, ruleSet, ruleSetRule);
         default:
             throw new OpenClinicaSystemException("actionType", "Unrecognized action type!");
         }

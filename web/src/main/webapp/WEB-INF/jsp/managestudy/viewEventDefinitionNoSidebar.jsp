@@ -71,7 +71,7 @@
   <fmt:message key="CRFs" bundle="${resword}"/>
 </div>
 <%--<p><fmt:message key="click_the_up_down_arrow_icons" bundle="${restext}"/></p>--%>
-<div style="width: 700px;margin-left: 20px;">
+<div style="width: 900px;margin-left: 20px;">
 <div class="box_T"><div class="box_L"><div class="box_R"><div class="box_B"><div class="box_TL"><div class="box_TR"><div class="box_BL"><div class="box_BR">
 
 
@@ -85,6 +85,15 @@
     <!-- <td valign="top" class="table_header_row"><fmt:message key="enforce_decision_conditions" bundle="${restext}"/></td>-->
     <td valign="top" class="table_header_row"><fmt:message key="default_version" bundle="${resword}"/></td>
      <td valign="top" class="table_header_row"><fmt:message key="hidden_crf" bundle="${resword}"/></td>     
+    <c:choose>
+    <c:when test="${participateFormStatus == 'enabled'}">
+     <td valign="top" class="table_header_row"><fmt:message key="participant_form" bundle="${resword}"/></td>     
+     <td valign="top" class="table_header_row"><fmt:message key="allow_anonymous_submission" bundle="${resword}"/></td>     
+     <td valign="top" class="table_header_row"><fmt:message key="submission_url" bundle="${resword}"/></td>     
+     <td valign="top" class="table_header_row"><fmt:message key="offline" bundle="${resword}"/></td>     
+    </c:when>  
+   </c:choose>
+
      <td valign="top" class="table_header_row"><fmt:message key="null_values" bundle="${resword}"/></td>    
      <td valign="top" class="table_header_row"><fmt:message key="sdv_option" bundle="${resword}"/></td>
     <td valign="top" class="table_header_row"><fmt:message key="status" bundle="${resword}"/></td>
@@ -135,9 +144,61 @@
    <td class="table_cell">   
     <c:out value="${crf.defaultVersionName}"/>     
    </td>
-   <td class="table_cell">
-    <c:out value="${crf.hideCrf}"/>
-   </td>
+
+    <td class="table_cell">
+     <c:choose>
+      <c:when test="${crf.hideCrf == true}"> <fmt:message key="yes" bundle="${resword}"/> </c:when>
+      <c:otherwise> <fmt:message key="no" bundle="${resword}"/> </c:otherwise>
+     </c:choose>
+    </td>
+
+    <c:choose>
+      <c:when test="${participateFormStatus == 'enabled'}">
+        <td class="table_cell">
+          <c:choose>
+            <c:when test="${crf.participantForm == true}"> <fmt:message key="yes" bundle="${resword}"/> </c:when>
+            <c:otherwise> <fmt:message key="no" bundle="${resword}"/> </c:otherwise>
+          </c:choose>
+        </td>
+        <td class="table_cell">
+          <c:choose>
+            <c:when test="${crf.participantForm == true}">
+              <c:choose>
+                <c:when test="${crf.allowAnonymousSubmission == true}"> <fmt:message key="yes" bundle="${resword}"/> </c:when>
+                <c:otherwise> <fmt:message key="no" bundle="${resword}"/> </c:otherwise>
+              </c:choose>
+            </c:when>
+          </c:choose>
+        </td>
+        <td class="table_cell">
+          <c:choose>
+            <c:when test="${crf.participantForm == true && crf.allowAnonymousSubmission == true}">
+              <c:choose>
+                <c:when test="${crf.submissionUrl != ''}">
+                  <c:out value="${participantUrl}${crf.submissionUrl}"/>
+                </c:when>
+             </c:choose>
+            </c:when>
+          </c:choose>
+        </td>
+        
+             <td class="table_cell">
+        <c:choose>
+          <c:when test="${crf.participantForm == true && crf.allowAnonymousSubmission == true}">
+            <c:choose>
+              <c:when test="${crf.offline == true}"> 
+                <fmt:message key="yes" bundle="${resword}"/> 
+              </c:when>
+              <c:otherwise> <fmt:message key="no" bundle="${resword}"/> </c:otherwise>
+            </c:choose>
+          </c:when>
+        </c:choose>
+      </td>
+        
+        
+      </c:when>
+    </c:choose>
+
    <td class="table_cell"> 
     <c:out value="${crf.nullValues}"/> &nbsp;    
   </td>          

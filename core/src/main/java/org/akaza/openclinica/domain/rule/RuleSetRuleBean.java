@@ -13,6 +13,8 @@ import org.akaza.openclinica.domain.rule.action.EmailActionBean;
 import org.akaza.openclinica.domain.rule.action.EventActionBean;
 import org.akaza.openclinica.domain.rule.action.HideActionBean;
 import org.akaza.openclinica.domain.rule.action.InsertActionBean;
+import org.akaza.openclinica.domain.rule.action.NotificationActionBean;
+import org.akaza.openclinica.domain.rule.action.RandomizeActionBean;
 import org.akaza.openclinica.domain.rule.action.RuleActionBean;
 import org.akaza.openclinica.domain.rule.action.RuleActionRunBean.Phase;
 import org.akaza.openclinica.domain.rule.action.ShowActionBean;
@@ -55,9 +57,13 @@ public class RuleSetRuleBean extends AbstractAuditableMutableDomainObject {
     private List<HideActionBean> lazyHideActions = LazyList.decorate(new ArrayList<HideActionBean>(), FactoryUtils.instantiateFactory(HideActionBean.class));
     private List<InsertActionBean> lazyInsertActions = LazyList.decorate(new ArrayList<InsertActionBean>(),
             FactoryUtils.instantiateFactory(InsertActionBean.class));
+    private List<RandomizeActionBean> lazyRandomizeActions = LazyList.decorate(new ArrayList<RandomizeActionBean>(),
+            FactoryUtils.instantiateFactory(RandomizeActionBean.class));
 
     private List<EventActionBean> lazyEventActions =  LazyList.decorate(new ArrayList<EventActionBean>(),
             FactoryUtils.instantiateFactory(EventActionBean.class));
+    private List<NotificationActionBean> lazyNotificationActions = LazyList
+            .decorate(new ArrayList<NotificationActionBean>(), FactoryUtils.instantiateFactory(NotificationActionBean.class));
 
     
     // Transient
@@ -73,9 +79,11 @@ public class RuleSetRuleBean extends AbstractAuditableMutableDomainObject {
         actions = new ArrayList<RuleActionBean>();
         actions.addAll(lazyDiscrepancyNoteActions);
         actions.addAll(lazyEmailActions);
+        actions.addAll(lazyNotificationActions);
         actions.addAll(lazyShowActions);
         actions.addAll(lazyHideActions);
         actions.addAll(lazyEventActions);
+        actions.addAll(lazyRandomizeActions);
     }
 
     @Transient
@@ -245,6 +253,14 @@ public class RuleSetRuleBean extends AbstractAuditableMutableDomainObject {
     public void setLazyEmailActions(List<EmailActionBean> lazyEmailActions) {
         this.lazyEmailActions = lazyEmailActions;
     }
+    @Transient
+    public List<NotificationActionBean> getLazyNotificationActions() {
+        return lazyNotificationActions;
+    }
+
+    public void setLazyNotificationActions(List<NotificationActionBean> lazyNotificationActions) {
+        this.lazyNotificationActions = lazyNotificationActions;
+    }
 
     @Transient
     public List<ShowActionBean> getLazyShowActions() {
@@ -272,6 +288,16 @@ public class RuleSetRuleBean extends AbstractAuditableMutableDomainObject {
     public void setLazyInsertActions(List<InsertActionBean> lazyInsertActions) {
         this.lazyInsertActions = lazyInsertActions;
     }
+
+    @Transient
+    public List<RandomizeActionBean> getLazyRandomizeActions() {
+        return lazyRandomizeActions;
+    }
+
+    public void setLazyRandomizeActions(List<RandomizeActionBean> lazyRandomizeActions) {
+        this.lazyRandomizeActions = lazyRandomizeActions;
+    }
+
 
     @Override
     public int hashCode() {

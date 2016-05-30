@@ -16,19 +16,28 @@ import org.akaza.openclinica.bean.managestudy.StudyEventDefinitionBean;
 import org.akaza.openclinica.bean.submit.CRFVersionBean;
 import org.akaza.openclinica.bean.submit.EventCRFBean;
 import org.akaza.openclinica.bean.submit.ItemDataBean;
+import org.akaza.openclinica.control.SpringServletAccess;
 import org.akaza.openclinica.control.core.SecureController;
 import org.akaza.openclinica.core.EmailEngine;
 import org.akaza.openclinica.core.form.StringUtil;
 import org.akaza.openclinica.dao.admin.CRFDAO;
+import org.akaza.openclinica.dao.core.CoreResources;
 import org.akaza.openclinica.dao.managestudy.EventDefinitionCRFDAO;
+import org.akaza.openclinica.dao.managestudy.StudyDAO;
 import org.akaza.openclinica.dao.managestudy.StudyEventDAO;
 import org.akaza.openclinica.dao.managestudy.StudyEventDefinitionDAO;
+import org.akaza.openclinica.dao.service.StudyParameterValueDAO;
 import org.akaza.openclinica.dao.submit.CRFVersionDAO;
 import org.akaza.openclinica.dao.submit.EventCRFDAO;
 import org.akaza.openclinica.dao.submit.ItemDataDAO;
+import org.akaza.openclinica.service.managestudy.EventDefinitionCrfTagService;
+import org.akaza.openclinica.service.pmanage.Authorization;
+import org.akaza.openclinica.service.pmanage.ParticipantPortalRegistrar;
 import org.akaza.openclinica.view.Page;
 import org.akaza.openclinica.web.InsufficientPermissionException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -38,6 +47,7 @@ import java.util.Date;
  * Restores a removed study event definition and all its related data
  */
 public class RestoreEventDefinitionServlet extends SecureController {
+    EventDefinitionCrfTagService eventDefinitionCrfTagService = null;
     /**
      *
      */
@@ -78,10 +88,15 @@ public class RestoreEventDefinitionServlet extends SecureController {
             edc.setCrfName(crf.getName());
             CRFVersionBean defaultVersion = (CRFVersionBean) cvdao.findByPK(edc.getDefaultVersionId());
             edc.setDefaultVersionName(defaultVersion.getName());
+            CRFBean cBean = (CRFBean) cdao.findByPK(edc.getCrfId());                
+            String crfPath=sed.getOid()+"."+cBean.getOid();
+            edc.setOffline(getEventDefinitionCrfTagService().getEventDefnCrfOfflineStatus(2,crfPath,true));
+
         }
 
         // finds all events
         StudyEventDAO sedao = new StudyEventDAO(sm.getDataSource());
+        StudyParameterValueDAO spvdao = new StudyParameterValueDAO(sm.getDataSource());    
         ArrayList events = (ArrayList) sedao.findAllByDefinition(sed.getId());
 
         String action = request.getParameter("action");
@@ -95,7 +110,10 @@ public class RestoreEventDefinitionServlet extends SecureController {
                     forwardPage(Page.LIST_DEFINITION_SERVLET);
                     return;
                 }
-
+                String participateFormStatus = spvdao.findByHandleAndStudy(sed.getStudyId(), "participantPortal").getValue();
+                request.setAttribute("participateFormStatus",participateFormStatus );
+                if (participateFormStatus.equals("enabled")) baseUrl();
+                            
                 request.setAttribute("definitionToRestore", sed);
                 request.setAttribute("eventDefinitionCRFs", eventDefinitionCRFs);
                 request.setAttribute("events", events);
@@ -186,5 +204,12 @@ public class RestoreEventDefinitionServlet extends SecureController {
         }
         logger.info("Sending email done..");
     }
+
+    public EventDefinitionCrfTagService getEventDefinitionCrfTagService() {
+        eventDefinitionCrfTagService=
+         this.eventDefinitionCrfTagService != null ? eventDefinitionCrfTagService : (EventDefinitionCrfTagService) SpringServletAccess.getApplicationContext(context).getBean("eventDefinitionCrfTagService");
+
+         return eventDefinitionCrfTagService;
+     }
 
 }

@@ -23,6 +23,8 @@ public class RuleActionContainerComparator implements Comparator<RuleActionConta
         order.put(ActionType.SHOW, "4");
         order.put(ActionType.HIDE, "5");
         order.put(ActionType.EVENT,"6");
+        order.put(ActionType.NOTIFICATION,"7");
+        order.put(ActionType.RANDOMIZE,"8");
     }
 
     public int compare(RuleActionContainer o1, RuleActionContainer o2) {

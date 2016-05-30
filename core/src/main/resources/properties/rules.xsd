@@ -18,6 +18,7 @@
     <xs:complexType name="RuleAssignmentType">
         <xs:sequence>
             <xs:element ref="Target"/>
+            <xs:element ref="RunOnSchedule" minOccurs="0"/>
             <xs:element ref="RuleRef" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
@@ -30,7 +31,9 @@
             <xs:element ref="ShowAction" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="HideAction" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="InsertAction" minOccurs="0" maxOccurs="unbounded"/>
-             <xs:element ref="EventAction" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="EventAction" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="NotificationAction" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="RandomizeAction" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attributeGroup ref="RuleRefAttributeType"/>
     </xs:complexType>
@@ -63,6 +66,16 @@
         <xs:attributeGroup ref="DiscrepancyNoteActionAttributeType"/>
     </xs:complexType>
     
+    <xs:element name="NotificationAction" type="NotificationActionType"/>
+    <xs:complexType name="NotificationActionType">
+        <xs:sequence>
+            <xs:element name="To" type="xs:string"/>
+            <xs:element name="Subject" type="xs:string" minOccurs="0"/>
+            <xs:element name="Message" type="xs:string"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="DiscrepancyNoteActionAttributeType"/>
+    </xs:complexType>
+
     <xs:element name="ShowAction" type="ShowActionType"/>
     <xs:complexType name="ShowActionType">
         <xs:sequence>
@@ -93,6 +106,23 @@
         <xs:attribute name="OID" type="xs:string"></xs:attribute>
     </xs:complexType>
     
+   <xs:element name="RandomizeAction" type="RandomizeActionType"/>
+    <xs:complexType name="RandomizeActionType">
+        <xs:sequence>
+            <xs:element name="Run" type="ActionRunType" minOccurs="0"/>
+            <xs:element name="DestinationProperty" type="SubPropertyType" maxOccurs="unbounded"/>
+            <xs:element name="StratificationFactors" minOccurs="0" maxOccurs="1">
+             <xs:complexType>
+                 <xs:sequence>
+                      <xs:element type="xs:string" name="StratificationFactor" maxOccurs="unbounded" minOccurs="0"/>
+                 </xs:sequence>
+             </xs:complexType>
+           </xs:element>            
+        </xs:sequence>
+        <xs:attributeGroup ref="DiscrepancyNoteActionAttributeType"/>
+        <xs:attribute name="OID" type="xs:string"></xs:attribute>
+    </xs:complexType>
+
     <xs:element name="EventAction" type="EventActionType">
     </xs:element>
     <xs:complexType name="EventActionType">
@@ -145,6 +175,7 @@
         <xs:attribute name="Value" type="xs:string" use="optional"/>
     </xs:attributeGroup>
     
+
      <xs:attributeGroup name="ActionRunAttributeType">
         <xs:attribute name="AdministrativeDataEntry" type="xs:boolean" use="required"/>
         <xs:attribute name="InitialDataEntry" type="xs:boolean" use="required"/>
@@ -168,6 +199,17 @@
         </xs:simpleContent>
     </xs:complexType>
     
+    <xs:element name="RunOnSchedule" type="RunOnScheduleType"/>
+    <xs:complexType name="RunOnScheduleType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="Time" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+
+
     <xs:complexType name="PropertyType">
         <xs:sequence>
             <xs:element name="ValueExpression" type="TargetType" minOccurs="0"/>
@@ -175,6 +217,26 @@
         <xs:attributeGroup ref="PropertyAttributeType"/>
     </xs:complexType>
     
+
+    <xs:complexType name="SubPropertyType">
+        <xs:attribute name="OID" type="xs:string" use="required"/>
+    </xs:complexType>
+
+
+
+    <xs:complexType name="StratificationFactorsType">
+        <xs:sequence>
+            <xs:element name="StratificationFactor" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+
+
+
+
+
+
+
      <xs:complexType name="ActionRunType">
         <xs:sequence>
         </xs:sequence>

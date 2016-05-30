@@ -176,7 +176,11 @@ public class EventDefinitionCRFBean extends AuditableEntityBean implements Compa
     //private SourceDataVerification sourceDataVerification = SourceDataVerification.NOTREQUIRED;
     private String selectedVersionIds = "";
     private int parentId = 0;
-
+    private boolean participantForm;
+    private boolean allowAnonymousSubmission;
+    private String submissionUrl;
+    private boolean offline;
+    
     //Not in db
     private String eventName;
 
@@ -582,4 +586,39 @@ public class EventDefinitionCRFBean extends AuditableEntityBean implements Compa
 	public void setDefaultCRF(CRFVersionBean defaultCRF) {
 		this.defaultCRF = defaultCRF;
 	}
+
+	public boolean isParticipantForm() {
+		return participantForm == true;
+	}
+
+	public void setParticipantForm(boolean participantForm) {
+		this.participantForm = participantForm;
+	}
+
+	public boolean isAllowAnonymousSubmission() {
+		return allowAnonymousSubmission == true;
+	}
+
+	public void setAllowAnonymousSubmission(boolean allowAnonymousSubmission) {
+		this.allowAnonymousSubmission = allowAnonymousSubmission;
+	}
+
+	public String getSubmissionUrl() {
+		return submissionUrl;
+	}
+
+	public void setSubmissionUrl(String submissionUrl) {
+		this.submissionUrl = submissionUrl;
+		
+	}
+
+    public boolean isOffline() {
+        return offline;
+    }
+
+    public void setOffline(boolean offline) {
+        this.offline = offline;
+    }
+
+	
 }

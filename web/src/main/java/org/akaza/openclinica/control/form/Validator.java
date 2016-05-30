@@ -394,7 +394,7 @@ public class Validator {
 
   
     public static final ValidatorRegularExpression USERNAME =
-        new ValidatorRegularExpression("at least 5 alphanumeric or underscore characters", "[A-Za-z0-9_]{5,}");
+        new ValidatorRegularExpression("at least 2 alphanumeric or underscore characters", "[A-Za-z0-9_]{2,}");
 
     public static final int NO_BLANKS = 1;
     public static final int IS_A_NUMBER = 2;
@@ -453,6 +453,10 @@ public class Validator {
     public static final int TO_HIDE_CONDITIONAL_DISPLAY = 37;
 
     public static final int NO_SEMI_COLONS_OR_COLONS = 43;
+    public static final int NO_SPACES_ALLOWED = 44;
+    public static final int SUBMISSION_URL_NOT_UNIQUE = 45;
+    
+    public static final int NO_LEADING_OR_TRAILING_SPACES = 46;
 
     /**
      * The last field for which an addValidation method was invoked. This is
@@ -474,7 +478,8 @@ public class Validator {
         validations = new HashMap();
         errors = new HashMap();
         this.request = request;
-        locale = LocaleResolver.getLocale(request);
+ //        locale=request.getLocale();
+       locale = LocaleResolver.getLocale(request);
         resformat = ResourceBundleProvider.getFormatBundle(locale);
         restext = ResourceBundleProvider.getTextsBundle(locale);
         resexception = ResourceBundleProvider.getExceptionsBundle(locale);
@@ -696,7 +701,6 @@ public class Validator {
     }
 
     protected void addError(String fieldName, Validation v) {
-
         locale = LocaleResolver.getLocale(request);
         resexception = ResourceBundleProvider.getExceptionsBundle(locale);
         resword = ResourceBundleProvider.getWordsBundle(locale);
@@ -709,6 +713,9 @@ public class Validator {
             switch (v.getType()) {
             case NO_BLANKS:
                 errorMessage = resexception.getString("field_not_blank");
+                break;
+            case NO_LEADING_OR_TRAILING_SPACES:
+                errorMessage = resexception.getString("field_no_leading_or_trailing_spaces");
                 break;
             case IS_A_NUMBER:
                 errorMessage = resexception.getString("field_should_number");
@@ -836,6 +843,12 @@ public class Validator {
             case NO_SEMI_COLONS_OR_COLONS:
                 errorMessage = resexception.getString("field_not_have_colons_or_semi");
                 break;
+            case NO_SPACES_ALLOWED:
+                errorMessage = resexception.getString("field_no_spaces_allowed");
+                break;
+            case SUBMISSION_URL_NOT_UNIQUE:
+                errorMessage = resexception.getString("field_submission_url_not_unique");
+                break;
             }
         }
         // logger.info("<<<error added: "+errorMessage+" to "+fieldName);
@@ -886,6 +899,11 @@ public class Validator {
         switch (v.getType()) {
         case NO_BLANKS:
             if (isBlank(fieldName)) {
+                addError(fieldName, v);
+            }
+            break;
+        case NO_LEADING_OR_TRAILING_SPACES:
+            if (isLeadingTrailingSpaces(fieldName)) {
                 addError(fieldName, v);
             }
             break;
@@ -1117,10 +1135,22 @@ public class Validator {
             if(isColonSemiColon(fieldName))
             addError(fieldName, v);
             break;
-        }
+        case NO_SPACES_ALLOWED:
+            if (isSpacesInSubmissionUrl(fieldName)) {
+            	addError(fieldName, v);
+            }
+            break;
+        case SUBMISSION_URL_NOT_UNIQUE:
+            if (isSubmissionUrlUnique(fieldName)) {
+                addError(fieldName, v);
+            }
+break;
+     }
         return errors;
     }
 
+    
+    
     /*
      * Instead of rewriting the whole Validation do this.
      */
@@ -1141,6 +1171,17 @@ public class Validator {
             return true;
         }
 
+        return false;
+    }
+
+    protected boolean isLeadingTrailingSpaces(String fieldName) {
+        String fieldValue = getFieldValue(fieldName);
+
+        if (fieldValue != null) {
+            if (!fieldValue.trim().equals(fieldValue)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -1719,6 +1760,20 @@ public class Validator {
         return true;
     }
 
+    protected boolean isSpacesInSubmissionUrl(String fieldName) {
+        String fieldValue = getFieldValue(fieldName);
+        if (fieldValue ==null) return false; 
+        if (fieldValue.trim().contains(" ")) {
+            return true;
+        }
+        return false;
+    }
+    
+    protected boolean isSubmissionUrlUnique(String fieldName) {
+            return true;
+    }
+
+    
     /**
      * Determine if the value for the specified field matches the value in the
      * bean.

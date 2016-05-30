@@ -32,7 +32,7 @@ import org.hibernate.annotations.Type;
  */
 @Entity
 @Table(name = "item_data")
-@GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "event_definition_crf_event_definition_crf_id_seq") })
+@GenericGenerator(name = "id-generator", strategy = "native", parameters = { @Parameter(name = "sequence", value = "item_data_item_data_id_seq") })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 
 public class ItemData  extends DataMapDomainObject {
@@ -47,6 +47,8 @@ public class ItemData  extends DataMapDomainObject {
 	private Date dateUpdated;
 	private Integer updateId;
 	private Integer ordinal;
+	private Status oldStatus;
+	private Boolean deleted;
 	private List<DnItemDataMap> dnItemDataMaps;
 
 	public ItemData() {
@@ -59,7 +61,7 @@ public class ItemData  extends DataMapDomainObject {
 
 	public ItemData(int itemDataId, UserAccount userAccount, EventCrf eventCrf,
 			Item item, Status status, String value, Date dateCreated,
-			Date dateUpdated, Integer updateId, Integer ordinal,
+			Date dateUpdated, Integer updateId, Integer ordinal, Boolean ocformDeleted,
 			 List<DnItemDataMap> dnItemDataMaps) {
 		this.itemDataId = itemDataId;
 		this.userAccount = userAccount;
@@ -71,7 +73,8 @@ public class ItemData  extends DataMapDomainObject {
 		this.dateUpdated = dateUpdated;
 		this.updateId = updateId;
 		this.ordinal = ordinal;
-		
+		this.deleted = ocformDeleted;
+
 		this.dnItemDataMaps = dnItemDataMaps;
 	}
 
@@ -172,11 +175,30 @@ public class ItemData  extends DataMapDomainObject {
 		return this.ordinal;
 	}
 
-	public void setOrdinal(Integer ordinal) {
+    @Type(type = "status")
+    @Column(name = "old_status_id")
+	public Status getOldStatus() {
+        return oldStatus;
+    }
+
+    public void setOldStatus(Status oldStatus) {
+        this.oldStatus = oldStatus;
+    }
+
+    public void setOrdinal(Integer ordinal) {
 		this.ordinal = ordinal;
 	}
 
-	
+	@Column(name = "deleted", nullable = false)
+	public Boolean isDeleted() {
+		return this.deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+
 	@OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL}, mappedBy = "itemData")
 	@OrderBy("discrepancyNote")
 	public List<DnItemDataMap> getDnItemDataMaps() {

@@ -205,11 +205,9 @@
       </td>
 
      <td>
-
       <a onmouseup="javascript:setImage('bt_run','images/bt_EnterData.gif');" 
          onmousedown="javascript:setImage('bt_run','images/bt_EnterData_d.gif');" 
-         href="${sessionScope.ruleDesignerUrl}&path=ViewRuleSet?ruleSetId=${ruleSet.id}"><img align="left" hspace="6" border="0" title="Rule Designer" alt="Rule Designer" src="images/bt_EnterData.gif" name="Test"></a>
-      
+         href="${designerUrl}&target=${ruleSet.target.value}&ruleOid=${ruleSetRule.ruleBean.oid}&study_oid=${currentStudy}&provider_user=${providerUser}&path=ViewRuleSet?ruleSetId=${ruleSet.id}"><img align="left" hspace="6" border="0" title="Rule Designer" alt="Rule Designer" src="images/bt_EnterData.gif" name="Test"></a>
       </td>
       <%--</c:when>--%>
       <%--<c:otherwise>--%>
@@ -281,7 +279,7 @@
 		        	</tr>
 		        </c:if>
 		        
-		        <c:if test="${val.actionType.code!=1 && val.actionType.code !=2 && fn:length(val.properties)>0}">
+		        <c:if test="${val.actionType.code!=1 && val.actionType.code !=2 && val.actionType.code !=7 && fn:length(val.properties)>0}">
 		        	<c:set var="props" value=""/>
 		    		<c:forEach items="${val.properties}" var="prop" varStatus="status">
 		    		
@@ -304,17 +302,31 @@
 
 		    		
 		    		</c:forEach>
+		    		
 		        	<c:if test="${fn:length(props)>0}">
 		    			<tr valign="top">
 	                		<td ><i><fmt:message key="dest_prop_colon" bundle="${resword}" /></i></td>
-    
-
-
                 			<td ><c:out value="${fn:substring(props,0,fn:length(props)-1)}"/></td>
     
                 		</tr>
                 	</c:if>
                 </c:if>
+              
+              <c:if test="${val.actionType.code==8 }">                
+                    <c:set var="factors" value=""/>                
+		    		<c:forEach items="${val.stratificationFactors}" var="factor" varStatus="status">
+  		    			<c:set var="factors"><c:out value="${factors}"/> <c:out value="${factor.stratificationFactor.value}"/>,</c:set>
+		    		</c:forEach>
+                
+                		    <c:if test="${fn:length(factors)>0}">
+		    			<tr valign="top">
+	                		<td ><i><fmt:message key="stratification_factor_colon" bundle="${resword}" /></i></td>
+                			<td ><c:out value="${fn:substring(factors,0,fn:length(factors)-1)}"/></td>
+    
+                		</tr>
+                	</c:if>
+                   </c:if>
+                
             </table>
             </td>
             <td class="table_cell">&nbsp;</td>

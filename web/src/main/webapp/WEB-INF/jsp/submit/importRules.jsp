@@ -6,7 +6,6 @@
 <fmt:setBundle basename="org.akaza.openclinica.i18n.words" var="resword"/>
 <fmt:setBundle basename="org.akaza.openclinica.i18n.workflow" var="resworkflow"/>
 <fmt:setBundle basename="org.akaza.openclinica.i18n.terms" var="resterm"/>
-<fmt:setBundle basename="org.akaza.openclinica.i18n.terms" var="resterm"/>
 <fmt:setBundle basename="org.akaza.openclinica.i18n.page_messages" var="respage"/>
 
 <c:choose>
@@ -67,7 +66,7 @@
 </c:choose>
 
 <fmt:message key="import_rule_data" bundle="${resworkflow}"/> ${study.name}
-<a href="javascript:openDocWindow('https://docs.openclinica.com/3.1/study-setup')"><img src="images/bt_Help_Manage.gif" border="0" alt="<fmt:message key="help" bundle="${restext}"/>" title="<fmt:message key="help" bundle="${restext}"/>"></a>
+<a href="javascript:openDocWindow('https://docs.openclinica.com/3.1/rules')"><img src="images/bt_Help_Manage.gif" border="0" alt="<fmt:message key="help" bundle="${restext}"/>" title="<fmt:message key="help" bundle="${restext}"/>"></a>
 </h1>
 
 
@@ -103,12 +102,12 @@
 
 <span class="table_title_Admin"><fmt:message key="rule_import_getting_started" bundle="${resterm}"/></span>
 <div>&nbsp;</div>
-<div class="homebox_bullets"><a href="javascript:openDocWindow('https://docs.openclinica.com/3.1/study-setup')"><fmt:message key="rule_import_rules_documentation" bundle="${resterm}"/></a></div><br/>
+<div class="homebox_bullets"><a href="javascript:openDocWindow('https://docs.openclinica.com/3.1/rules')"><fmt:message key="rule_import_rules_documentation" bundle="${resterm}"/></a></div><br/>
  
 
 <span class="table_title_Admin"><fmt:message key="rule_import_templates" bundle="${resterm}"/></span>
 <div>&nbsp;</div>
-<div class="homebox_bullets"><a href="ImportRule?action=downloadtemplateWithNotes"><fmt:message key="rule_import_all_actions_with_notes" bundle="${resterm}"/></a></div><br/>
+<!--<div class="homebox_bullets"><a href="ImportRule?action=downloadtemplateWithNotes"><fmt:message key="rule_import_all_actions_with_notes" bundle="${resterm}"/></a></div><br/> -->
 <div class="homebox_bullets"><a href="ImportRule?action=downloadtemplate"><fmt:message key="rule_import_all_actions_without_notes" bundle="${resterm}"/></a></div><br/>
 
 <!-- @pgawade 13-April-2011 - Fix for issue #8877: Removed the Rule Designer link from import Rule Data page

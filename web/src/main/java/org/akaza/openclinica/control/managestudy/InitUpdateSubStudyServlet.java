@@ -16,19 +16,26 @@ import org.akaza.openclinica.bean.managestudy.StudyEventDefinitionBean;
 import org.akaza.openclinica.bean.service.StudyParameterValueBean;
 import org.akaza.openclinica.bean.service.StudyParamsConfig;
 import org.akaza.openclinica.bean.submit.CRFVersionBean;
+import org.akaza.openclinica.control.SpringServletAccess;
 import org.akaza.openclinica.control.core.SecureController;
 import org.akaza.openclinica.control.form.FormProcessor;
 import org.akaza.openclinica.core.form.StringUtil;
 import org.akaza.openclinica.dao.admin.CRFDAO;
+import org.akaza.openclinica.dao.core.CoreResources;
 import org.akaza.openclinica.dao.managestudy.EventDefinitionCRFDAO;
 import org.akaza.openclinica.dao.managestudy.StudyDAO;
 import org.akaza.openclinica.dao.managestudy.StudyEventDefinitionDAO;
 import org.akaza.openclinica.dao.service.StudyParameterValueDAO;
 import org.akaza.openclinica.dao.submit.CRFVersionDAO;
 import org.akaza.openclinica.domain.SourceDataVerification;
+import org.akaza.openclinica.service.managestudy.EventDefinitionCrfTagService;
+import org.akaza.openclinica.service.pmanage.Authorization;
+import org.akaza.openclinica.service.pmanage.ParticipantPortalRegistrar;
 import org.akaza.openclinica.view.Page;
 import org.akaza.openclinica.web.InsufficientPermissionException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -38,6 +45,7 @@ import java.util.ArrayList;
  *          jxu $
  */
 public class InitUpdateSubStudyServlet extends SecureController {
+    EventDefinitionCrfTagService eventDefinitionCrfTagService = null;
 
     /**
      *
@@ -59,7 +67,7 @@ public class InitUpdateSubStudyServlet extends SecureController {
 
     @Override
     public void processRequest() throws Exception {
-
+    	//baseUrl();
         String userName = request.getRemoteUser();
         StudyDAO sdao = new StudyDAO(sm.getDataSource());
         String idString = request.getParameter("id");
@@ -97,6 +105,7 @@ public class InitUpdateSubStudyServlet extends SecureController {
                             // logger.info("value:" +
                             // scg.getValue().getValue());
                             StudyParameterValueBean spvb = spvdao.findByHandleAndStudy(study.getId(), scg.getParameter().getHandle());
+                            if (spvb.getValue().equals("enabled")) baseUrl(); 
                             if (spvb.getId() > 0) {
                                 // the sub study itself has the parameter
                                 scg.setValue(spvb);
@@ -136,8 +145,10 @@ public class InitUpdateSubStudyServlet extends SecureController {
 
     }
 
-    private void createEventDefinitions(StudyBean parentStudy) {
+    private void createEventDefinitions(StudyBean parentStudy) throws MalformedURLException {
         FormProcessor fp = new FormProcessor(request);
+        StudyParameterValueDAO spvdao = new StudyParameterValueDAO(sm.getDataSource());    
+
         int siteId = Integer.valueOf(request.getParameter("id").trim());
         ArrayList<StudyEventDefinitionBean> seds = new ArrayList<StudyEventDefinitionBean>();
         StudyEventDefinitionDAO sedDao = new StudyEventDefinitionDAO(sm.getDataSource());
@@ -147,12 +158,20 @@ public class InitUpdateSubStudyServlet extends SecureController {
         seds = sedDao.findAllByStudy(parentStudy);
         int start = 0;
         for (StudyEventDefinitionBean sed : seds) {
+            String participateFormStatus = spvdao.findByHandleAndStudy(sed.getStudyId(), "participantPortal").getValue();
+              if (participateFormStatus.equals("enabled")) 	baseUrl();
+            request.setAttribute("participateFormStatus",participateFormStatus );
+
             int defId = sed.getId();
             ArrayList<EventDefinitionCRFBean> edcs =
                 (ArrayList<EventDefinitionCRFBean>) edcdao.findAllByDefinitionAndSiteIdAndParentStudyId(defId, siteId, parentStudy.getId());
             ArrayList<EventDefinitionCRFBean> defCrfs = new ArrayList<EventDefinitionCRFBean>();
             // sed.setCrfNum(edcs.size());
             for (EventDefinitionCRFBean edcBean : edcs) {
+                CRFBean cBean = (CRFBean) cdao.findByPK(edcBean.getCrfId());                
+                String crfPath=sed.getOid()+"."+cBean.getOid();
+                edcBean.setOffline(getEventDefinitionCrfTagService().getEventDefnCrfOfflineStatus(2,crfPath,true));
+                
                 int edcStatusId = edcBean.getStatus().getId();
                 CRFBean crf = (CRFBean) cdao.findByPK(edcBean.getCrfId());
                 int crfStatusId = crf.getStatusId();
@@ -161,9 +180,14 @@ public class InitUpdateSubStudyServlet extends SecureController {
                     ArrayList<CRFVersionBean> versions = (ArrayList<CRFVersionBean>) cvdao.findAllActiveByCRF(edcBean.getCrfId());
                     edcBean.setVersions(versions);
                     edcBean.setCrfName(crf.getName());
+                    
+                    if (edcBean.getParentId()==0)
+                        edcBean.setSubmissionUrl("");
+                    
                     CRFVersionBean defaultVersion = (CRFVersionBean) cvdao.findByPK(edcBean.getDefaultVersionId());
                     edcBean.setDefaultVersionName(defaultVersion.getName());
                     String sversionIds = edcBean.getSelectedVersionIds();
+                    
                     ArrayList<Integer> idList = new ArrayList<Integer>();
                     if (sversionIds.length() > 0) {
                         String[] ids = sversionIds.split("\\,");
@@ -203,5 +227,11 @@ public class InitUpdateSubStudyServlet extends SecureController {
             return "";
         }
     }
+    public EventDefinitionCrfTagService getEventDefinitionCrfTagService() {
+        eventDefinitionCrfTagService=
+         this.eventDefinitionCrfTagService != null ? eventDefinitionCrfTagService : (EventDefinitionCrfTagService) SpringServletAccess.getApplicationContext(context).getBean("eventDefinitionCrfTagService");
+
+         return eventDefinitionCrfTagService;
+     }
 
 }

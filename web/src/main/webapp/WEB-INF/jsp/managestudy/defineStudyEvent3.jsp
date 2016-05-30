@@ -58,12 +58,37 @@
         return true;
 
     }
+
+    function showMe(count,idField) {
+        switch(idField) {
+            case "participantForm" :
+                var elEvaluator = document.getElementsByName('participantForm'+count)[0];
+                var elChangeVisibility = document.getElementById('enabledIfParticipantForm'+count);
+                var elAllowAnonymousSubmission = document.getElementsByName('allowAnonymousSubmission'+count)[0];
+                if (elEvaluator.checked) {
+                    elChangeVisibility.removeAttribute("style");
+                } else {
+                    elAllowAnonymousSubmission.checked = false;
+                    elChangeVisibility.setAttribute("style", "display: none;");
+                }
+                // break;
+            case "allowAnonymousSubmission" :
+                var elEvaluator = document.getElementsByName('allowAnonymousSubmission'+count)[0];
+                var elChangeVisibility = document.getElementById('enabledIfAllowAnonymousSubmission'+count);
+                if (elEvaluator.checked) {
+                    elChangeVisibility.removeAttribute("style");
+                } else {
+                    elChangeVisibility.setAttribute("style", "display: none;");
+                }
+                break;
+        }
+    }
     //-->
 </script>
 
 <form action="DefineStudyEvent" method="post">
     <input type="hidden" name="actionName" value="confirm">
-    <div style="width: 600px">
+    <div style="width: 900px">
         <!-- These DIVs define shaded box borders -->
         <div class="box_T"><div class="box_L"><div class="box_R"><div class="box_B"><div class="box_TL"><div class="box_TR"><div class="box_BL"><div class="box_BR">
 
@@ -81,15 +106,15 @@
 
                         <tr valign="top">
 
-                            <td class="table_cell"><fmt:message key="required" bundle="${resword}"/>:<input type="checkbox" checked name="requiredCRF<c:out value="${count}"/>" value="yes"></td>
+                            <td class="table_cell" colspan="1"><fmt:message key="required" bundle="${resword}"/>:<input type="checkbox" checked name="requiredCRF<c:out value="${count}"/>" value="yes"></td>
 
-                            <td class="table_cell"><fmt:message key="double_data_entry" bundle="${resword}"/>:<input type="checkbox" name="doubleEntry<c:out value="${count}"/>" value="yes"></td>
+                            <td class="table_cell" colspan="1"><fmt:message key="double_data_entry" bundle="${resword}"/>:<input type="checkbox" name="doubleEntry<c:out value="${count}"/>" value="yes"></td>
 
-                            <td class="table_cell"><fmt:message key="password_required" bundle="${resword}"/>:<input type="checkbox" name="electronicSignature<c:out value="${count}"/>" value="yes"></td>
+                            <td class="table_cell" colspan="1"><fmt:message key="password_required" bundle="${resword}"/>:<input type="checkbox" name="electronicSignature<c:out value="${count}"/>" value="yes"></td>
 
                                 <%-- <td class="table_cell"><fmt:message key="enforce_decision_conditions" bundle="${restext}"/>:<input type="checkbox" name="decisionCondition<c:out value="${count}"/>"  checked value="yes"></td>--%>
 
-                            <td class="table_cell" colspan="2"><fmt:message key="default_version" bundle="${resword}"/>:
+                            <td class="table_cell" colspan="1"><fmt:message key="default_version" bundle="${resword}"/>:
 
                                 <select name="defaultVersionId<c:out value="${count}"/>">
                                     <c:forEach var="version" items="${crf.versions}">
@@ -97,26 +122,69 @@
                                         </c:forEach>
                                 </select>
                             </td></tr>
+                            
                         <tr valign="top">
-                            <td class="table_cell" colspan="2"><fmt:message key="hidden_crf" bundle="${resword}"/>:<input type="checkbox" name="hiddenCrf<c:out value="${count}"/>" value="yes"></td>
-                    		
-                            <td class="table_cell" colspan="6"><fmt:message key="sdv_option" bundle="${resword}"/>:
-							    <select name="sdvOption<c:out value="${count}"/>">
-						        	<c:set var="index" value="1"/>
-						            <c:forEach var="sdv" items="${sdvOptions}">
-						            	<c:choose>
-						            	<c:when test="${index == 3}">
-						            		<option value="${index}" selected><c:out value="${sdv}"/>
-						                </c:when>
-						                <c:otherwise>
-						            		<option value="${index}"><c:out value="${sdv}"/>
-						                </c:otherwise>
-						                </c:choose>
-						            	<c:set var="index" value="${index+1}"/>
-						            </c:forEach>
-					        	</select>
-							    </td>                      
+                            <td class="table_cell" colspan="1"><fmt:message key="hidden_crf" bundle="${resword}"/>:<input type="checkbox" name="hiddenCrf<c:out value="${count}"/>" value="yes"></td>
+
+
+                            <td class="table_cell" colspan="3"><fmt:message key="sdv_option" bundle="${resword}"/>:
+                                <select name="sdvOption<c:out value="${count}"/>">
+                                    <c:set var="index" value="1"/>
+                                    <c:forEach var="sdv" items="${sdvOptions}">
+                                        <c:choose>
+                                        <c:when test="${index == 3}">
+                                            <option value="${index}" selected><c:out value="${sdv}"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="${index}"><c:out value="${sdv}"/>
+                                        </c:otherwise>
+                                        </c:choose>
+                                        <c:set var="index" value="${index+1}"/>
+                                    </c:forEach>
+                                </select>
+                                </td>                      
                         </tr>
+
+                           <tr valign="top">
+  <c:choose>
+    <c:when test="${participateFormStatus == 'enabled'}">
+    
+       <c:choose>
+       <c:when test="${definition.repeating == true }">
+            <td class="table_cell" colspan="1"><fmt:message key="participant_form" bundle="${resword}"/>:<input type="checkbox" name="participantForm<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'participantForm')"></td>                                      
+       </c:when>
+         <c:otherwise>
+            <td class="table_cell" colspan="1"><fmt:message key="participant_form" bundle="${resword}"/>:<input type="checkbox" name="participantForm<c:out value="${count}"/>" value="yes" ></td>
+         </c:otherwise>
+       </c:choose>
+    
+    
+      <td class="table_cell" colspan="1">
+        <span id="enabledIfParticipantForm<c:out value="${count}"/>" style="display : none">
+          <fmt:message key="allow_anonymous_submission" bundle="${resword}"/>:<input type="checkbox" name="allowAnonymousSubmission<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'allowAnonymousSubmission')">
+        </span>
+      </td>
+      <td class="table_cell" colspan="2">
+        <span id="enabledIfAllowAnonymousSubmission<c:out value="${count}"/>" style="display : none">
+          <fmt:message key="submission_url" bundle="${resword}"/>: ${participantUrl}<input type="text" name="submissionUrl<c:out value="${count}"/>" value="">
+                <c:choose>
+                  <c:when test="${definition.repeating == true }">
+                          <br />
+                    <fmt:message key="offline" bundle="${resword}"/>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;           
+                    <input type="checkbox" name="offline<c:out value="${count}"/>" value="yes" >                    
+                  </c:when>
+                </c:choose>
+          
+        </span>
+      </td>
+   </c:when>  
+ </c:choose>
+
+                        </tr>
+
+                            
+
+
                         <tr valign="top">
                             <td class="table_header_column" colspan="4"><fmt:message key="choose_null_values"  bundle="${resword}"/> (<a href="<fmt:message key="nullValue" bundle="${resformat}"/>" target="def_win" onClick="openDefWindow('<fmt:message key="nullValue" bundle="${resformat}"/>'); return false;"><fmt:message key="what_is_null_value"  bundle="${resword}"/></a>)</td>
                         </tr>
@@ -213,12 +281,12 @@
                                             <div class="box_T"><div class="box_L"><div class="box_R"><div class="box_B"><div class="box_TL"><div class="box_TR"><div class="box_BL"><div class="box_BR">
 
                                                 <div class="textbox_center" align="center">
-	
-							<span class="title_manage">			
-						
-							<fmt:message key="enter_definition_name_and_description" bundle="${resword}"/><br><br>
-									
-							</span>
+    
+                            <span class="title_manage">         
+                        
+                            <fmt:message key="enter_definition_name_and_description" bundle="${resword}"/><br><br>
+                                    
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>
@@ -232,9 +300,9 @@
 
                                                 <div class="textbox_center" align="center">
 
-							<span class="title_manage">
-				             <fmt:message key="add_CRFs_to_definition" bundle="${resword}"/><br><br>
-							</span>
+                            <span class="title_manage">
+                             <fmt:message key="add_CRFs_to_definition" bundle="${resword}"/><br><br>
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>
@@ -248,9 +316,9 @@
 
                                                 <div class="textbox_center" align="center">
 
-							<span class="title_manage">
-				             <b><fmt:message key="edit_properties_for_each_CRF" bundle="${resword}"/><br><br></b>
-							</span>
+                            <span class="title_manage">
+                             <b><fmt:message key="edit_properties_for_each_CRF" bundle="${resword}"/><br><br></b>
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>
@@ -264,9 +332,9 @@
 
                                                 <div class="textbox_center" align="center">
 
-							<span class="title_manage">
-				             <fmt:message key="confirm_and_submit_definition" bundle="${resword}"/><br><br>
-							</span>
+                            <span class="title_manage">
+                             <fmt:message key="confirm_and_submit_definition" bundle="${resword}"/><br><br>
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>

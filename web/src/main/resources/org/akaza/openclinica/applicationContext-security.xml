@@ -28,6 +28,19 @@
     <security:intercept-url pattern="/help/**" filters="none"/>
     <security:intercept-url pattern="/ws/**" filters="none"/>
     <security:intercept-url pattern="/Contact" filters="none"/>
+    <security:intercept-url pattern="/rest2/openrosa/**" filters="none"/>
+    <security:intercept-url pattern="/pages/odmk/**" filters="none"/>
+    <security:intercept-url pattern="/pages/openrosa/**" filters="none"/>
+    <security:intercept-url pattern="/pages/accounts/**" filters="none"/>
+    <security:intercept-url pattern="/pages/itemdata/**" filters="none"/>
+    <security:intercept-url pattern="/pages/auth/api/v1/studies/**" filters="none"/>
+    <security:intercept-url pattern="/pages/odmss/**" filters="none"/>
+    <security:intercept-url pattern="/pages/healthcheck/**" filters="none"/>
+    <security:intercept-url pattern="/pages/api/v1/anonymousform/**" filters="none"/>
+    <security:intercept-url pattern="/pages/api/v2/anonymousform/**" filters="none"/>
+    <security:intercept-url pattern="/pages/api/v1/editform/**" filters="none"/>
+    <security:intercept-url pattern="/pages/auth/api/v1/discrepancynote/**" filters="none"/>
+    <security:intercept-url pattern="/pages/auth/api/**" filters="none"/>
     <!--
     <security:form-login login-page="/pages/login/login" authentication-failure-url="/pages/login/login?action=errorLogin"
       default-target-url='/MainMenu' always-use-default-target='true' />
@@ -90,6 +103,7 @@
      <bean id="sessionRegistry" class="org.akaza.openclinica.web.filter.OpenClinicaSessionRegistryImpl">
         <property name="auditUserLoginDao" ref="auditUserLoginDao"/>
         <property name="dataSource" ref="dataSource"/>
+         <property name="crfLocker" ref="crfLocker" />
      </bean>
     
     
@@ -145,4 +159,15 @@
 	<property name="metadataCollectorResource" ref="metadataCollectorResource"/>
     <property name="dataSource" ref="dataSource"/>
 </bean>
+<bean id="openRosaServices" class="org.akaza.openclinica.web.pform.OpenRosaServices">
+    <property name="dataSource" ref="dataSource"></property>
+    <property name="coreResources" ref="coreResources"/>
+    <property name="ruleActionPropertyDao" ref="ruleActionPropertyDao"/>
+    <property name="openRosaSubmissionController" ref="openRosaSubmissionController" />
+</bean>
+
+<bean id="openRosaSubmissionController" class="org.akaza.openclinica.controller.openrosa.OpenRosaSubmissionController" autowire="byName">
+</bean>
+
+
 </beans>

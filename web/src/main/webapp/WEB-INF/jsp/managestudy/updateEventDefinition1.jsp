@@ -59,6 +59,32 @@
         }
         return true;
     }
+
+    function showMe(count,idField) {
+        switch(idField) {
+            case "participantForm" :
+                var elEvaluator = document.getElementsByName('participantForm'+count)[0];
+                var elChangeVisibility = document.getElementById('enabledIfParticipantForm'+count);
+                var elAllowAnonymousSubmission = document.getElementsByName('allowAnonymousSubmission'+count)[0];
+                if (elEvaluator.checked) {
+                    elChangeVisibility.removeAttribute("style");
+                } else {
+                    elAllowAnonymousSubmission.checked = false;
+                    elChangeVisibility.setAttribute("style", "display: none;");
+                }
+                // break;
+            case "allowAnonymousSubmission" :
+                var elEvaluator = document.getElementsByName('allowAnonymousSubmission'+count)[0];
+                var elChangeVisibility = document.getElementById('enabledIfAllowAnonymousSubmission'+count);
+                if (elEvaluator.checked) {
+                    elChangeVisibility.removeAttribute("style");
+                } else {
+                    elChangeVisibility.setAttribute("style", "display: none;");
+                }
+                break;
+        }
+    }
+
     //-->
 </script>
 <h1><span class="title_manage">
@@ -196,7 +222,7 @@
 <c:if test="${status==1}">
 <tr valign="top">
 
-    <td class="table_cell"><fmt:message key="required" bundle="${resword}"/>:
+    <td class="table_cell" colspan="1"><fmt:message key="required" bundle="${resword}"/>:
         <c:choose>
             <c:when test="${edc.requiredCRF == true}">
                 <input type="checkbox" checked name="requiredCRF<c:out value="${count}"/>" value="yes">
@@ -207,7 +233,7 @@
         </c:choose>
     </td>
 
-    <td class="table_cell"><fmt:message key="double_data_entry" bundle="${resword}"/>:
+    <td class="table_cell" colspan="1"><fmt:message key="double_data_entry" bundle="${resword}"/>:
         <c:choose>
             <c:when test="${edc.doubleEntry == true}">
                 <c:set var="msg" value="You are choosing to have this CRF go through one pass of data entry instead of having it go through Double Data Entry. Before choosing this option, ensure that all Subject`s who have data entry for this CRF are not in one of the following 2 phases:\n\n1. The event CRF is in a status of Double Data Entry Started\n2. The event CRF is in a status of Initial Data Entry Completed.\n\nIf the CRFs are in one of those two phases, data entry will not be allowed to continue. You will have to change the configuration back to Double Data Entry.\n\nSelect OK to remove the DDE configuration. Select Cancel to keep the DDE configuration."/>
@@ -219,7 +245,7 @@
         </c:choose>
     </td>
 
-    <td class="table_cell"><fmt:message key="password_required" bundle="${resword}"/>:
+    <td class="table_cell" colspan="1"><fmt:message key="password_required" bundle="${resword}"/>:
         <c:choose>
             <c:when test="${edc.electronicSignature == true}">
                 <input type="checkbox" checked name="electronicSignature<c:out value="${count}"/>" value="yes">
@@ -241,7 +267,7 @@
           </c:choose>
         </td>--%>
 
-    <td class="table_cell" colspan="2"><fmt:message key="default_version" bundle="${resword}"/>:
+    <td class="table_cell" colspan="1"><fmt:message key="default_version" bundle="${resword}"/>:
         <select name="defaultVersionId<c:out value="${count}"/>">
             <c:forEach var="version" items="${edc.versions}">
             <c:choose>
@@ -258,8 +284,8 @@
     </tr>
 
 <tr valign="top">
-    <td class="table_cell" colspan="2">
-        <fmt:message key="hidden_crf" bundle="${resword}"/> :
+    <td class="table_cell" colspan="1">
+        <fmt:message key="hidden_crf" bundle="${resword}"/>:
         <c:choose>
             <c:when test="${! edc.hideCrf}">
                 <input type="checkbox" name="hideCRF<c:out value="${count}"/>" value="yes">
@@ -267,23 +293,161 @@
             <c:otherwise><input checked="checked" type="checkbox" name="hideCRF<c:out value="${count}"/>" value="yes"></c:otherwise>
         </c:choose>
     </td>
+        
+    </td>
+ 
+     <td class="table_cell" colspan="3"><fmt:message key="sdv_option" bundle="${resword}"/>:
+            <select name="sdvOption<c:out value="${count}"/>">
+                <c:set var="index" value="1"/>
+                <c:forEach var="sdv" items="${sdvOptions}">
+                    <c:choose>
+                    <c:when test="${edc.sourceDataVerification.code == index}">
+                        <option value="${index}" selected><c:out value="${sdv}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <option value="${index}"><c:out value="${sdv}"/>
+                    </c:otherwise>
+                    </c:choose>
+                    <c:set var="index" value="${index+1}"/>
+                </c:forEach>
+            </select>
+            </td>
+ 
+ 
+  
+</tr>
+  <tr valign="top">
     
-    <td class="table_cell" colspan="6"><fmt:message key="sdv_option" bundle="${resword}"/>:
-		    <select name="sdvOption<c:out value="${count}"/>">
-	        	<c:set var="index" value="1"/>
-	            <c:forEach var="sdv" items="${sdvOptions}">
-	            	<c:choose>
-	            	<c:when test="${edc.sourceDataVerification.code == index}">
-	            		<option value="${index}" selected><c:out value="${sdv}"/>
-	                </c:when>
-	                <c:otherwise>
-	            		<option value="${index}"><c:out value="${sdv}"/>
-	                </c:otherwise>
-	                </c:choose>
-	            	<c:set var="index" value="${index+1}"/>
-	            </c:forEach>
-        	</select>
-		    </td>
+    <c:choose>
+      <c:when test="${participateFormStatus == 'enabled'}">
+ 
+        <td class="table_cell" colspan="1">
+          <fmt:message key="participant_form" bundle="${resword}"/>:
+          <c:choose>
+            <c:when test="${edc.participantForm == true}">
+      <c:choose>
+       <c:when test="${definition.repeating == true }">
+              <input type="checkbox" name="participantForm<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'participantForm')" checked>
+       </c:when>
+         <c:otherwise>
+              <input type="checkbox" checked name="participantForm<c:out value="${count}"/>" value="yes" >
+         </c:otherwise>
+       </c:choose>
+            
+            </c:when>
+            
+        <c:otherwise>
+       
+        <c:choose>
+          <c:when test="${definition.repeating == true }">
+                <input type="checkbox" name="participantForm<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'participantForm')">
+          </c:when>
+         <c:otherwise>
+              <input type="checkbox" name="participantForm<c:out value="${count}"/>" value="yes" >
+         </c:otherwise>
+        </c:choose>
+               
+            </c:otherwise>
+          </c:choose>
+        </td>
+
+        <td class="table_cell" colspan="1">
+          <c:choose>
+            <c:when test="${edc.participantForm == true}">
+              <span id="enabledIfParticipantForm<c:out value="${count}"/>">
+                <c:choose>
+                
+                  <c:when test="${edc.allowAnonymousSubmission == true}">
+                  
+                        <c:choose>
+       <c:when test="${definition.repeating == true }">
+           <fmt:message key="allow_anonymous_submission" bundle="${resword}"/>:
+           <input type="checkbox" name="allowAnonymousSubmission<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'allowAnonymousSubmission')" checked>
+       </c:when>
+         <c:otherwise>
+         </c:otherwise>
+       </c:choose>
+            </c:when>
+                  
+                  <c:otherwise>
+
+                        <c:choose>
+       <c:when test="${definition.repeating == true }">
+           <fmt:message key="allow_anonymous_submission" bundle="${resword}"/>:
+                    <input type="checkbox" name="allowAnonymousSubmission<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'allowAnonymousSubmission')">
+       </c:when>
+         <c:otherwise>
+         </c:otherwise>
+       </c:choose>
+
+
+                  </c:otherwise>
+                  
+                </c:choose>
+              </span>
+            </c:when>
+            <c:otherwise>
+              <span id="enabledIfParticipantForm<c:out value="${count}"/>" style="display : none">
+                <fmt:message key="allow_anonymous_submission" bundle="${resword}"/>:
+                <c:choose>
+                  <c:when test="${edc.allowAnonymousSubmission == true}">
+                    <input type="checkbox" name="allowAnonymousSubmission<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'allowAnonymousSubmission')" checked>
+                  </c:when>
+                  <c:otherwise>
+                    <input type="checkbox" name="allowAnonymousSubmission<c:out value="${count}"/>" value="yes" onclick="showMe(<c:out value="${count}"/>,'allowAnonymousSubmission')">
+                  </c:otherwise>
+                </c:choose>
+              </span>
+            </c:otherwise>
+          </c:choose>
+        </td>
+
+        <td class="table_cell" colspan="2">
+          <c:choose>
+            <c:when test="${edc.participantForm == true && definition.repeating == true && edc.allowAnonymousSubmission == true}">
+              <span id="enabledIfAllowAnonymousSubmission<c:out value="${count}"/>">
+                
+                <fmt:message key="submission_url" bundle="${resword}"/>: ${participantUrl}
+                <input type="text" name="submissionUrl<c:out value="${count}"/>" value="${edc.submissionUrl}">               
+                <c:set var="summary" value="submissionUrl${count}"/>
+                <jsp:include page="../showMessage.jsp"><jsp:param name="key" value="${summary}"/></jsp:include>
+                 <br />
+                <c:choose>
+                  <c:when test="${edc.allowAnonymousSubmission == true && definition.repeating == true  && edc.offline == true}">
+                <fmt:message key="offline" bundle="${resword}"/>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;           
+                    <input type="checkbox" name="offline<c:out value="${count}"/>" value="yes"  checked>
+                  </c:when>
+                  <c:when test="${edc.allowAnonymousSubmission == true && definition.repeating == true  && edc.offline != true}">
+                <fmt:message key="offline" bundle="${resword}"/>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;           
+                    <input type="checkbox" name="offline<c:out value="${count}"/>" value="yes" >
+                  </c:when>
+                </c:choose>
+                
+              </span>
+            </c:when>
+            <c:otherwise>
+              <span id="enabledIfAllowAnonymousSubmission<c:out value="${count}"/>" style="display : none">
+                <fmt:message key="submission_url" bundle="${resword}"/>: ${participantUrl}
+                <input type="text" name="submissionUrl<c:out value="${count}"/>" value="${edc.submissionUrl}">
+                <c:set var="summary" value="submissionUrl${count}"/>
+                <jsp:include page="../showMessage.jsp"><jsp:param name="key" value="${summary}"/></jsp:include>
+                <c:choose>
+                  <c:when test="${definition.repeating == true }">
+                          <br />
+                    <fmt:message key="offline" bundle="${resword}"/>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;           
+                    <input type="checkbox" name="offline<c:out value="${count}"/>" value="yes" >                    
+                  </c:when>
+                </c:choose>                
+              </span>
+            </c:otherwise>
+          </c:choose>
+        </td>
+
+
+
+      </c:when>
+    </c:choose>
+
 </tr>
 
 <tr valign="top">
@@ -538,12 +702,12 @@
                                             <div class="box_T"><div class="box_L"><div class="box_R"><div class="box_B"><div class="box_TL"><div class="box_TR"><div class="box_BL"><div class="box_BR">
 
                                                 <div class="textbox_center" align="center">
-	
-							<span class="title_manage">			
-						
-							<b><fmt:message key="enter_definition_name_and_description" bundle="${resword}"/><br><br></b>
-									
-							</span>
+    
+                            <span class="title_manage">         
+                        
+                            <b><fmt:message key="enter_definition_name_and_description" bundle="${resword}"/><br><br></b>
+                                    
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>
@@ -557,9 +721,9 @@
 
                                                 <div class="textbox_center" align="center">
 
-							<span class="title_manage">
-				             <fmt:message key="add_CRFs_to_definition" bundle="${resword}"/><br><br>
-							</span>
+                            <span class="title_manage">
+                             <fmt:message key="add_CRFs_to_definition" bundle="${resword}"/><br><br>
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>
@@ -573,9 +737,9 @@
 
                                                 <div class="textbox_center" align="center">
 
-							<span class="title_manage">
-				             <fmt:message key="edit_properties_for_each_CRF" bundle="${resword}"/><br><br>
-							</span>
+                            <span class="title_manage">
+                             <fmt:message key="edit_properties_for_each_CRF" bundle="${resword}"/><br><br>
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>
@@ -589,9 +753,9 @@
 
                                                 <div class="textbox_center" align="center">
 
-							<span class="title_manage">
-				             <fmt:message key="confirm_and_submit_definition" bundle="${resword}"/><br><br>
-							</span>
+                            <span class="title_manage">
+                             <fmt:message key="confirm_and_submit_definition" bundle="${resword}"/><br><br>
+                            </span>
 
                                                 </div>
                                             </div></div></div></div></div></div></div></div>

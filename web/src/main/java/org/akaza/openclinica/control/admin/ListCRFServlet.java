@@ -13,6 +13,7 @@ import org.akaza.openclinica.bean.submit.CRFVersionBean;
 import org.akaza.openclinica.control.core.SecureController;
 import org.akaza.openclinica.control.form.FormProcessor;
 import org.akaza.openclinica.dao.admin.CRFDAO;
+import org.akaza.openclinica.dao.core.CoreResources;
 import org.akaza.openclinica.dao.submit.CRFVersionDAO;
 import org.akaza.openclinica.i18n.core.LocaleResolver;
 import org.akaza.openclinica.view.Page;
@@ -20,6 +21,7 @@ import org.akaza.openclinica.web.InsufficientPermissionException;
 import org.akaza.openclinica.web.SQLInitServlet;
 import org.akaza.openclinica.web.bean.EntityBeanTable;
 import org.akaza.openclinica.web.bean.ListCRFRow;
+import org.akaza.openclinica.web.pform.EnketoAPI;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -120,9 +122,9 @@ public class ListCRFServlet extends SecureController {
                         cv.setDownloadable(true);
                     }
                 }
-
             }
             eb.setVersions(versions);
+            
 
         }
         // request.setAttribute("crfs", crfs);
@@ -144,7 +146,7 @@ public class ListCRFServlet extends SecureController {
         table.addLink(resword.getString("blank_CRF_template"), "DownloadVersionSpreadSheet?template=1");
         // YW << add "Enterprise CRF Catalog" link
         String crfCatalogField = "crfCatalog";
-        table.addLink(resword.getString("openclinica_CRF_catalog"), SQLInitServlet.getEnterpriseField(crfCatalogField));
+//        table.addLink(resword.getString("openclinica_CRF_catalog"), SQLInitServlet.getEnterpriseField(crfCatalogField));
         // YW >>
         // TODO add i18n links to the above, tbh
         table.addLink(resword.getString("create_a_new_CRF"), "CreateCRFVersion?module=" + module);
@@ -152,6 +154,7 @@ public class ListCRFServlet extends SecureController {
         table.computeDisplay();
 
         request.setAttribute("table", table);
+        request.setAttribute("study", currentStudy);
 
         resetPanel();
         panel.setStudyInfoShown(false);

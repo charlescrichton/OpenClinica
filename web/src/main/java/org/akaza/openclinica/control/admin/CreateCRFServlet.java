@@ -16,6 +16,7 @@ import org.akaza.openclinica.control.form.FormProcessor;
 import org.akaza.openclinica.control.form.Validator;
 import org.akaza.openclinica.core.form.StringUtil;
 import org.akaza.openclinica.dao.admin.CRFDAO;
+import org.akaza.openclinica.dao.core.CoreResources;
 import org.akaza.openclinica.i18n.core.LocaleResolver;
 import org.akaza.openclinica.view.Page;
 import org.akaza.openclinica.web.InsufficientPermissionException;
@@ -25,7 +26,7 @@ import java.util.Locale;
 
 /**
  * Creates a new CRF
- *
+ * 
  * @author jxu
  */
 public class CreateCRFServlet extends SecureController {
@@ -72,6 +73,7 @@ public class CreateCRFServlet extends SecureController {
         // checks which module the requests are from
         String module = fp.getString(MODULE);
         request.setAttribute(MODULE, module);
+        request.setAttribute("xformEnabled", CoreResources.getField("xform.enabled"));
 
         // add the list here so that users can tell about crf creation
         // process together with workflow, tbh
@@ -127,6 +129,7 @@ public class CreateCRFServlet extends SecureController {
                         crf.setOwner(ub);
                         crf.setCreatedDate(new Date());
                         crf.setStatus(Status.AVAILABLE);
+                        crf.setStudyId(currentStudy.getId());
                         cdao.create(crf);
 
                         crf = (CRFBean) cdao.findByName(crf.getName());

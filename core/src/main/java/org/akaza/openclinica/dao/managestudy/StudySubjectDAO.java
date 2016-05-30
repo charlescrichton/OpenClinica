@@ -133,11 +133,17 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
 
         //Not sure what these are - but they go at the end!
         this.setTypeExpected(ind, TypeNames.STRING);
+<<<<<<< HEAD
         ind++; //
         this.setTypeExpected(ind, TypeNames.INT);
         ind++; //
 
 
+=======
+        ind++; // time_zone
+//        this.setTypeExpected(ind, TypeNames.INT);
+ //       ind++; //
+>>>>>>> upstream/master
     }
 
     public void setTypesExpectedFilter() {
@@ -159,9 +165,9 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
 
         this.setTypeExpected(ind, TypeNames.DATE);
         ind++; // enrollment_date
-        this.setTypeExpected(ind, TypeNames.DATE);
+        this.setTypeExpected(ind, TypeNames.TIMESTAMP);
         ind++; // date_created
-        this.setTypeExpected(ind, TypeNames.DATE);
+        this.setTypeExpected(ind, TypeNames.TIMESTAMP);
         ind++; // date_updated
         this.setTypeExpected(ind, TypeNames.INT);
         ind++; // owner_id
@@ -169,6 +175,7 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         ind++; // update_id
         this.setTypeExpected(ind, TypeNames.STRING);
         ind++; // oc oid
+<<<<<<< HEAD
 
         //gel_* columns
         this.setTypeExpected(ind, TypeNames.STRING);
@@ -191,6 +198,8 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         ind++;
         this.setTypeExpected(ind, TypeNames.STRING);
         ind++;
+=======
+>>>>>>> upstream/master
         this.setTypeExpected(ind, TypeNames.STRING);
         ind++;
 
@@ -278,6 +287,7 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         eb.setStudyName((String) hm.get("unique_identifier"));
 //        eb.setEventStartDate((Date) hm.get("date_start"));
         // eb.setActive(true);
+<<<<<<< HEAD
 
 
         eb.setGelFamilyId((String) hm.get("gel_family_id"));
@@ -293,6 +303,9 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
 
         eb.setGelSlfDownloaded(isSlfDownloaded);
 
+=======
+        eb.setTime_zone((String) hm.get("time_zone"));
+>>>>>>> upstream/master
         return eb;
     }
 
@@ -1141,6 +1154,13 @@ public class StudySubjectDAO<K extends String,V extends ArrayList> extends Audit
         variables.put(new Integer(ind), new Integer(sb.getUpdater().getId()));
         ind++;
         variables.put(new Integer(ind), sb.getSecondaryLabel());
+        ind++;
+        if (sb.getTime_zone() == null || sb.getTime_zone().equals("")) {
+            nullVars.put(new Integer(ind), new Integer(TypeNames.STRING));
+            variables.put(new Integer(ind), "");
+        } else {
+            variables.put(new Integer(ind), sb.getTime_zone());
+        }
         ind++;
         variables.put(new Integer(ind), new Integer(sb.getId()));
         ind++;
