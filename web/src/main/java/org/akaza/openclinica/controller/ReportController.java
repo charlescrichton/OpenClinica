@@ -2,7 +2,7 @@ package org.akaza.openclinica.controller;
 
 import org.akaza.openclinica.bean.extract.ExtractPropertyBean;
 import org.akaza.openclinica.bean.login.UserAccountBean;
-import org.akaza.openclinica.controller.healthcheck.DatabaseHealthCheck;
+//import org.akaza.openclinica.controller.healthcheck.DatabaseHealthCheck;
 import org.akaza.openclinica.dao.core.CoreResources;
 import org.akaza.openclinica.dao.login.UserAccountDAO;
 import org.akaza.openclinica.i18n.util.ResourceBundleProvider;
