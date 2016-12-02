@@ -1,3 +1,4 @@
+<!-- |||| [./submit/eventLayer.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -557,3 +558,5 @@
 				"layersShowOrHide('hidden','Event_<c:out value="${subjectName}"/>_<c:out value="${count}"/>_<c:out value="${eblRowCount}"/>'); setImage('ExpandIcon_<c:out value="${subjectName}"/>_<c:out value="${count}"/>_<c:out value="${eblRowCount}"/>','images/icon_blank.gif');"
 				onClick=
 				"layersShowOrHide('visible','Lock_all'); LockObject('Lock_<c:out value="${subjectName}"/>_<c:out value="${count}"/>_<c:out value="${eblRowCount}"/>', event);">
+
+<!-- [/./submit/eventLayer.jsp] |||| -->

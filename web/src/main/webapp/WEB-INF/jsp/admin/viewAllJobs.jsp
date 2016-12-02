@@ -1,3 +1,4 @@
+<!-- |||| [./admin/viewAllJobs.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -52,3 +53,5 @@
 <P><I><fmt:message key="note_that_job_is_set" bundle="${resword}"/> <fmt:formatDate value="${now}" pattern="${dtetmeFormat}"/>.</I></P>
 
  <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./admin/viewAllJobs.jsp] |||| -->

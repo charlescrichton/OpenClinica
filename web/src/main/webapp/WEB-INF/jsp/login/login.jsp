@@ -1,3 +1,4 @@
+<!-- |||| [./login/login.jsp] -->
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <!-- For Mantis Issue 6099 -->
@@ -151,3 +152,5 @@
 <!-- Footer -->
 <!-- End Main Content Area -->
 <jsp:include page="../login-include/login-footer.jsp"/>
+
+<!-- [/./login/login.jsp] |||| -->

@@ -1,3 +1,4 @@
+<!-- |||| [./include/breadcrumb.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@page import="org.akaza.openclinica.bean.core.Status"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -52,3 +53,4 @@ function reportBug() {
 <!-- end Help and Report Bugs Buttons -->
 	<td valign="top" align="right" style="width: 24em;">
 
+<!-- [/./include/breadcrumb.jsp] |||| -->

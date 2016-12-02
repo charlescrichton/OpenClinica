@@ -1,3 +1,4 @@
+<!-- |||| [./submit/showGroupItemInputMonitor.jsp] -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -179,8 +180,8 @@
 		</c:when>
 		<c:otherwise>
 			<c:set var="filename" value="${displayItem.data.value}"/>
-			<c:set var="sep" value="\\"/>
-            <c:set var="sep2" value="\\\\"/>
+			<c:set var="sep" value="\"/>
+            <c:set var="sep2" value="\\"/>
 			<a href="DownloadAttachedFile?eventCRFId=<c:out value="${section.eventCRF.id}"/>&fileName=${fn:replace(fn:replace(filename,'+','%2B'),sep,sep2)}" id="a<c:out value="${itemId}"/>"><c:out value="${inputTxtValue}"/></a>
 		</c:otherwise>
 		</c:choose>
@@ -543,3 +544,5 @@ inputType == "calculation" }'>
     </c:if>
   </c:if>
 </c:if>
+
+<!-- [/./submit/showGroupItemInputMonitor.jsp] |||| -->

@@ -1,3 +1,4 @@
+<!-- |||| [./extract/createFilterScreen3_1.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -37,3 +38,5 @@
 <input type="submit" value="<fmt:message key="select_section_and_continue" bundle="${resword}"/>" class="button_xlong"/>
 </form>
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./extract/createFilterScreen3_1.jsp] |||| -->

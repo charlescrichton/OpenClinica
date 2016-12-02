@@ -1,3 +1,4 @@
+<!-- |||| [./access_confirmation.jsp] -->
 <%@ page import="org.springframework.security.core.AuthenticationException" %>
 <%@ page import="org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter" %>
 <%@ page import="org.springframework.security.oauth2.provider.verification.BasicUserApprovalFilter" %>
@@ -58,3 +59,5 @@
 
 </body>
 </html>
+
+<!-- [/./access_confirmation.jsp] |||| -->

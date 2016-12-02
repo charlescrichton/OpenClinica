@@ -1,3 +1,4 @@
+<!-- |||| [./managestudy/listUserInStudy.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -53,3 +54,5 @@
 	<div class="homebox_bullets"><a href="pages/studymodule"><fmt:message key="go_back_build_study_page" bundle="${resword}"/></a></div>
 </c:if>
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./managestudy/listUserInStudy.jsp] |||| -->

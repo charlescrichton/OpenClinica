@@ -1,3 +1,4 @@
+<!-- |||| [./managestudy/viewSectionDataEntry.jsp] -->
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -968,3 +969,5 @@ but the custom tag uses that, not this jstl code--%>
   "position:absolute;visibility:hidden;background-color:white"></div>
 </body>
 </html>
+
+<!-- [/./managestudy/viewSectionDataEntry.jsp] |||| -->

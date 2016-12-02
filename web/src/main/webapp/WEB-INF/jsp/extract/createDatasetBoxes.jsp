@@ -1,3 +1,4 @@
+<!-- |||| [./extract/createDatasetBoxes.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -148,3 +149,5 @@ jsp:param name="selectStudyEvents" value="1"
 	</table>
 
 	<br>
+
+<!-- [/./extract/createDatasetBoxes.jsp] |||| -->

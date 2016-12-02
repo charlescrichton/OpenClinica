@@ -1,3 +1,4 @@
+<!-- |||| [./include/showTableForStudyUserList.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%-- calling syntax:
 	(assuming showTable.jsp and userRow.jsp are in the same directory)
@@ -288,3 +289,5 @@
 		</td>
 	</tr>
 </table>
+
+<!-- [/./include/showTableForStudyUserList.jsp] |||| -->

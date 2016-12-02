@@ -1,3 +1,4 @@
+<!-- |||| [./login-include/request-sidebar.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@page import="org.akaza.openclinica.bean.core.Status"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -85,3 +86,5 @@ function reportBug(versionNumber) {
 
 				</td>
 				<td class="content" valign="top">
+
+<!-- [/./login-include/request-sidebar.jsp] |||| -->

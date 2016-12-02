@@ -1,3 +1,4 @@
+<!-- |||| [./login/requestAccountConfirm.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -59,3 +60,5 @@
  <input type="submit" name="submit" value="<fmt:message key="submit_account_reset" bundle="${resword}"/>" class="button_long">
 </form>
 <jsp:include page="../login-include/login-footer.jsp"/>
+
+<!-- [/./login/requestAccountConfirm.jsp] |||| -->

@@ -1,3 +1,4 @@
+<!-- |||| [./managestudy/listSubject.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!-- NOT USED----------------------->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -71,3 +72,5 @@
 </table>
 
 <jsp:include page="../login-include/footer.jsp"/>
+
+<!-- [/./managestudy/listSubject.jsp] |||| -->

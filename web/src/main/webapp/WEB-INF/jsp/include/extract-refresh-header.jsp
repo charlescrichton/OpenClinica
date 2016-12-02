@@ -1,3 +1,4 @@
+<!-- |||| [./include/extract-refresh-header.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -77,3 +78,5 @@ function sendToPage() {
 
 	<jsp:include page="../include/navBar.jsp"/>
 <!-- End Main Navigation -->
+
+<!-- [/./include/extract-refresh-header.jsp] |||| -->

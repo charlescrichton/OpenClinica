@@ -1,3 +1,4 @@
+<!-- |||| [./submit/listEventsForSubject.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -272,3 +273,5 @@ You may also enroll a new subject and add a new study event:
 
 
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./submit/listEventsForSubject.jsp] |||| -->

@@ -1,3 +1,4 @@
+<!-- |||| [./include/showTableForEventDefinition.jsp] -->
 <%-- calling syntax:
 	(assuming showTable.jsp and userRow.jsp are in the same directory)
 	<c:import url="../include/showTable.jsp"><c:param name="rowURL" value="userRow.jsp" /></c:import>
@@ -278,3 +279,5 @@
 		</td>
 	</tr>
 </table>
+
+<!-- [/./include/showTableForEventDefinition.jsp] |||| -->

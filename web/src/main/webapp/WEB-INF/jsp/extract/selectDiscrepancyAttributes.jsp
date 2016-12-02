@@ -1,3 +1,4 @@
+<!-- |||| [./extract/selectDiscrepancyAttributes.jsp] -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -54,3 +55,5 @@ You may select all items in the study by going to the "View Selected Items" (hyp
 </form>
 
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./extract/selectDiscrepancyAttributes.jsp] |||| -->

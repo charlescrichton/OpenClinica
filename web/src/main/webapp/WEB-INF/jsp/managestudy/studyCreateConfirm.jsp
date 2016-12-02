@@ -1,3 +1,4 @@
+<!-- |||| [./managestudy/studyCreateConfirm.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -692,3 +693,5 @@
 
 <!-- END WORKFLOW BOX -->
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./managestudy/studyCreateConfirm.jsp] |||| -->

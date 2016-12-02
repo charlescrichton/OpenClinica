@@ -1,3 +1,4 @@
+<!-- |||| [./include/home-header.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -102,3 +103,5 @@ document.write('<table border="0" cellpadding="0" cellspacing="0" width="' + doc
 
     <jsp:include page="../include/navBar.jsp"/>
 <!-- End Main Navigation -->
+
+<!-- [/./include/home-header.jsp] |||| -->

@@ -1,3 +1,4 @@
+<!-- |||| [./admin/auditUserActivity.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -78,3 +79,5 @@
 <input type="button" onclick="confirmExit('ListUserAccounts');"  name="exit" value="<fmt:message key="exit" bundle="${resword}"/>   " class="button_medium"/>
 
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./admin/auditUserActivity.jsp] |||| -->

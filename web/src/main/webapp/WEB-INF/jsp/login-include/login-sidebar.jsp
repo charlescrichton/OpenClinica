@@ -1,3 +1,4 @@
+<!-- |||| [./login-include/login-sidebar.jsp] -->
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
@@ -122,3 +123,5 @@ function reportBug(versionNumber) {
 
 				</td>
 				<td class="content" valign="top">
+
+<!-- [/./login-include/login-sidebar.jsp] |||| -->

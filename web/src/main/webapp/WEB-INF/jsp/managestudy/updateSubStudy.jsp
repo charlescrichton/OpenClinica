@@ -1,3 +1,4 @@
+<!-- |||| [./managestudy/updateSubStudy.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -736,3 +737,5 @@ function updateThis(multiSelEle, count) {
 </form>
 <DIV ID="testdiv1" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></DIV>
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./managestudy/updateSubStudy.jsp] |||| -->

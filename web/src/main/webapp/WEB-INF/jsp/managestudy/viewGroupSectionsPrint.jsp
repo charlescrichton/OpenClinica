@@ -1,3 +1,4 @@
+<!-- |||| [./managestudy/viewGroupSectionsPrint.jsp] -->
 <%--
   The Print CRF JSP.
 --%>
@@ -63,3 +64,5 @@
 
 </body>
 </html>
+
+<!-- [/./managestudy/viewGroupSectionsPrint.jsp] |||| -->

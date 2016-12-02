@@ -1,3 +1,4 @@
+<!-- |||| [./admin/createCRFVersionConfirm.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.*" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -133,3 +134,5 @@
  </c:choose>
 
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./admin/createCRFVersionConfirm.jsp] |||| -->

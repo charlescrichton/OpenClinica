@@ -1,3 +1,4 @@
+<!-- |||| [./login/requestPassword.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -69,3 +70,5 @@
 
 </form>
 <jsp:include page="../login-include/login-footer.jsp"/>
+
+<!-- [/./login/requestPassword.jsp] |||| -->

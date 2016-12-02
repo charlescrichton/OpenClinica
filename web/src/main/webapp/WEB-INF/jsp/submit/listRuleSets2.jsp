@@ -1,3 +1,4 @@
+<!-- |||| [./submit/listRuleSets2.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -92,3 +93,5 @@
 
 <br>
 <jsp:include page="../include/footer.jsp"/>
+
+<!-- [/./submit/listRuleSets2.jsp] |||| -->
