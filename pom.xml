@@ -93,6 +93,7 @@
 				<artifactId>jmesa</artifactId>
 				<version>2.4.2-oc</version>
 			</dependency>
+			<!-- Updated to use version compiled locally -->
 			<dependency>
 				<groupId>org.akaza.openclinica.odm</groupId>
 				<artifactId>openclinica-odm</artifactId>
