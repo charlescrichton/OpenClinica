@@ -70,7 +70,7 @@
 </tr>
 <tr>
  <td class="table_cell_noborder" style="color: #789EC5"><b><fmt:message key="event" bundle="${resword}"/>:</b></td>
- <td class="table_cell_noborder" style="color: #789EC5"><c:out value="${studyEvent.studyEventDefinition.name}"/> (<fmt:formatDate value="${studyEvent.dateStarted}" pattern="${dteFormat}"/>)</td>
+ <td class="table_cell_noborder" style="color: #789EC5"><c:out value="${studyEvent.studyEventDefinition.name}" escapeXml="false"/> (<fmt:formatDate value="${studyEvent.dateStarted}" pattern="${dteFormat}"/>)</td>
  <td class="table_cell_top" style="color: #789EC5"><b><fmt:message key="date_of_birth" bundle="${resword}"/>:</b><br></td>
  <td class="table_cell_noborder" style="color: #789EC5"><fmt:formatDate value="${subject.dateOfBirth}" pattern="${dteFormat}"/><br></td>
 </tr>

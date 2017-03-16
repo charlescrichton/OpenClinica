@@ -45,10 +45,10 @@
 	<b><fmt:message key="study_event" bundle="${resword}"/></b>: &nbsp;
 	<c:choose>
 	 <c:when test="${toc != null}">	 
-	  <c:out value="${toc.studyEventDefinition.name}"/>
+	  <c:out value="${toc.studyEventDefinition.name}" escapeXml="false"/>
 	 </c:when>
 	 <c:otherwise>
-	  <c:out value="${studyEvent.studyEventDefinition.name}"/>	   
+	  <c:out value="${studyEvent.studyEventDefinition.name}" escapeXml="false"/>	   
 	 </c:otherwise>
 	</c:choose>
 	<br><br>

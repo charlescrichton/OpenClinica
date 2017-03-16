@@ -143,7 +143,7 @@
    </tr>
   <c:forEach var="eCRF" items="${eventCRFs}">
     <tr valign="top">
-    <td class="table_cell_left"><c:out value="${eCRF.studyEvent.studyEventDefinition.name}"/></td>
+    <td class="table_cell_left"><c:out value="${eCRF.studyEvent.studyEventDefinition.name}" escapeXml="false"/></td>
     <td class="table_cell"><c:out value="${eCRF.studyEvent.sampleOrdinal}"/></td>
     <td class="table_cell"><c:out value="${eCRF.studySubject.label}"/></td>
     </tr>

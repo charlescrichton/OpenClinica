@@ -87,7 +87,7 @@
 		              <td class="table_header_row_left" colspan="2">
 		        		<fmt:message key="subject" bundle="${resword}"/>: <c:out value="${subjectName}"/>
 						<br>
-						<fmt:message key="event" bundle="${resword}"/>: <c:out value="${currEvent.studyEventDefinition.name}"/>	
+						<fmt:message key="event" bundle="${resword}"/>: <c:out value="${currEvent.studyEventDefinition.name}" escapeXml="false"/>	
 						
 		               </td>
 		               

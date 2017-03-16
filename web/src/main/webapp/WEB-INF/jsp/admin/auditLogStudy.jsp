@@ -121,7 +121,7 @@
 	</tr>
 	<c:forEach var="event" items="${eventList}">
 		<tr>
-		 <td class="table_header_column"><c:out value="${event.studyEventDefinition.name}"/>&nbsp;</td>
+		 <td class="table_header_column"><c:out value="${event.studyEventDefinition.name}" escapeXml="false"/>&nbsp;</td>
 		 <td class="table_header_column"><c:out value="${event.location}"/>&nbsp;</td>
 		 <td class="table_header_column"><fmt:formatDate value="${event.dateStarted}" pattern="${dteFormat}"/>&nbsp;</td>
 		</tr>

@@ -163,7 +163,7 @@ function getSib(theSibling){
 </tr>
 <tr>
  <td class="table_cell_noborder" ><b><fmt:message key="event" bundle="${resword}"/>:</b></td>
- <td class="table_cell_noborder" ><c:out value="${studyEvent.studyEventDefinition.name}"/> (<fmt:formatDate value="${studyEvent.dateStarted}" pattern="${dteFormat}"/>)</td>
+ <td class="table_cell_noborder" ><c:out value="${studyEvent.studyEventDefinition.name}" escapeXml="false"/> (<fmt:formatDate value="${studyEvent.dateStarted}" pattern="${dteFormat}"/>)</td>
  <td class="table_cell_top" ><b><fmt:message key="date_of_birth" bundle="${resword}"/>:</b><br></td>
  <td class="table_cell_noborder" ><fmt:formatDate value="${subject.dateOfBirth}" pattern="${dteFormat}"/><br></td>
 </tr>

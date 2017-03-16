@@ -124,7 +124,7 @@
                                         <option value="0">--<fmt:message key="all" bundle="${resword}"/>--</option>
                                         --%><%-- probably need to use study event name here --%><%--
                                         <c:forEach var="studyEventDefinition" items="${studyEventDefinitions}">
-                                        <option value="<c:out value="${studyEventDefinition.id}"/>"><c:out value="${studyEventDefinition.name}"/>
+                                        <option value="<c:out value="${studyEventDefinition.id}"/>"><c:out value="${studyEventDefinition.name}" escapeXml="false"/>
                                             </c:forEach>
                                     </select>
                                 </div>

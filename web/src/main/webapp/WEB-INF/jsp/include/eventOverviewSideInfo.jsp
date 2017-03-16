@@ -59,10 +59,10 @@
 	<b><fmt:message key="study_event" bundle="${resword}"/></b>: &nbsp;
 	<c:choose>
 	 <c:when test="${toc != null}">	 
-	  <a href="EnterDataForStudyEvent?eventId=<c:out value="${toc.studyEvent.id}"/>"><c:out value="${toc.studyEventDefinition.name}"/></a>
+	  <a href="EnterDataForStudyEvent?eventId=<c:out value="${toc.studyEvent.id}"/>"><c:out value="${toc.studyEventDefinition.name}" escapeXml="false"/></a>
 	 </c:when>
 	 <c:otherwise>
-	  <c:out value="${studyEvent.studyEventDefinition.name}"/>	   
+	  <c:out value="${studyEvent.studyEventDefinition.name}" escapeXml="false"/>	   
 	 </c:otherwise>
 	</c:choose>
 	<br><br>

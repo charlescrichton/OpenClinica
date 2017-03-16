@@ -21,7 +21,7 @@
 
 		<div class="sidebar_tab_content">		
        
-         <fmt:message key="confirm_restore_of_this_CRF_to_event"  bundle="${resword}"/> <c:out value="${event.studyEventDefinition.name}"/> (<fmt:message key="date_started" bundle="${resword}"/>:<fmt:formatDate value="${event.dateStarted}" pattern="${dteFormat}"/>). <fmt:message key="all_data_associated_with_the_CRF_in_this_event_will_be_restored"  bundle="${resword}"/>
+         <fmt:message key="confirm_restore_of_this_CRF_to_event"  bundle="${resword}"/> <c:out value="${event.studyEventDefinition.name}" escapeXml="false"/> (<fmt:message key="date_started" bundle="${resword}"/>:<fmt:formatDate value="${event.dateStarted}" pattern="${dteFormat}"/>). <fmt:message key="all_data_associated_with_the_CRF_in_this_event_will_be_restored"  bundle="${resword}"/>
        
 		</div>
 
@@ -47,14 +47,14 @@
 <h1><span class="title_manage">
 <fmt:message key="restore_CRF_to_event"  bundle="${resword}"/>
 </span></h1>
-<p><fmt:message key="confirm_restore_of_this_CRF_to_event"  bundle="${resword}"/> <c:out value="${event.studyEventDefinition.name}"/> (<fmt:message key="date_started" bundle="${resword}"/>:<fmt:formatDate value="${event.dateStarted}" pattern="${dteFormat}"/>). <fmt:message key="all_data_associated_with_the_CRF_in_this_event_will_be_restored"  bundle="${resword}"/></p>
+<p><fmt:message key="confirm_restore_of_this_CRF_to_event"  bundle="${resword}"/> <c:out value="${event.studyEventDefinition.name}" escapeXml="false"/> (<fmt:message key="date_started" bundle="${resword}"/>:<fmt:formatDate value="${event.dateStarted}" pattern="${dteFormat}"/>). <fmt:message key="all_data_associated_with_the_CRF_in_this_event_will_be_restored"  bundle="${resword}"/></p>
 
 <div style="width: 600px">
 <div class="box_T"><div class="box_L"><div class="box_R"><div class="box_B"><div class="box_TL"><div class="box_TR"><div class="box_BL"><div class="box_BR">
 
 <div class="textbox_center">
 <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
-  <tr valign="top"><td class="table_header_column_top"><fmt:message key="event_definition_name" bundle="${resword}"/>:</td><td class="table_cell"><c:out value="${event.studyEventDefinition.name}"/></td></tr>
+  <tr valign="top"><td class="table_header_column_top"><fmt:message key="event_definition_name" bundle="${resword}"/>:</td><td class="table_cell"><c:out value="${event.studyEventDefinition.name}" escapeXml="false"/></td></tr>
   <tr valign="top"><td class="table_header_column_top"><fmt:message key="location" bundle="${resword}"/>:</td><td class="table_cell"><c:out value="${event.location}"/></td></tr>
   <tr valign="top"><td class="table_header_column_top"><fmt:message key="visit" bundle="${resword}"/>:</td><td class="table_cell"><c:out value="${event.sampleOrdinal}"/></td></tr>
     

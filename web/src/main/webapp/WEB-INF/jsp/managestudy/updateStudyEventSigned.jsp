@@ -204,7 +204,7 @@
                         </tr>
                         <tr>
                             <td class="table_header_column"><fmt:message key="SE" bundle="${resword}"/></td>
-                            <td class="table_cell"><c:out value="${studyEvent.studyEventDefinition.name}"/>&nbsp;</td>
+                            <td class="table_cell"><c:out value="${studyEvent.studyEventDefinition.name}" escapeXml="false"/>&nbsp;</td>
                         </tr>
                         <tr>
                             <td class="table_header_column"><fmt:message key="location" bundle="${resword}"/></td>

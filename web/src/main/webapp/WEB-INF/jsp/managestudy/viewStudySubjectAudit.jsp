@@ -113,8 +113,8 @@
     <c:forEach var="event" items="${events}">
         <tr>
 			<!-- Link to Dynamic Anchor -->
-			<td class="table_header_column"><a href="#<c:out value="${event.studyEventDefinition.name}"/><c:out value="${event.sampleOrdinal}"/>"><c:out value="${event.studyEventDefinition.name}"/>&nbsp;</a></td>
-            <%-- <td class="table_header_column"><c:out value="${event.studyEventDefinition.name}"/>&nbsp;</td> --%>
+			<td class="table_header_column"><a href="#<c:out value="${event.studyEventDefinition.name}" escapeXml="false"/><c:out value="${event.sampleOrdinal}"/>"><c:out value="${event.studyEventDefinition.name}" escapeXml="false"/>&nbsp;</a></td>
+            <%-- <td class="table_header_column"><c:out value="${event.studyEventDefinition.name}" escapeXml="false"/>&nbsp;</td> --%>
             <td class="table_header_column"><c:out value="${event.location}"/>&nbsp;</td>
             <c:choose>
                 <c:when test="${event.startTimeFlag=='false'}">
@@ -132,11 +132,11 @@
 <c:forEach var="event" items="${events}">
 <%-- Study Event Summary --%>
 <!-- Embedded Anchor -->
-<a name="<c:out value="${event.studyEventDefinition.name}"/><c:out value="${event.sampleOrdinal}"/>"></a>
+<a name="<c:out value="${event.studyEventDefinition.name}" escapeXml="false"/><c:out value="${event.sampleOrdinal}"/>"></a>
 <table border="0" cellpadding="0" cellspacing="0" width="550" style="border-style: solid; border-width: 1px; border-color: #CCCCCC;">
 <tr>
     <td class="table_header_column_top" style="color: #789EC5"><b><fmt:message key="name" bundle="${resword}"/></b></td>
-    <td class="table_header_column_top" style="color: #789EC5"><b><c:out value="${event.studyEventDefinition.name}"/></b>&nbsp;</td>
+    <td class="table_header_column_top" style="color: #789EC5"><b><c:out value="${event.studyEventDefinition.name}" escapeXml="false"/></b>&nbsp;</td>
 </tr>
 <tr>
     <td class="table_header_column"><c:out value="Location"/></td>

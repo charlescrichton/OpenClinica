@@ -105,7 +105,7 @@
     <%--<c:forEach var="event" items="${events}">--%>
     <%--<tr>--%>
         <%--<td class="table_cell"><fmt:formatDate value="${event.updatedDate}" pattern="${dteFormat}"/></td>--%>
-        <%--<td class="table_cell"><c:out value="${event.studyEventDefinition.name}"/></td>--%>
+        <%--<td class="table_cell"><c:out value="${event.studyEventDefinition.name}" escapeXml="false"/></td>--%>
         <%--<td class="table_cell"><fmt:formatDate value="${event.dateStarted}" pattern="${dteFormat}"/></td>--%>
         <%--<td class="table_cell"><fmt:formatDate value="${event.dateEnded}" pattern="${dteFormat}"/></td>--%>
         <%--<td class="table_cell"><c:out value="${event.location}"/></td>--%>
@@ -117,7 +117,7 @@
     <c:forEach var="displayEvents" items="${events}">
     <tr>
         <td class="table_cell"><fmt:formatDate value="${displayEvents.studyEvent.updatedDate}" pattern="${dteFormat}"/></td>
-        <td class="table_cell"><c:out value="${displayEvents.studyEvent.studyEventDefinition.name}"/>
+        <td class="table_cell"><c:out value="${displayEvents.studyEvent.studyEventDefinition.name}" escapeXml="false"/>
         <c:if test="${displayEvents.studyEvent.studyEventDefinition.repeating}">
             (<c:out value="${displayEvents.studyEvent.sampleOrdinal}"/>)
         </c:if>
