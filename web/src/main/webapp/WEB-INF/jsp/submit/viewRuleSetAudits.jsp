@@ -1,4 +1,3 @@
-<!-- |||| [./submit/viewRuleSetAudits.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -169,5 +168,3 @@
   </c:otherwise>
  </c:choose>
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./submit/viewRuleSetAudits.jsp] |||| -->

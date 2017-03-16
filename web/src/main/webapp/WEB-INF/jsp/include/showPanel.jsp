@@ -1,4 +1,3 @@
-<!-- |||| [./include/showPanel.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%-- calling syntax:
 	(assuming showTable.jsp and userRow.jsp are in the same directory)
@@ -27,5 +26,3 @@
 <%  } else {
 %><jsp:include page="<c:out var='request.panelURL'/>"/>
 <%  }  %>
-
-<!-- [/./include/showPanel.jsp] |||| -->

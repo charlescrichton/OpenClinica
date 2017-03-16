@@ -1,4 +1,3 @@
-<!-- |||| [./submit/showItemInputMonitor.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -140,8 +139,8 @@ form element in red --%>
 		</c:when>
 		<c:otherwise>
 			<c:set var="filename" value="${displayItem.data.value}"/>
-			<c:set var="sep" value="\"/>
-            <c:set var="sep2" value="\\"/>
+			<c:set var="sep" value="\\"/>
+            <c:set var="sep2" value="\\\\"/>
 			<a href="DownloadAttachedFile?eventCRFId=<c:out value="${section.eventCRF.id}"/>&&fileName=${fn:replace(fn:replace(filename,'+','%2B'),sep,sep2)}" id="a<c:out value="${itemId}"/>"><c:out value="${inputTxtValue}"/></a>
 		</c:otherwise>
 		</c:choose>
@@ -448,5 +447,3 @@ form element in red --%>
 
 
 </c:if>
-
-<!-- [/./submit/showItemInputMonitor.jsp] |||| -->

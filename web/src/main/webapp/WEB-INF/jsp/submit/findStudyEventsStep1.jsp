@@ -1,4 +1,3 @@
-<!-- |||| [./submit/findStudyEventsStep1.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -28,5 +27,3 @@
 <p><a href="FindStudyEvent?browseBy=StudyEventDefinition"><fmt:message key="browse_by_SED" bundle="${restext}"/></a>
 
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./submit/findStudyEventsStep1.jsp] |||| -->

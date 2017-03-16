@@ -1,4 +1,3 @@
-<!-- |||| [./submit/instructionsEnrollSubject.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -66,5 +65,3 @@
 <br>
    <%-- <jsp:include page="instructionsEnterData.jsp" />--%>
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./submit/instructionsEnrollSubject.jsp] |||| -->

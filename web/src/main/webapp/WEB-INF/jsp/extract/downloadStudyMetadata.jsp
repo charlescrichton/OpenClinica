@@ -1,4 +1,3 @@
-<!-- |||| [./extract/downloadStudyMetadata.jsp] -->
 <%String path = String.valueOf(request.getAttribute("generate"));
   if ( path != null) {
     try {
@@ -13,5 +12,3 @@
 %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.io.*" %>
-
-<!-- [/./extract/downloadStudyMetadata.jsp] |||| -->

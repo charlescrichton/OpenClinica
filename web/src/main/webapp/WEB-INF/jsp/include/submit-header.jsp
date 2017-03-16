@@ -1,4 +1,3 @@
-<!-- |||| [./include/submit-header.jsp] -->
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -80,5 +79,3 @@ onload="<jsp:include page="../include/showPopUp.jsp"/>"
 
 	<jsp:include page="../include/navBar.jsp"/>
 <!-- End Main Navigation -->
-
-<!-- [/./include/submit-header.jsp] |||| -->

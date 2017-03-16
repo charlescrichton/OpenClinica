@@ -1,4 +1,3 @@
-<!-- |||| [./submit/importRules.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -130,5 +129,3 @@ as the link is provided on Build Study page tasks -> Create Rules -> Actions
     </c:otherwise>
 </c:choose>
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./submit/importRules.jsp] |||| -->

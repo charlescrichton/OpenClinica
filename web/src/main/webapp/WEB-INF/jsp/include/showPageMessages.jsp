@@ -1,4 +1,3 @@
-<!-- |||| [./include/showPageMessages.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.*" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -16,5 +15,3 @@
 
 </div></div></div></div></div></div></div></div>
 </c:if>
-
-<!-- [/./include/showPageMessages.jsp] |||| -->

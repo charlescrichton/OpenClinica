@@ -1,4 +1,3 @@
-<!-- |||| [./include/managestudy-head-prev.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -90,5 +89,3 @@ onload="<jsp:include page="../include/showPopUp2.jsp"/>"
 
 <jsp:include page="../include/navBar.jsp"/>
 <!-- End Main Navigation -->
-
-<!-- [/./include/managestudy-head-prev.jsp] |||| -->

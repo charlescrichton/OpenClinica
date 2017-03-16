@@ -1,4 +1,3 @@
-<!-- |||| [./include/footer-inactive.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -58,5 +57,3 @@ document.write('<table border="0" cellpadding=0" cellspacing="0" width="' + docu
 </body>
 
 </html>
-
-<!-- [/./include/footer-inactive.jsp] |||| -->

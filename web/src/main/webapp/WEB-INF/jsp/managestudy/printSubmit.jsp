@@ -1,4 +1,3 @@
-<!-- |||| [./managestudy/printSubmit.jsp] -->
 <%--
   This is the file that must be bundled within viewGroupSectionsPrint.jsp.
   It is only necessary if the
@@ -57,5 +56,3 @@
   </table>
 
 </c:if>
-
-<!-- [/./managestudy/printSubmit.jsp] |||| -->

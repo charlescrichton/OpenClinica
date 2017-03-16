@@ -1,4 +1,3 @@
-<!-- |||| [./submit/showEventsForSubjectRow.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ page import="org.akaza.openclinica.bean.core.DataEntryStage"%>
@@ -531,5 +530,3 @@
 
 </c:otherwise>
 </c:choose>
-
-<!-- [/./submit/showEventsForSubjectRow.jsp] |||| -->

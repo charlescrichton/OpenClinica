@@ -1,4 +1,3 @@
-<!-- |||| [./include/showAuditEntityLink.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%-- proper format: usually called from a showAuditRow.jsp page:
 	<c:import url="../include/showAuditEntityLink.jsp">
@@ -43,5 +42,3 @@
 		<!-- blank form here -->
 	</c:otherwise>
 </c:choose>
-
-<!-- [/./include/showAuditEntityLink.jsp] |||| -->

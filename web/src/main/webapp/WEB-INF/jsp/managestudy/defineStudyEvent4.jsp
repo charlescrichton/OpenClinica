@@ -1,4 +1,3 @@
-<!-- |||| [./managestudy/defineStudyEvent4.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -122,14 +121,7 @@
     <td class="table_cell" colspan="1"><fmt:message key="double_data_entry" bundle="${resword}"/>:
         <c:choose>
             <c:when test="${edc.doubleEntry == true}">
-                <c:set var="msg" value="You are choosing to have this CRF go through one pass of data entry instead of having it go through Double Data Entry. Before choosing this option, ensure that all Subject`s who have data entry for this CRF are not in one of the following 2 phases:
-
-1. The event CRF is in a status of Double Data Entry Started
-2. The event CRF is in a status of Initial Data Entry Completed.
-
-If the CRFs are in one of those two phases, data entry will not be allowed to continue. You will have to change the configuration back to Double Data Entry.
-
-Select OK to remove the DDE configuration. Select Cancel to keep the DDE configuration."/>
+                <c:set var="msg" value="You are choosing to have this CRF go through one pass of data entry instead of having it go through Double Data Entry. Before choosing this option, ensure that all Subject`s who have data entry for this CRF are not in one of the following 2 phases:\n\n1. The event CRF is in a status of Double Data Entry Started\n2. The event CRF is in a status of Initial Data Entry Completed.\n\nIf the CRFs are in one of those two phases, data entry will not be allowed to continue. You will have to change the configuration back to Double Data Entry.\n\nSelect OK to remove the DDE configuration. Select Cancel to keep the DDE configuration."/>
                 <input type="checkbox" onclick="javascript:return confirm('<c:out value="${msg}"/>');" checked name="doubleEntry<c:out value="${count}"/>" value="yes">
             </c:when>
             <c:otherwise>
@@ -474,5 +466,3 @@ Select OK to remove the DDE configuration. Select Cancel to keep the DDE configu
 
 <!-- END WORKFLOW BOX -->
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./managestudy/defineStudyEvent4.jsp] |||| -->

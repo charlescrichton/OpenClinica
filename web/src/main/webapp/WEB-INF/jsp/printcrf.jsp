@@ -1,4 +1,3 @@
-<!-- |||| [./printcrf.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -13,7 +12,7 @@
 
 <c:set var="dtetmeFormat"><fmt:message key="date_time_format_string" bundle="${resformat}"/></c:set>
 <c:set var="search" value="'"/>
-<c:set var="replace" value="\'"/>
+<c:set var="replace" value="\\'"/>
 <c:set var="test"><fmt:message key="sure_to_sign_subject1" bundle="${resword}"/><fmt:message key="sure_to_sign_subject2" bundle="${resword}"/></c:set>
 <c:set var="test1" value="${fn:replace(test,search,replace)}"></c:set>
 <c:set var="app_print_CRF_Message_at_Loading"><fmt:message key="print_CRF_Message_at_Loading" bundle="${respage_messages}"/></c:set>
@@ -176,5 +175,3 @@ var app_error_print_CRF_Message_at_Loading='<oc:jsEscape key="error_print_CRF_Me
     <img id="loading" src="${pageContext.request.contextPath}/images/loading_wh.gif" class="spinner"/>
  </body>
 </html>
-
-<!-- [/./printcrf.jsp] |||| -->

@@ -1,4 +1,3 @@
-<!-- |||| [./submit/showDNotesForCRFs.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ page import="org.akaza.openclinica.bean.core.DataEntryStage"%>
@@ -544,5 +543,3 @@ if dnote.crfName == edc.crfName, then include dnote--%>
 
 </c:otherwise>
 </c:choose>
-
-<!-- [/./submit/showDNotesForCRFs.jsp] |||| -->

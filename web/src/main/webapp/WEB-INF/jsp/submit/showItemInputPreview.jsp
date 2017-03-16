@@ -1,4 +1,3 @@
-<!-- |||| [./submit/showItemInputPreview.jsp] -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -168,5 +167,3 @@
 <c:if test="${displayItem.metadata.required}">
     <td valign="top"><span class="alert">*</span></td>
 </c:if>
-
-<!-- [/./submit/showItemInputPreview.jsp] |||| -->

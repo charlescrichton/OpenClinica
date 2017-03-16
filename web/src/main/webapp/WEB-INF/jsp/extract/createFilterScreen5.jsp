@@ -1,4 +1,3 @@
-<!-- |||| [./extract/createFilterScreen5.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -91,5 +90,3 @@
 </form>
 
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./extract/createFilterScreen5.jsp] |||| -->

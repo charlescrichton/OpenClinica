@@ -1,4 +1,3 @@
-<!-- |||| [./addSubjectMonitor.jsp] -->
 <%--
   User: Hamid
   Date: November 25, 2010
@@ -409,5 +408,3 @@
 </div>
 
 </form>
-
-<!-- [/./addSubjectMonitor.jsp] |||| -->

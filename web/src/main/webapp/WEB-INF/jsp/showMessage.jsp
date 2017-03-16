@@ -1,4 +1,3 @@
-<!-- |||| [./showMessage.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.*" %>
 <jsp:useBean scope='request' id='formMessages' class='java.util.HashMap'/>
@@ -21,5 +20,3 @@ if (hasMessages) {
 	%><br /><br /><%
 }
 %>
-
-<!-- [/./showMessage.jsp] |||| -->

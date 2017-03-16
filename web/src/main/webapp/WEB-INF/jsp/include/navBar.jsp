@@ -1,4 +1,3 @@
-<!-- |||| [./include/navBar.jsp] -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page import="org.akaza.openclinica.i18n.util.ResourceBundleProvider" %>
@@ -33,10 +32,8 @@
             }
         }
         function lockedCRFAlert(userName){
-            alert('<fmt:message key="CRF_unavailable" bundle="${resword}"/>'+'
-'
-                    +'          '+userName+' '+'<fmt:message key="Currently_entering_data" bundle="${resword}"/>'+'
-'
+            alert('<fmt:message key="CRF_unavailable" bundle="${resword}"/>'+'\n'
+                    +'          '+userName+' '+'<fmt:message key="Currently_entering_data" bundle="${resword}"/>'+'\n'
                     +'<fmt:message key="Leave_the_CRF" bundle="${resword}"/>');
             return false;
         }
@@ -342,5 +339,3 @@
         <div></div>
     </div>
 </div>
-
-<!-- [/./include/navBar.jsp] |||| -->

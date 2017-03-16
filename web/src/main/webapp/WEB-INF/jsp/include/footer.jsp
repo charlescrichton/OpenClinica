@@ -1,4 +1,3 @@
-<!-- |||| [./include/footer.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -59,5 +58,3 @@
 </body>
 
 </html>
-
-<!-- [/./include/footer.jsp] |||| -->

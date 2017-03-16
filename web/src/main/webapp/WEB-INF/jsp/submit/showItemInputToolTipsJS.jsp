@@ -1,4 +1,3 @@
-<!-- |||| [./submit/showItemInputToolTipsJS.jsp] -->
 <%-- 
     
 	JSP with the Javascript generation for use in the showItemInput.jsp page.
@@ -391,5 +390,3 @@ function hideRow(itemId) {
 }
 //-->
 </script>
-
-<!-- [/./submit/showItemInputToolTipsJS.jsp] |||| -->

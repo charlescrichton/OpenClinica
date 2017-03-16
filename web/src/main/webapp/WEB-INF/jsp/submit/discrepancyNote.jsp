@@ -1,4 +1,3 @@
-<!-- |||| [./submit/discrepancyNote.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -301,7 +300,7 @@ function setYPos(id) {
 						<c:set var="resStatuses" value="${resolutionStatuses}"/>
 					</c:when>
 					<c:otherwise>
-						<%-- for FVC; for Query, it will be set per setElements function --%>
+						<%-- for FVC; for JsonQuery, it will be set per setElements function --%>
 						<c:set var="resStatuses" value="${resolutionStatuses2}"/>
 					</c:otherwise>
 					</c:choose>
@@ -388,5 +387,3 @@ function setYPos(id) {
 </table>
 </form>
 <div style="clear:both;"></div>
-
-<!-- [/./submit/discrepancyNote.jsp] |||| -->

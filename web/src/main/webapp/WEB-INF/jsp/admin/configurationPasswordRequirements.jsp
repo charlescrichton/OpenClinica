@@ -1,4 +1,3 @@
-<!-- |||| [./admin/configurationPasswordRequirements.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8"
          import="javax.servlet.http.HttpServletRequest,
                  java.util.Map" %>
@@ -179,5 +178,3 @@
 </form>
 <br>
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./admin/configurationPasswordRequirements.jsp] |||| -->

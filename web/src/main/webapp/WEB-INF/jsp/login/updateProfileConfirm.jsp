@@ -1,4 +1,3 @@
-<!-- |||| [./login/updateProfileConfirm.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -81,5 +80,3 @@
  <input type="button" onclick="confirmCancel('MainMenu');"  name="cancel" value="   <fmt:message key="cancel" bundle="${resword}"/>   " class="button_medium"/>
 </form>
 <jsp:include page="../include/footer.jsp"/>
-
-<!-- [/./login/updateProfileConfirm.jsp] |||| -->

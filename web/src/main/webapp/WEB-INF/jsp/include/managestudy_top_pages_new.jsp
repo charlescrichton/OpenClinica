@@ -1,4 +1,3 @@
-<!-- |||| [./include/managestudy_top_pages_new.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -86,5 +85,3 @@ onload="TabsForwardByNum(<c:out value="${tabId}"/>);<jsp:include page="../includ
         <jsp:param name="isSpringController" value="true" />
     </jsp:include>
 <!-- End Main Navigation -->
-
-<!-- [/./include/managestudy_top_pages_new.jsp] |||| -->

@@ -1,4 +1,3 @@
-<!-- |||| [./include/viewRuleAssignmentStudySideInfo.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -33,5 +32,3 @@
         Your last active study/site was <c:out value="${study.name}"/>, but it has been deleted.
     </c:otherwise>
 </c:choose>
-
-<!-- [/./include/viewRuleAssignmentStudySideInfo.jsp] |||| -->

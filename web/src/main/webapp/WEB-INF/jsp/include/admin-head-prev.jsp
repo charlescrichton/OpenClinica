@@ -1,4 +1,3 @@
-<!-- |||| [./include/admin-head-prev.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -72,5 +71,3 @@
 
 <jsp:include page="../include/navBar.jsp"/>
 <!-- End Main Navigation -->
-
-<!-- [/./include/admin-head-prev.jsp] |||| -->

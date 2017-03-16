@@ -1,4 +1,3 @@
-<!-- |||| [./error.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="org.akaza.openclinica.web.SQLInitServlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -55,5 +54,3 @@
 		<jsp:include page="login-include/login-footer.jsp"/>
 	</c:otherwise>
 </c:choose>
-
-<!-- [/./error.jsp] |||| -->

@@ -1,4 +1,3 @@
-<!-- |||| [./include/showDateTimeInput.jsp] -->
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <%@ page import="org.akaza.openclinica.i18n.util.*" %>
@@ -142,5 +141,3 @@
 <input type="hidden" name="<c:out value="${halfFieldName}"/>" value=""/>
 <% } %>
 </td>
-
-<!-- [/./include/showDateTimeInput.jsp] |||| -->

@@ -1,4 +1,3 @@
-<!-- |||| [./login/requestPasswordPop.jsp] -->
 <%@page import="org.akaza.openclinica.service.user.LdapUserService"%>
 <%@page import="org.springframework.context.ApplicationContext"%>
 <%@page import="org.springframework.web.context.support.WebApplicationContextUtils"%>
@@ -59,5 +58,3 @@ LdapUserService ldapUserService = (LdapUserService) ctx.getBean(LdapUserService.
  </table>
 </form>
 </div>
-
-<!-- [/./login/requestPasswordPop.jsp] |||| -->

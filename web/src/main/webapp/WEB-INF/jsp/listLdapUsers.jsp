@@ -1,4 +1,3 @@
-<!-- |||| [./listLdapUsers.jsp] -->
 <%@page import="java.net.URLEncoder"%>
 <%@page import="org.apache.commons.lang.StringEscapeUtils"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
@@ -104,5 +103,3 @@ body {
 
 </body>
 </html>
-
-<!-- [/./listLdapUsers.jsp] |||| -->

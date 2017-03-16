@@ -1,4 +1,3 @@
-<!-- |||| [./login-include/login-footer.jsp] -->
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <fmt:setBundle basename="org.akaza.openclinica.i18n.words" var="resword"/>
@@ -85,5 +84,3 @@
 </body>
 
 </html>
-
-<!-- [/./login-include/login-footer.jsp] |||| -->
