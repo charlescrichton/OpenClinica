@@ -103,7 +103,7 @@
         <div class="textbox_center">
             <table border="0" cellpadding="0" cellspacing="0">
                 <tr valign="top"><td class="formlabel"><fmt:message key="name" bundle="${resword}"/>:</td><td>
-                    <div class="formfieldXL_BG"><input type="text" name="name" value="<c:out value="${definition.name}"/>" class="formfieldXL"></div>
+                    <div class="formfieldXL_BG"><input type="text" name="name" value="<c:out value="${definition.name}" escapeXml="false"/>" class="formfieldXL"></div>
                     <jsp:include page="../showMessage.jsp"><jsp:param name="key" value="name"/></jsp:include>
                 </td><td class="formlabel">*</td></tr>
                 <tr valign="top"><td class="formlabel"><fmt:message key="description" bundle="${resword}"/>:</td><td>
