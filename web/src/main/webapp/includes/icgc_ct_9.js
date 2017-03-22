@@ -343,7 +343,7 @@ ICGC.BC = function() {
 
 	self.updateFields = function(index) {
 
-		console.log("update fields("+index+")");
+//		console.log("update fields("+index+")");
 
 		// Get old values
 
@@ -388,7 +388,7 @@ ICGC.BC = function() {
 
 	self.updateAllFields = function() {
 		var rowCount = self.countRows();
-		console.log("Update all fields: "+rowCount);		
+//		console.log("Update all fields: "+rowCount);		
 		for ( var i = 0; i < self.countRows(); i++) {
 			self.updateFields(i);
 		}
@@ -435,7 +435,7 @@ ICGC.BC = function() {
             var btn = self.getTableSelector().find("button:contains('Add')");
             btn.hide();
 
-            var newBtn = jQuery("<button class='button_search'>Add2</button>").insertAfter(btn);
+            var newBtn = jQuery("<button class='button_search'>Add</button>").insertAfter(btn);
             newBtn.on("click", function (event) {
                 //add a new row
                 btn.trigger("click");
@@ -451,7 +451,7 @@ ICGC.BC = function() {
 
 	self.setup = function() {
 
-		console.log('hi');
+//		console.log('hi');
 
 		// Go through each row and add a listener to each blood type source
 		// selector and asource selector number.
@@ -459,14 +459,14 @@ ICGC.BC = function() {
 		// Go through each row
 		self.configureUpdateFields();
 
-		console.log('there');
+//		console.log('there');
 
 		// Add configuration step to add button
 		jQuery('.button_search').bind('click.icgc', function() {
 			self.configureUpdateFields();
 		});
 
-		console.log('buddy');
+//		console.log('buddy');
 
 		//Configure display logic on page
 		var $bloodSamplesTakenControlSelectorFn = function() { return jQuery("span[data-id^=BloodSamplesTaken]").parent().parent().find("select"); };
@@ -590,13 +590,13 @@ ICGC.BC = function() {
 
 }();
 
-console.log("Yo!");
+//console.log("Yo!");
 
  jQuery(document).ready(function($) { 
  	ICGC.BC.setup();
  });
 
-console.log("LOL");
+//console.log("LOL");
 //
 //jQuery(ICGC.BC.getTableRowsSelector(0).find("td")[1]).find("input[type!=hidden]");
 // jQuery(ICGC.BC.getTableRowsSelector(0).find("td")[1]).find("input[type!=hidden]").data("events");
