@@ -238,10 +238,10 @@
 							</c:choose>
 							<c:choose>
 								<c:when test="${chosenDefinition.id == definition.id}">
-									<option value="<c:out value="${definition.id}" />" selected><c:out value="${definition.name}"/> <c:out value="${repeating}"/></option>
+									<option value="<c:out value="${definition.id}" />" selected><c:out value="${definition.name}" escapeXml="false"/> <c:out value="${repeating}"/></option>
 								</c:when>
 								<c:otherwise>
-									<option value="<c:out value="${definition.id}"/>"><c:out value="${definition.name}"/> <c:out value="${repeating}"/></option>
+									<option value="<c:out value="${definition.id}"/>"><c:out value="${definition.name}" escapeXml="false"/> <c:out value="${repeating}"/></option>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>

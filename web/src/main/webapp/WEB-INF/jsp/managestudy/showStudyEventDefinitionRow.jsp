@@ -49,7 +49,7 @@
       </c:choose>
 
       </td>   
-      <td class="table_cell"><c:out value="${currRow.bean.name}"/></td>
+      <td class="table_cell"><c:out value="${currRow.bean.name}" escapeXml="false"/></td>
       <td class="table_cell"><c:out value="${currRow.bean.oid}"/></td>
       <td class="table_cell">
         <c:choose>
