@@ -399,7 +399,7 @@ ICGC.BC = function() {
 
 		var $TubeNumberSelectors = self.getTubeNumberSelectors();
 		var $SampleNameSelectors = self.getSampleNameSelectors();
-
+		var $bloodPreparationSelectors = self.getBloodPreparationSelectors();
 		// console.log($TissueTypeSelectors);
 
 		// Go through all selectors and bind an update.
@@ -410,6 +410,7 @@ ICGC.BC = function() {
 			self.updateAllFields();
 		});
 
+		$bloodPreparationSelectors.attr("disabled", true);
 		$SampleNameSelectors.attr("readonly", true);
 	};
 
@@ -576,6 +577,8 @@ ICGC.BC = function() {
 			};
 		}, "other");
 
+		//Disable column 11g (Blood preparation method)
+		//self.hideBloodPreparationColumn();
 
 		//Update all
 		self.updateAllFields();
