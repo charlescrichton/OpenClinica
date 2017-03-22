@@ -413,6 +413,31 @@ ICGC.BC = function() {
 		;
 	};
 
+
+	self.handleAddButton = function() {
+
+            //hide the original button and add a new button
+            var btn = self.getTableSelector().find("button:contains('Add')");
+            btn.hide();
+
+            var newBtn = jQuery("<button class='button_search'>Add</button>").insertAfter(btn);
+            newBtn.on("click", function (event) {
+                //add a new row
+                btn.trigger("click");
+                //var lastRow = self.table.find("tr:last").prev().prev();
+                
+                self.configureUpdateFields();
+                self.updateAllFields();
+            	 
+                event.preventDefault();
+                return false;
+            });
+        };
+
+	//Update all
+	self.updateAllFields();
+	self.handleAddButton();
+
 	return self;
 
 }();
