@@ -6,7 +6,7 @@
 /* For BC form copy the following into the right item text of the first question:
  <script type="text/javascript" src="includes/icgc_bc_7.js"></script>
  <script type="text/javascript">
- jQuery(document).ready(function($) { 
+ jQuery(document).ready(function($) {
  ICGC.BC.setup();
  });
  </script>
@@ -50,7 +50,7 @@ ICGC.DOM = function() {
 	/*
 	 * This listens for changes in a table row count and calls the function if
 	 * there is a change.
-	 * 
+	 *
 	 */
 	self.tableRowCountChangeDetector = function(jQueryTableRowSelectorText, onChangeFunction) {
 		// Set initial value
@@ -144,7 +144,7 @@ ICGC.DOM = function() {
 
 	self.enableControlForValueArray = function(triggerControl, triggerValuesArray, targetControl, wipeOnHide) {
 
-		self.alterControlForValueArray(triggerControl, triggerValuesArray, function() {			
+		self.alterControlForValueArray(triggerControl, triggerValuesArray, function() {
 			targetControl.removeAttr("disabled");
 		}, function() {
 			targetControl.attr("disabled", "disabled");
@@ -169,10 +169,10 @@ ICGC.DOM = function() {
 	self.greyChildControlsWhenNotValueArray = function(triggerControl, triggerValuesArray, targetControl) {
 
 		self.alterControlForValueArray(triggerControl, triggerValuesArray, function() {
-			 
+
 			targetControl.find('td').removeAttr("style");
 		}, function() {
-			 
+
 			targetControl.find('td').attr("style", "color:#E0E0F0");
 		});
 	};
@@ -223,17 +223,17 @@ ICGC.BC = function() {
 
 	};
 
-	self.getCollectionNumberSelector = function() { 
-		return jQuery("span[data-id=CollectionNumber_1]").parent().parent().find("input"); 
+	self.getCollectionNumberSelector = function() {
+		return jQuery("span[data-id=CollectionNumber_1]").parent().parent().find("input");
 	};
-		
+
 
 	self.getCollectionNumber = function() {
 		return self.getCollectionNumberSelector().val();
 	};
 
 	self.getOccurenceNumber = function() {
-		
+
     //    <td class="table_cell_noborder">
     //        <b>Occurrence Number:</b>
 	//	  </td>
@@ -248,10 +248,12 @@ ICGC.BC = function() {
 			return "";
 		if (bloodPreparation === null || bloodPreparation === "")
 			return "";
-		if (bloodSampleNumber === null || bloodSampleNumber === "")
-			return "";
 		if (collectionNumber === null || collectionNumber === "")
 			return "";
+
+		//Blood sample numbers can be empty in which case they are blank.
+		if (bloodSampleNumber === null) { bloodSampleNumber = "" }
+
 		return shortenedName + "/B/"+ bloodPreparation + bloodSampleNumber + "/C" + collectionNumber;
 	};
 
@@ -355,6 +357,25 @@ ICGC.BC = function() {
 		return self.getAllTableRowsSelector().get().length;
 	};
 
+	self.getRowsWhereTheSamplePreparationAppearsArray = function(samplePreperationToSelect) {
+
+		//We specially return an empty array when there is no sample preparation selected.
+		if (samplePreperationToSelect === null || samplePreperationToSelect === "") {
+			return [];
+		}
+
+		var rows = [];
+
+		var bloodPreparationSelectors = self.getBloodPreparationSelectors();
+		for (var i = bloodPreparationSelectors.length - 1; i >= 0; i--) {
+			if (bloodPreparationSelectors[i].val() === samplePreperationToSelect) {
+				rows = rows.concat(i);
+			}
+		}
+
+		return rows;
+	}
+
 	self.updateFields = function(index) {
 
 		//console.log("update fields("+index+")");
@@ -366,6 +387,8 @@ ICGC.BC = function() {
 		var bloodSampleNumber = self.getBloodSampleNumberSelector(index).val();
 		var oldSampleName = self.getSampleNameSelector(index).val();
 		var collectionNumber =  self.getCollectionNumber();
+
+		var rowsWhereTheSamplePreparationAppearsArray = self.getRowsWhereTheSamplePreparationAppearsArray();
 
 		//console.log("bloodSampleNumber1:'"+bloodSampleNumber+"'")
 		//If the blood sample number is empty ... then fill it!
@@ -453,10 +476,10 @@ ICGC.BC = function() {
                 //add a new row
                 btn.trigger("click");
                 //var lastRow = self.table.find("tr:last").prev().prev();
-                
+
                 self.configureUpdateFields();
                 self.updateAllFields();
-            	 
+
                 event.preventDefault();
                 return false;
             });
@@ -495,7 +518,7 @@ ICGC.BC = function() {
 		var $bloodSamplesTakenControlSelectorFn = function() { return jQuery("span[data-id^=BloodSamplesTaken]").parent().parent().find("select"); };
 		var $reasonNoSamplesTakenControlSelectorFn = function() { return jQuery("span[data-id=NoBloodSamplesTakenReason_1]").parent().parent().find("textarea"); };
 		var $reasonNoSamplesTakenDisplaySelectorFn = function() { return jQuery("span[data-id=NoBloodSamplesTakenReason_1]").parent().parent(); };
-		
+
 		var $collectionNumberSelectorFn =  self.getCollectionNumberSelector;
 
 		ICGC.DOM.initAndChange($bloodSamplesTakenControlSelectorFn(), function(s) {
@@ -523,6 +546,8 @@ ICGC.BC = function() {
 			$collectionNumberSelector.change();
 		}
 
+        //Make the collectionNumberSelector read only.
+        $collectionNumberSelector.("disabled", "disabled");
 
 		// If not set, then set to yes.
 		// If there are any blood samples on the page then set the control to Yes
@@ -552,13 +577,13 @@ ICGC.BC = function() {
 		var $stageOfCollectionSelectorFn = function() { return jQuery("span[data-id=CollectionStage_2]").parent().parent().find("select"); };
 		var $cycleSelectorFn = function() { return jQuery("span[data-id=CollectionStageCycle_1]").parent().parent().find("input"); };
 		var $cycleSelectorTextFn = function() { return jQuery("span[data-id=CollectionStageCycle_1]").parent().parent(); };
-		
+
 		ICGC.DOM.initAndChange($stageOfCollectionSelectorFn(), function(s) {
 			return function() {
 				var stagingArrayValues = ["NCC","ACC","NRC","ARC"]; //Cycles
-				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $cycleSelectorTextFn() );	
-				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $cycleSelectorFn(), true);	
-				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $cycleSelectorFn(), false);		 
+				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $cycleSelectorTextFn() );
+				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $cycleSelectorFn(), true);
+				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $cycleSelectorFn(), false);
 			};
 		}, "cycle");
 
@@ -572,13 +597,13 @@ ICGC.BC = function() {
 		ICGC.DOM.initAndChange($stageOfCollectionSelectorFn(), function(s) {
 			return function() {
 				var stagingArrayValues = ["POP"]; //Post-op
-				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorTextFn() );		 
-				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorFn(), true);	
-				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorFn(), false);	
+				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorTextFn() );
+				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorFn(), true);
+				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorFn(), false);
 
-				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorTextFn() );		 			
-				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorFn(), true);				
-				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorFn(), false);	
+				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorTextFn() );
+				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorFn(), true);
+				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorFn(), false);
 
 			};
 		}, "postop");
@@ -590,9 +615,9 @@ ICGC.BC = function() {
 		ICGC.DOM.initAndChange($stageOfCollectionSelectorFn(), function(s) {
 			return function() {
 				var stagingArrayValues = ["OTH"]; //Other
-				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorTextFn() );	
-				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorFn(), true);	
-				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorFn(), false);		 
+				ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorTextFn() );
+				ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorFn(), true);
+				ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorFn(), false);
 			};
 		}, "other");
 
@@ -617,10 +642,10 @@ ICGC.BC = function() {
                 //add a new row
                 btn.trigger("click");
                 //var lastRow = self.table.find("tr:last").prev().prev();
-                
+
                 self.configureUpdateFields();
                 self.updateAllFields();
-            	 
+
                 event.preventDefault();
                 return false;
             });
@@ -635,6 +660,6 @@ ICGC.BC = function() {
 }();
 
 
- jQuery(document).ready(function($) { 
+ jQuery(document).ready(function($) {
  	ICGC.BC.setup();
  });
