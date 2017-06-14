@@ -2,6 +2,10 @@
 
 This is a list of changes and notes. Reading down from top to bottom should give you an idea of the state of this repository and how it got there. Obviously you can look at the commit messages for more detail on individual files.
 
+## 2017-06-05: Added Blood form JavaScript
+
+Added `icgc_bc_9.js` Javascript file.
+
 ## 2016-11-22: Create Repository
 
 This repository is based on the [3.12.2 version of OpenClinica](https://github.com/OpenClinica/OpenClinica/tree/3.12.2).
