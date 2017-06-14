@@ -367,13 +367,27 @@ ICGC.BC = function() {
 		var rows = [];
 
 		var bloodPreparationSelectors = self.getBloodPreparationSelectors();
-		for (var i = bloodPreparationSelectors.length - 1; i >= 0; i--) {
-			if (bloodPreparationSelectors[i].val() === samplePreperationToSelect) {
+		//console.log("bloodPreparationSelectors.length = "+bloodPreparationSelectors.length)
+
+		for (var i = 0; i < bloodPreparationSelectors.length; i++) {
+			if (self.getBloodPreparationSelector(i).val() === samplePreperationToSelect) {
 				rows = rows.concat(i);
 			}
 		}
 
 		return rows;
+	}
+
+	self.positionOfValueInArray  = function (array, value) {
+		 
+		for (var i = array.length - 1; i >= 0; i--) {
+			if (array[i] === value) {
+				return i;
+			}
+		}
+
+		//Value for no position
+		return -1;
 	}
 
 	self.updateFields = function(index) {
@@ -388,10 +402,15 @@ ICGC.BC = function() {
 		var oldSampleName = self.getSampleNameSelector(index).val();
 		var collectionNumber =  self.getCollectionNumber();
 
-		var rowsWhereTheSamplePreparationAppearsArray = self.getRowsWhereTheSamplePreparationAppearsArray();
+		var rowsWhereTheSamplePreparationAppearsArray = self.getRowsWhereTheSamplePreparationAppearsArray(bloodPreparation);
+
+	//	console.log("rowsWhereTheSamplePreparationAppearsArray:-");
+		//console.log(rowsWhereTheSamplePreparationAppearsArray);
+
 
 		//console.log("bloodSampleNumber1:'"+bloodSampleNumber+"'")
 		//If the blood sample number is empty ... then fill it!
+		/*
 		if (bloodSampleNumber === null || bloodSampleNumber === undefined || bloodSampleNumber === '') {
 			bloodSampleNumber = "" + (index + 1);
 			var bloodSampleNumberSelector = self.getBloodSampleNumberSelector(index);
@@ -401,7 +420,26 @@ ICGC.BC = function() {
 			//Check we are getting the value
 			bloodSampleNumber = bloodSampleNumberSelector.val();
 		}
-		//console.log("bloodSampleNumber3:'"+bloodSampleNumber+"'")
+		*/
+
+		//Calculate a blood sample number if rowsWhereTheSamplePreparationAppearsArray.length > 1
+		var calculatedBloodSampleNumber= self.positionOfValueInArray(rowsWhereTheSamplePreparationAppearsArray,index) + 1; 
+
+		//Don't display number where there is only one sample of that preparation
+		if (rowsWhereTheSamplePreparationAppearsArray.length <= 1) {
+			calculatedBloodSampleNumber = "";
+		}
+	
+		if (bloodSampleNumber !== calculatedBloodSampleNumber) {
+			var bloodSampleNumberSelector = self.getBloodSampleNumberSelector(index);
+			bloodSampleNumberSelector.val(""+calculatedBloodSampleNumber);
+			bloodSampleNumberSelector.change();
+			bloodSampleNumber = bloodSampleNumberSelector.val();
+		}
+
+
+//		console.log("index = "+index);
+		//console.log("calculatedBloodSampleNumber= '"+calculatedBloodSampleNumber+"'");
 
 		// Calculate new value
 		var newSampleName = self.ComposeSampleName(studySubjectIdentifier, bloodPreparation, bloodSampleNumber, collectionNumber);
@@ -419,7 +457,7 @@ ICGC.BC = function() {
 
 	self.updateAllFields = function() {
 		var rowCount = self.countRows();
-		console.log("Update all fields: "+rowCount);
+		//console.log("Update all fields: "+rowCount);
 		for ( var i = 0; i < self.countRows(); i++) {
 			self.updateFields(i);
 		}
@@ -442,11 +480,14 @@ ICGC.BC = function() {
 			self.updateAllFields();
 		});
 
+		/*
 		$BloodSampleNumberSelectors.on('change.icgc', function() {
 			// console.log("c2");
 			self.updateAllFields();
 		});
+		*/
 
+		$BloodSampleNumberSelectors.attr("readonly", true);
 		$SampleNameSelectors.attr("readonly", true);
 	};
 
@@ -547,7 +588,7 @@ ICGC.BC = function() {
 		}
 
         //Make the collectionNumberSelector read only.
-        $collectionNumberSelector.("disabled", "disabled");
+        $collectionNumberSelector.attr("disabled", "disabled");
 
 		// If not set, then set to yes.
 		// If there are any blood samples on the page then set the control to Yes
@@ -663,3 +704,6 @@ ICGC.BC = function() {
  jQuery(document).ready(function($) {
  	ICGC.BC.setup();
  });
+
+//console.log("2017-06-14 v2");
+
