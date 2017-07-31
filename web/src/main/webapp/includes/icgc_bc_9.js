@@ -191,7 +191,7 @@ ICGC.STUDYSUBJECT = function() {
 	self.ShortenStudySubject = function(studySubjectID) {
 
 		if (studySubjectID === null) {
-			return "";
+			return "XXX";
 		}
 
 		// Matches and is same length OCCAMS/AZ/000 is 13 characters
@@ -668,9 +668,29 @@ ICGC.BC = function() {
 		//Update all
 		self.updateAllFields();
 		self.handleAddButton();
+		self.handleAddTickBox();
 
 	};
 
+	self.handleAddTickBox = function() {
+
+		var collectionNumberSelector =  self.getCollectionNumberSelector();
+
+		var discrepancyNoteSelector = collectionNumberSelector.parent().parent().find("img").parent();
+
+		var tickBox = jQuery("<input id='edit-occurence' type='checkbox' name='edit-occurence' value='edit-occurence'> Unlock field - only do this if you are sure you are adding a unique collection number<br>").insertAfter(discrepancyNoteSelector);
+
+		//var editOccurenceTickboxSelectorFn = function() { return jQuery("input[id='edit-occurence']"); };
+
+		tickBox.on("change", function(event) {
+
+		  if(tickBox.is(":checked")) {
+		  	collectionNumberSelector.removeAttr("disabled");
+		  } else {
+		  	collectionNumberSelector.attr("disabled", "disabled");
+		  }
+		});
+	}
 
 	self.handleAddButton = function() {
 
@@ -705,5 +725,4 @@ ICGC.BC = function() {
  	ICGC.BC.setup();
  });
 
-//console.log("2017-06-14 v2");
 
