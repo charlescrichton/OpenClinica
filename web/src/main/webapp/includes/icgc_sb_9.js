@@ -254,7 +254,7 @@ ICGC.BC = function() {
 		//Blood sample numbers can be empty in which case they are blank.
 		if (bloodSampleNumber === null) { bloodSampleNumber = "" }
 
-		return shortenedName + "/B/"+ bloodPreparation + bloodSampleNumber + "/C" + collectionNumber;
+		return shortenedName + "/B/S"+ bloodSampleNumber;
 	};
 
 	self.getTableSelector = function() {
@@ -425,8 +425,8 @@ ICGC.BC = function() {
 		//Calculate a blood sample number if rowsWhereTheSamplePreparationAppearsArray.length > 1
 		var calculatedBloodSampleNumber= self.positionOfValueInArray(rowsWhereTheSamplePreparationAppearsArray,index) + 1; 
 
-		//Don't display number where there is only one sample of that preparation
-		if (rowsWhereTheSamplePreparationAppearsArray.length <= 1) {
+		//Don't display number where there is only one sample of that preparation 
+		if (rowsWhereTheSamplePreparationAppearsArray.length <= 0) {
 			calculatedBloodSampleNumber = "";
 		}
 	
@@ -668,7 +668,7 @@ ICGC.BC = function() {
 		//Update all
 		self.updateAllFields();
 		self.handleAddButton();
-		self.handleAddTickBox();
+		//self.handleAddTickBox();
 
 	};
 
