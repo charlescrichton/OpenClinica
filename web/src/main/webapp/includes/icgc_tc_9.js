@@ -353,11 +353,6 @@ ICGC.TC = function() {
         return $inputs;
     };
 
-    /*
-     * NOT REQUIRED self.getDateOfCollectionSelector = function() { return
-     * self.getInputSelector(pos_DC); };
-     */
-
     self.getBloodPreparationSelector = function(index) {
         return self.getSelectSelector(pos_BP, index);
     };
