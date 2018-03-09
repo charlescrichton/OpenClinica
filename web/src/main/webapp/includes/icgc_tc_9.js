@@ -1,13 +1,13 @@
 //ICGC Library
 //Version 1.0
-//2017-06-05 Monday
+//TC Form
 //See associated icgcSpec.js for Jasmine-1.3.1.js definition.
 
-/* For BC form copy the following into the right item text of the first question:
+/* For TC form copy the following into the right item text of the first question:
  <script type="text/javascript" src="includes/icgc_bc_7.js"></script>
  <script type="text/javascript">
  jQuery(document).ready(function($) {
- ICGC.BC.setup();
+ ICGC.TC.setup();
  });
  </script>
  */
@@ -206,8 +206,8 @@ ICGC.STUDYSUBJECT = function() {
 
 }();
 
-// Define BC sub-namesapce
-ICGC.BC = function() {
+// Define TC sub-namesapce
+ICGC.TC = function() {
 
 	var self = {};
 
@@ -552,7 +552,7 @@ ICGC.BC = function() {
 
 		//Enable and disable fields when yes/no is toggled.
 		var $tableSelectorFn = function() {
-			return ICGC.BC.getTableSelector();
+			return ICGC.TC.getTableSelector();
 		};
 
 		//Configure display logic on page
@@ -722,7 +722,7 @@ ICGC.BC = function() {
 
 
  jQuery(document).ready(function($) {
- 	ICGC.BC.setup();
+ 	ICGC.TC.setup();
  });
 
 //Is this the file...?
