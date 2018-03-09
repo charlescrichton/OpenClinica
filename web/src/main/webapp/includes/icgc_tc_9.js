@@ -316,9 +316,12 @@ ICGC.TC = function() {
     };
 
     // Column for fields (first column is 0)
-    var pos_BP = 0; // BC_BloodPreparation
-    var pos_BSN = 1; // BC_BloodSampleNumber
-    var pos_SN = 2; // BC_SampleName_2
+    //var pos_DC = 0; //TC_DateOfCollection_1 I
+    var pos_TT = 1; //TC_TissueType_4 S
+    var pos_TS = 2; //TC_TissueSource_3 S
+    var pos_TSN = 3; //TC_TissueSourceNumber_2 S
+    //var pos_DS = 4; //TC_DateSampleSentToCambridge_1 I
+    var pos_SN = 5; //TC_SampleName_2 I
 
     // This gets an entire column
     self.getInputSelectors = function(pos) {
