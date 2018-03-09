@@ -393,21 +393,20 @@ ICGC.TC = function() {
         return self.getAllTableRowsSelector().get().length;
     };
 
+    self.getRowsWhereTheTissueTypeAppearsArray = function(sampleToSelect) {
 
-    self.getRowsWhereTheSamplePreparationAppearsArray = function(samplePreperationToSelect) {
-
-        //We specially return an empty array when there is no sample preparation selected.
-        if (samplePreperationToSelect === null || samplePreperationToSelect === "") {
+        //We specially return an empty array when there is no tissue type selected.
+        if (sampleToSelect === null || sampleToSelect === "") {
             return [];
         }
 
         var rows = [];
 
-        var bloodPreparationSelectors = self.getBloodPreparationSelectors();
-        //console.log("bloodPreparationSelectors.length = "+bloodPreparationSelectors.length)
+        var tissueTypeSelectors = self.getTissueTypeSelectors();
+        //console.log("tissueTypeSelectors.length = "+tissueTypeSelectors.length)
 
-        for (var i = 0; i < bloodPreparationSelectors.length; i++) {
-            if (self.getBloodPreparationSelector(i).val() === samplePreperationToSelect) {
+        for (var i = 0; i < tissueTypeSelectors.length; i++) {
+            if (self.getTissueTypeSelector(i).val() === sampleToSelect) {
                 rows = rows.concat(i);
             }
         }
@@ -439,7 +438,7 @@ ICGC.TC = function() {
         var oldSampleName = self.getSampleNameSelector(index).val();
         var collectionNumber = self.getCollectionNumber();
 
-        var rowsWhereTheSamplePreparationAppearsArray = self.getRowsWhereTheSamplePreparationAppearsArray(bloodPreparation);
+        var rowsWhereTheSamplePreparationAppearsArray = self.getRowsWhereTheTissueTypeAppearsArray(bloodPreparation);
 
         //	console.log("rowsWhereTheSamplePreparationAppearsArray:-");
         //console.log(rowsWhereTheSamplePreparationAppearsArray);
