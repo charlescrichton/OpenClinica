@@ -320,8 +320,8 @@ ICGC.TC = function() {
     var pos_TT = 1; //TC_TissueType_5 S
     var pos_TS = 2; //TC_TissueSource_5 S
     var pos_TSN = 3; //TC_TissueSourceNumber_4 S
-    var pos_SN = 5; //TC_SampleName_3 I
-    //var pos_DS = 4; //TC_DateSampleSentToCambridge_2 I
+    var pos_SN = 4; //TC_SampleName_3 I
+    //var pos_DS = 5; //TC_DateSampleSentToCambridge_1 I
 
     // This gets an entire column
     self.getInputSelectors = function(pos) {
