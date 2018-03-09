@@ -284,8 +284,8 @@ ICGC.TC = function() {
         return shortenedName + "/" + tissueType + "/" + tissueSource + sourceNumber;
     };
 
-    self.getTableSelector = function() {
-        var $table = jQuery("span[data-id='LocalSampleIdentifier_1']").closest('table');
+   self.getTableSelector = function() {
+        var $table = jQuery("#icgc_d").closest('table');
         //console.log("Table Selector");
         //console.log ($table.get());
         return $table;
