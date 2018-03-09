@@ -479,30 +479,34 @@ ICGC.TC = function() {
 
     self.configureUpdateFields = function() {
 
-        var $BloodPreparationSelectors = self.getBloodPreparationSelectors();
-        var $BloodSampleNumberSelectors = self.getBloodSampleNumberSelectors();
+        var $TissueTypeSelectors = self.getTissueTypeSelectors();
+        var $TissueSourceSelectors = self.getTissueSourceSelectors();
+        var $TissueSourceNumberSelectors = self.getTissueSourceNumberSelectors();
         var $SampleNameSelectors = self.getSampleNameSelectors();
 
-        // console.log($TissueTypeSelectors);
+        //console.log($TissueTypeSelectors);
 
-        // Go through all selectors and bind an update.
+        //Go through all selectors and bind an update.
 
-        // .bind with namespace needs jQuery1.7.1 or later.
-        $BloodPreparationSelectors.on('change.icgc', function() {
-            // console.log("c1");
+        //.bind with namespace needs jQuery1.7.1 or later.
+        $TissueTypeSelectors.on('change.icgc', function() {
+            //console.log("c1");
             self.updateAllFields();
         });
 
-        /*
-        $BloodSampleNumberSelectors.on('change.icgc', function() {
-        	// console.log("c2");
-        	self.updateAllFields();
+        $TissueSourceSelectors.on('change.icgc', function() {
+            //console.log("c2");
+            self.updateAllFields();
         });
-        */
 
-        $BloodSampleNumberSelectors.attr("readonly", true);
+        $TissueSourceNumberSelectors.on('change.icgc', function() {
+            //console.log("c3");
+            self.updateAllFields();
+        });
+
         $SampleNameSelectors.attr("readonly", true);
     };
+
 
     self.thereAreTissueSamplesWithIDs = function() {
         // Go through each row
