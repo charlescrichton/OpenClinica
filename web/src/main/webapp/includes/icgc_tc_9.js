@@ -216,11 +216,10 @@ ICGC.TC = function() {
     // The path to the study subject on the page is: /html/body/div[4]/table/tbody/tr/td[2]/h1/span
     // jQuery("#centralContainer > table > tbody tr td[2] h1 span").
     self.getStudySubject = function() {
-
         return jQuery.trim(jQuery("#centralContainer > table > tbody > tr > td:eq(1) > h1 > span").text());
-
     };
 
+/* There are no collections numbers in the TC form 
     self.getCollectionNumberSelector = function() {
         return jQuery("span[data-id=CollectionNumber_1]").parent().parent().find("input");
     };
@@ -239,7 +238,7 @@ ICGC.TC = function() {
         return jQuery('td.table_cell_noborder > b:contains("Occurrence Number:")').parent().next().text().trim();
 
     };
-
+*/
     self.ComposeSampleName = function(studySubjectIdentifier, bloodPreparation, bloodSampleNumber, collectionNumber) {
         var shortenedName = ICGC.STUDYSUBJECT.ShortenStudySubject(studySubjectIdentifier);
         if (shortenedName === "")
