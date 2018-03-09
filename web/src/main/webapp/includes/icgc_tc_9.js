@@ -430,55 +430,33 @@ ICGC.TC = function() {
 
         //console.log("update fields("+index+")");
 
-        // Get old values
+        //Get old values
 
         var studySubjectIdentifier = self.getStudySubject();
-        var bloodPreparation = self.getBloodPreparationSelector(index).val();
-        var bloodSampleNumber = self.getBloodSampleNumberSelector(index).val();
+        var tissueType = self.getTissueTypeSelector(index).val();
+        var tissueSource = self.getTissueSourceSelector(index).val();
+        var sourceNumber = self.getTissueSourceNumberSelector(index).val();
         var oldSampleName = self.getSampleNameSelector(index).val();
-        var collectionNumber = self.getCollectionNumber();
 
-        var rowsWhereTheSamplePreparationAppearsArray = self.getRowsWhereTheTissueTypeAppearsArray(bloodPreparation);
+        var rowsWhereTheTissueSampleAppearsArray = self.getRowsWhereTheTissueTypeAppearsArray(bloodPreparation);
 
-        //	console.log("rowsWhereTheSamplePreparationAppearsArray:-");
-        //console.log(rowsWhereTheSamplePreparationAppearsArray);
+        //Calculate a source number if rowsWhereTheTissueSampleAppearsArray.length > 1
+        var calculatedTissueSampleSourceNumber = self.positionOfValueInArray(rowsWhereTheTissueSampleAppearsArray, index) + 1;
 
-
-        //console.log("bloodSampleNumber1:'"+bloodSampleNumber+"'")
-        //If the blood sample number is empty ... then fill it!
-        /*
-        if (bloodSampleNumber === null || bloodSampleNumber === undefined || bloodSampleNumber === '') {
-        	bloodSampleNumber = "" + (index + 1);
-        	var bloodSampleNumberSelector = self.getBloodSampleNumberSelector(index);
-        	bloodSampleNumberSelector.val(""+bloodSampleNumber);
-        	//console.log("bloodSampleNumber2:'"+bloodSampleNumber+"'")
-        	bloodSampleNumberSelector.change();
-        	//Check we are getting the value
-        	bloodSampleNumber = bloodSampleNumberSelector.val();
-        }
-        */
-
-        //Calculate a blood sample number if rowsWhereTheSamplePreparationAppearsArray.length > 1
-        var calculatedBloodSampleNumber = self.positionOfValueInArray(rowsWhereTheSamplePreparationAppearsArray, index) + 1;
-
-        //Don't display number where there is only one sample of that preparation
-        if (rowsWhereTheSamplePreparationAppearsArray.length <= 1) {
-            calculatedBloodSampleNumber = "";
+        //Don't display number where there is only one sample
+        if (rowsWhereTheTissueSampleAppearsArray.length <= 1) {
+            calculatedTissueSampleSourceNumber = "";
         }
 
-        if (bloodSampleNumber !== calculatedBloodSampleNumber) {
-            var bloodSampleNumberSelector = self.getBloodSampleNumberSelector(index);
-            bloodSampleNumberSelector.val("" + calculatedBloodSampleNumber);
-            bloodSampleNumberSelector.change();
-            bloodSampleNumber = bloodSampleNumberSelector.val();
+        if (sourceNumber !== calculatedTissueSampleSourceNumber) {
+            var tissueSourceNumberSelector = self.getTissueSourceNumberSelector(index);
+            tissueSourceNumberSelector.val("" + calculatedTissueSampleSourceNumber);
+            tissueSourceNumberSelector.change();
+            sourceNumber = tissueSourceNumberSelector.val();
         }
 
-
-        //		console.log("index = "+index);
-        //console.log("calculatedBloodSampleNumber= '"+calculatedBloodSampleNumber+"'");
-
-        // Calculate new value
-        var newSampleName = self.ComposeSampleName(studySubjectIdentifier, bloodPreparation, bloodSampleNumber, collectionNumber);
+		//Calculate new value
+        var newSampleName = self.ComposeSampleName(studySubjectIdentifier, tissueType, tissueSource, sourceNumber);
 
         // Check to see if the value has changed - if not then do nothing.
         if (newSampleName !== oldSampleName) {
