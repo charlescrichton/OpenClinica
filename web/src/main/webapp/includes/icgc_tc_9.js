@@ -65,7 +65,7 @@ ICGC.DOM = function() {
         }, 500);
     };
 
-     /* Function which takes a set of items selected by jQuery and calls change on them.
+    /* Function which takes a set of items selected by jQuery and calls change on them.
      * Usage example:
      *   ICGC.DOM.initAndChange(jQuery("#ET").parent().parent().find("select"),
      *   		function(s) {
@@ -216,66 +216,50 @@ ICGC.TC = function() {
     // The path to the study subject on the page is: /html/body/div[4]/table/tbody/tr/td[2]/h1/span
     // jQuery("#centralContainer > table > tbody tr td[2] h1 span").
     self.getStudySubject = function() {
-        return jQuery.trim(jQuery("#centralContainer > table > tbody > tr > td:eq(1) > h1 > span").text());
+        return jQuery.trim(jQuery("#centralContainer")
+            .find("table")
+            .find("tbody")
+            .find("tr")
+            .find("td:eq(1)")
+            .find("h1")
+            .find("span")
+            .text()
+        );
     };
 
-/*  There are no collections numbers in the TC form 
---TODELETE--
-    
-    self.getCollectionNumberSelector = function() {
-        return jQuery("span[data-id=CollectionNumber_1]").parent().parent().find("input");
-    };
+    /* ### Tissue samples have the format:
 
+    OC/{***site code***}/{***study subject number***}/{**Tissue type**}/{***Tissue source***}{***Tissue source number***}
 
-    self.getCollectionNumber = function() {
-        return self.getCollectionNumberSelector().val();
-    };
+    E.g. OC/XX/000/E/N1 
 
-    self.getOccurenceNumber = function() {
+    Regexp: `^OC/[A-Z]{2,}/[0-9]{3}/(E|S|L|R)/(N|B|T|G|L|M)[0-9]{1,}$`
 
-        //    <td class="table_cell_noborder">
-        //        <b>Occurrence Number:</b>
-        //	  </td>
-        //    <td class="table_cell_noborder"> 1 </td>
-        return jQuery('td.table_cell_noborder > b:contains("Occurrence Number:")').parent().next().text().trim();
+    - Site code is a two letter identifier.
+    - Study subject number id a 3 digit number
+    - Tissue types have the following meaning
 
-    };
---TODELETE--
-*/
+    | Tissue preparation  code | Meaning          |
+    | ------------------------ | ---------------- |
+    | `E`                      | Endoscopy Tissue |
+    | `S`                      | Surgical Tissue  |
+    | `L`                      | Laparoscopy      |
+    | `R`                      | EMR              |
 
-	/* ### Tissue samples have the format:
+    - Tissue sources are one of the following
 
-	OC/{***site code***}/{***study subject number***}/{**Tissue type**}/{***Tissue source***}{***Tissue source number***}
+    | Tissue source code | Meaning           |
+    | ------------------ | ----------------- |
+    | `N`                | Normal Oesophagus |
+    | `B`                | Barrett's         |
+    | `T`                | Tumour            |
+    | `G`                | Normal Gastric    |
+    | `L`                | Lymph-node        |
+    | `M`                | Metastasis        |
 
-	E.g. OC/XX/000/E/N1 
-
-	Regexp: `^OC/[A-Z]{2,}/[0-9]{3}/(E|S|L|R)/(N|B|T|G|L|M)[0-9]{1,}$`
-
-	- Site code is a two letter identifier.
-	- Study subject number id a 3 digit number
-	- Tissue types have the following meaning
-
-	| Tissue preparation  code | Meaning          |
-	| ------------------------ | ---------------- |
-	| `E`                      | Endoscopy Tissue |
-	| `S`                      | Surgical Tissue  |
-	| `L`                      | Laparoscopy      |
-	| `R`                      | EMR              |
-
-	- Tissue sources are one of the following
-
-	| Tissue source code | Meaning           |
-	| ------------------ | ----------------- |
-	| `N`                | Normal Oesophagus |
-	| `B`                | Barrett's         |
-	| `T`                | Tumour            |
-	| `G`                | Normal Gastric    |
-	| `L`                | Lymph-node        |
-	| `M`                | Metastasis        |
-
-	- Tissue sample number is a discriminator which can be used to discriminate between multiple samples of the same type, (usually) taken on the same day.
-	*/
-     self.ComposeSampleName = function(studySubjectIdentifier, tissueType, tissueSource, sourceNumber) {
+    - Tissue sample number is a discriminator which can be used to discriminate between multiple samples of the same type, (usually) taken on the same day.
+    */
+    self.ComposeSampleName = function(studySubjectIdentifier, tissueType, tissueSource, sourceNumber) {
         var shortenedName = ICGC.STUDYSUBJECT.ShortenStudySubject(studySubjectIdentifier);
         if (shortenedName === "") return "";
         if (tissueType === null || tissueType === "") return "";
@@ -284,10 +268,15 @@ ICGC.TC = function() {
         return shortenedName + "/" + tissueType + "/" + tissueSource + sourceNumber;
     };
 
-   self.getTableSelector = function() {
-        var $table = jQuery("#icgc_d").closest('table');
-        //console.log("Table Selector");
-        //console.log ($table.get());
+    //If the table is hidden this can return null.
+    self.getTableSelector = function() {
+
+        var $tag = jQuery("#icgc_d");
+        //console.log("$tag = ");
+        //console.log($tag);
+
+        var $table = $tag.closest('table');
+        //console.log($table);
         return $table;
     };
 
@@ -320,19 +309,20 @@ ICGC.TC = function() {
     var pos_TT = 1; //TC_TissueType_5 S
     var pos_TS = 2; //TC_TissueSource_5 S
     var pos_TSN = 3; //TC_TissueSourceNumber_4 S
-    var pos_SN = 4; //TC_SampleName_3 I
-    //var pos_DS = 5; //TC_DateSampleSentToCambridge_1 I
+    // var pos_DBTN = 4; //Distance between tumour and normal
+    var pos_SN = 5; //TC_SampleName_3 I
+    //var pos_DS = 6; //TC_DateSampleSentToCambridge_1 I
 
     // This gets an entire column
     self.getInputSelectors = function(pos) {
-        var $inputs = self.getAllTableRowsSelector().find('td:eq(' + pos + ') > input[type!="hidden"]');
+        var $inputs = self.getAllTableRowsSelector().find('td:eq(' + pos + ')').find('input[type!="hidden"]');
         // console.log("Input Selector: "+pos);
         // console.log($inputs.get());
         return $inputs;
     };
 
     self.getInputSelector = function(pos, index) {
-        var $inputs = self.getTableRowsSelector(index).find('td:eq(' + pos + ') > input[type!="hidden"]');
+        var $inputs = self.getTableRowsSelector(index).find('td:eq(' + pos + ')').find('input[type!="hidden"]');
         // console.log("Input Selector: "+pos);
         // console.log($inputs.get());
         return $inputs;
@@ -340,14 +330,14 @@ ICGC.TC = function() {
 
     // This gets an enire column
     self.getSelectSelectors = function(pos) {
-        var $inputs = self.getAllTableRowsSelector().find('td:eq(' + pos + ') > select');
+        var $inputs = self.getAllTableRowsSelector().find('td:eq(' + pos + ')').find('select');
         // console.log("Select Selector: "+pos);
         // console.log($inputs.get());
         return $inputs;
     };
 
     self.getSelectSelector = function(pos, index) {
-        var $inputs = self.getTableRowsSelector(index).find('td:eq(' + pos + ') > select');
+        var $inputs = self.getTableRowsSelector(index).find('td:eq(' + pos + ')').find('select');
         // console.log("Select Selector: "+pos);
         // console.log($inputs.get());
         return $inputs;
@@ -364,7 +354,7 @@ ICGC.TC = function() {
     };
 
     self.getTissueSourceNumberSelector = function(index) {
-        return self.getSelectSelector(pos_TSN, index);
+        return self.getInputSelector(pos_TSN, index);
     };
 
     // Column selectors
@@ -377,7 +367,7 @@ ICGC.TC = function() {
     };
 
     self.getTissueSourceNumberSelectors = function() {
-        return self.getSelectSelectors(pos_TSN);
+        return self.getInputSelectors(pos_TSN);
     };
 
     self.getSampleNameSelector = function(index) {
@@ -393,20 +383,25 @@ ICGC.TC = function() {
         return self.getAllTableRowsSelector().get().length;
     };
 
+    /* Find the rows where there are identical Tissue Type and Tissue Source
+     */
     self.getRowsWhereTheTissueTypeAppearsArray = function(sampleToSelect) {
 
-        //We specially return an empty array when there is no tissue type selected.
+        //We specially return an empty array when there is no sample.
         if (sampleToSelect === null || sampleToSelect === "") {
             return [];
         }
 
         var rows = [];
 
+
         var tissueTypeSelectors = self.getTissueTypeSelectors();
-        //console.log("tissueTypeSelectors.length = "+tissueTypeSelectors.length)
+        var tissueSourceSelectors = self.getTissueSourceSelectors();
 
         for (var i = 0; i < tissueTypeSelectors.length; i++) {
-            if (self.getTissueTypeSelector(i).val() === sampleToSelect) {
+            if (self.getTissueTypeSelector(i).val() === sampleToSelect &&
+                self.tissueSourceSelectors(i).val() === sampleToSelect
+            ) {
                 rows = rows.concat(i);
             }
         }
@@ -427,6 +422,14 @@ ICGC.TC = function() {
     }
 
     self.updateFields = function(index) {
+        return self.updateFieldsImpl(index, true);
+    }
+
+    self.updateSourceNumberFields = function(index) {
+        return self.updateFieldsImpl(index, false);
+    }
+
+    self.updateFieldsImpl = function(index, allowSourceNumberUpdate) {
 
         //console.log("update fields("+index+")");
 
@@ -438,24 +441,28 @@ ICGC.TC = function() {
         var sourceNumber = self.getTissueSourceNumberSelector(index).val();
         var oldSampleName = self.getSampleNameSelector(index).val();
 
-        var rowsWhereTheTissueSampleAppearsArray = self.getRowsWhereTheTissueTypeAppearsArray(bloodPreparation);
+        if (allowSourceNumberUpdate) {
+            var rowsWhereTheTissueSampleAppearsArray = self.getRowsWhereTheTissueTypeAppearsArray(sourceNumber);
 
-        //Calculate a source number if rowsWhereTheTissueSampleAppearsArray.length > 1
-        var calculatedTissueSampleSourceNumber = self.positionOfValueInArray(rowsWhereTheTissueSampleAppearsArray, index) + 1;
+            //Calculate a source number if rowsWhereTheTissueSampleAppearsArray.length > 1
+            var calculatedTissueSampleSourceNumber = self.positionOfValueInArray(rowsWhereTheTissueSampleAppearsArray, index) + 1;
 
-        //Don't display number where there is only one sample
-        if (rowsWhereTheTissueSampleAppearsArray.length <= 1) {
-            calculatedTissueSampleSourceNumber = "";
+            //Don't display number where there is only one sample
+            //if (rowsWhereTheTissueSampleAppearsArray.length <= 1) {
+            //    calculatedTissueSampleSourceNumber = "";
+            //}
+
+            if (!sourceNumber) {
+                if (sourceNumber !== calculatedTissueSampleSourceNumber) {
+                    var tissueSourceNumberSelector = self.getTissueSourceNumberSelector(index);
+                    tissueSourceNumberSelector.val("" + calculatedTissueSampleSourceNumber);
+                    tissueSourceNumberSelector.change();
+                    sourceNumber = tissueSourceNumberSelector.val();
+                }
+            }
         }
 
-        if (sourceNumber !== calculatedTissueSampleSourceNumber) {
-            var tissueSourceNumberSelector = self.getTissueSourceNumberSelector(index);
-            tissueSourceNumberSelector.val("" + calculatedTissueSampleSourceNumber);
-            tissueSourceNumberSelector.change();
-            sourceNumber = tissueSourceNumberSelector.val();
-        }
-
-		//Calculate new value
+        //Calculate new value
         var newSampleName = self.ComposeSampleName(studySubjectIdentifier, tissueType, tissueSource, sourceNumber);
 
         // Check to see if the value has changed - if not then do nothing.
@@ -469,11 +476,20 @@ ICGC.TC = function() {
         }
     };
 
+
     self.updateAllFields = function() {
         var rowCount = self.countRows();
         //console.log("Update all fields: "+rowCount);
         for (var i = 0; i < self.countRows(); i++) {
             self.updateFields(i);
+        };
+    };
+
+    self.updateAllSourceNumberFields = function() {
+        var rowCount = self.countRows();
+        //console.log("Update all fields: "+rowCount);
+        for (var i = 0; i < self.countRows(); i++) {
+            self.updateSourceNumberFields(i);
         };
     };
 
@@ -489,6 +505,7 @@ ICGC.TC = function() {
         //Go through all selectors and bind an update.
 
         //.bind with namespace needs jQuery1.7.1 or later.
+
         $TissueTypeSelectors.on('change.icgc', function() {
             //console.log("c1");
             self.updateAllFields();
@@ -501,8 +518,9 @@ ICGC.TC = function() {
 
         $TissueSourceNumberSelectors.on('change.icgc', function() {
             //console.log("c3");
-            self.updateAllFields();
+            self.updateAllSourceNumberFields();
         });
+
 
         $SampleNameSelectors.attr("readonly", true);
     };
@@ -545,10 +563,7 @@ ICGC.TC = function() {
 
     self.setup = function() {
 
-        // Go through each row and add a listener to each tissue type source
-        // selector and asource selector number.
-
-        // Go through each row
+        //Add listeners
         self.configureUpdateFields();
 
         // Add configuration step to add button
@@ -556,175 +571,49 @@ ICGC.TC = function() {
             self.configureUpdateFields();
         });
 
-        // Configure display logic on page
-        //var $tissueSamplesTakenControlSelectorFn = function() {
-        //	return jQuery("#icgc_t").parent().parent().find("select");
-        //};
-        //var $reasonNoSamplesTakenControlSelectorFn = function() {
-        //	return jQuery("#icgc_r").parent().parent().find("textarea");
-        //};
-        //var $reasonNoSamplesTakenDisplaySelectorFn = function() {
-        //	return jQuery("#icgc_r").parent().parent();
-        //};
+
+        //Configure display logic on page
+        var $tissueSamplesTakenControlSelectorFn = function() { return jQuery("#icgc_t").parent().parent().find("select"); };
+        var $reasonNoSamplesTakenControlSelectorFn = function() { return jQuery("#icgc_r").parent().parent().find("select"); };
+        var $reasonNoSamplesTakenDisplaySelectorFn = function() { return jQuery("#icgc_r").parent().parent(); };
+
+
+        var $reasonNoSamplesTakenOtherControlSelectorFn = function() { return jQuery("#icgc_ro").parent().parent().find("textarea"); };
+        var $reasonNoSamplesTakenOtherDisplaySelectorFn = function() { return jQuery("#icgc_ro").parent().parent(); };
 
         //Enable and disable fields when yes/no is toggled.
         var $tableSelectorFn = function() {
             return ICGC.TC.getTableSelector();
         };
 
-        //Configure display logic on page
-        var $bloodSamplesTakenControlSelectorFn = function() { return jQuery("span[data-id^=BloodSamplesTaken]").parent().parent().find("select"); };
-        var $reasonNoSamplesTakenControlSelectorFn = function() { return jQuery("span[data-id=NoBloodSamplesTakenReason_1]").parent().parent().find("textarea"); };
-        var $reasonNoSamplesTakenDisplaySelectorFn = function() { return jQuery("span[data-id=NoBloodSamplesTakenReason_1]").parent().parent(); };
+        ICGC.DOM.initAndChange($tissueSamplesTakenControlSelectorFn(),
+            function(s) {
+                return function() {
+                    ICGC.DOM.enableControlForValue(s, "No", $reasonNoSamplesTakenControlSelectorFn(), true);
+                    ICGC.DOM.greyChildControlsWhenNotValue(s, "No", $reasonNoSamplesTakenDisplaySelectorFn());
+                    //Try and remove any rows
+                    ICGC.DOM.alterControlForValue(s, "No",
+                        function() {
+                            jQuery(".remove_button").each(
+                                function() { jQuery(this).click(); }
+                            );
+                        },
+                        function() {});
+                    ICGC.DOM.showControlForValue(s, "Yes", $tableSelectorFn(), false);
+                };
+            }, "taken");
 
-        var $collectionNumberSelectorFn = self.getCollectionNumberSelector;
-
-        ICGC.DOM.initAndChange($bloodSamplesTakenControlSelectorFn(), function(s) {
-            return function() {
-                ICGC.DOM.enableControlForValue(s, "No", $reasonNoSamplesTakenControlSelectorFn(), true);
-                ICGC.DOM.greyChildControlsWhenNotValue(s, "No", $reasonNoSamplesTakenDisplaySelectorFn());
-                // Try and remove any rows
-                ICGC.DOM.alterControlForValue(s, "No", function() {
-                    jQuery(".remove_button").each(function() {
-                        jQuery(this).click();
-                    });
-                }, function() {});
-                ICGC.DOM.showControlForValue(s, "Yes", $tableSelectorFn(), false);
-            };
-        }, "taken");
-
-        //Copy the occurence number into the page
-        $collectionNumberSelector = $collectionNumberSelectorFn();
-        //console.log("$collectionNumberSelectorFn.val: '"+$collectionNumberSelector.val()+"'");
-        //console.log("self.getOccurenceNumber(): '"+self.getOccurenceNumber()+"'");
-
-        if ($collectionNumberSelector.val() === '' || $collectionNumberSelector.val() === undefined || $collectionNumberSelector.val() === null) {
-            $collectionNumberSelector.val(self.getOccurenceNumber());
-            $collectionNumberSelector.change();
-        }
-
-        //Make the collectionNumberSelector read only.
-        $collectionNumberSelector.attr("disabled", "disabled");
-
-        // If not set, then set to yes.
-        // If there are any blood samples on the page then set the control to Yes
-        // (if it is not already Yes)
-        var $bloodSamplesTakenControlSelector = $bloodSamplesTakenControlSelectorFn();
-        if ($bloodSamplesTakenControlSelector.val() !== "No") {
-            $bloodSamplesTakenControlSelector.val("Yes");
-            $bloodSamplesTakenControlSelector.change();
-        }
-        if ($bloodSamplesTakenControlSelector.val() !== true && self.thereAreTissueSamplesWithIDs()) {
-            $bloodSamplesTakenControlSelector.val("Yes");
-            $bloodSamplesTakenControlSelector.change();
-            // Lock it.
-            $bloodSamplesTakenControlSelector.attr("disabled", "disabled");
-        };
-
-
-        //Look for change in collection number
-        ICGC.DOM.initAndChange($collectionNumberSelectorFn(), function(s) {
-            return function() {
-                self.updateAllFields();
-            };
-        }, "taken");
-
-        //Stage of collection determines which fields are made available
-        var $stageOfCollectionSelectorFn = function() { return jQuery("span[data-id=CollectionStage_2]").parent().parent().find("select"); };
-        var $cycleSelectorFn = function() { return jQuery("span[data-id=CollectionStageCycle_1]").parent().parent().find("input"); };
-        var $cycleSelectorTextFn = function() { return jQuery("span[data-id=CollectionStageCycle_1]").parent().parent(); };
-
-        ICGC.DOM.initAndChange($stageOfCollectionSelectorFn(), function(s) {
-            return function() {
-                var stagingArrayValues = ["NCC", "ACC", "NRC", "ARC"]; //Cycles
-                ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $cycleSelectorTextFn());
-                ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $cycleSelectorFn(), true);
-                ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $cycleSelectorFn(), false);
-            };
-        }, "cycle");
-
-        //Post Op time
-        var $CollectionStagePostOperationTimeSelectorFn = function() { return jQuery("span[data-id=CollectionStagePostOperationTime_1]").parent().parent().find("input"); };
-        var $CollectionStagePostOperationTimeSelectorTextFn = function() { return jQuery("span[data-id=CollectionStagePostOperationTime_1]").parent().parent(); };
-
-        var $CollectionStagePostOperationTimeUnitSelectorFn = function() { return jQuery("span[data-id=CollectionStagePostOperationTimeUnit_2]").parent().parent().find("select"); };
-        var $CollectionStagePostOperationTimeUnitSelectorTextFn = function() { return jQuery("span[data-id=CollectionStagePostOperationTimeUnit_2]").parent().parent(); };
-
-        ICGC.DOM.initAndChange($stageOfCollectionSelectorFn(), function(s) {
-            return function() {
-                var stagingArrayValues = ["POP"]; //Post-op
-                ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorTextFn());
-                ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorFn(), true);
-                ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeSelectorFn(), false);
-
-                ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorTextFn());
-                ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorFn(), true);
-                ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStagePostOperationTimeUnitSelectorFn(), false);
-
-            };
-        }, "postop");
-
-        //Other - CollectionStageOther_2
-        var $CollectionStageOtherSelectorFn = function() { return jQuery("span[data-id=CollectionStageOther_2]").parent().parent().find("input"); };
-        var $CollectionStageOtherSelectorTextFn = function() { return jQuery("span[data-id=CollectionStageOther_2]").parent().parent(); };
-
-        ICGC.DOM.initAndChange($stageOfCollectionSelectorFn(), function(s) {
-            return function() {
-                var stagingArrayValues = ["OTH"]; //Other
-                ICGC.DOM.greyChildControlsWhenNotValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorTextFn());
-                ICGC.DOM.enableControlForValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorFn(), true);
-                ICGC.DOM.showControlForValueArray(s, stagingArrayValues, $CollectionStageOtherSelectorFn(), false);
-            };
-        }, "other");
-
-        //Disable column 11g (Blood preparation method)
-        //self.hideBloodPreparationColumn();
+        ICGC.DOM.initAndChange($reasonNoSamplesTakenControlSelectorFn(),
+            function(s) {
+                return function() {
+                    ICGC.DOM.enableControlForValue(s, "Other (Specify)", $reasonNoSamplesTakenOtherControlSelectorFn(), true);
+                    ICGC.DOM.greyChildControlsWhenNotValue(s, "Other (Specify)", $reasonNoSamplesTakenOtherDisplaySelectorFn());
+                };
+            }, "reason");
 
         //Update all
         self.updateAllFields();
         self.handleAddButton();
-        self.handleAddTickBox();
-
-    };
-
-    self.handleAddTickBox = function() {
-
-        var collectionNumberSelector = self.getCollectionNumberSelector();
-
-        var discrepancyNoteSelector = collectionNumberSelector.parent().parent().find("img").parent();
-
-        var tickBox = jQuery("<input id='edit-occurence' type='checkbox' name='edit-occurence' value='edit-occurence'> Unlock field - only do this if you are sure you are adding a unique collection number<br>").insertAfter(discrepancyNoteSelector);
-
-        //var editOccurenceTickboxSelectorFn = function() { return jQuery("input[id='edit-occurence']"); };
-
-        tickBox.on("change", function(event) {
-
-            if (tickBox.is(":checked")) {
-                collectionNumberSelector.removeAttr("disabled");
-            } else {
-                collectionNumberSelector.attr("disabled", "disabled");
-            }
-        });
-    }
-
-    self.handleAddButton = function() {
-
-        //hide the original button and add a new button
-        var btn = self.getTableSelector().find("button:contains('Add')");
-        btn.hide();
-
-        var newBtn = jQuery("<button class='button_search'>Add</button>").insertAfter(btn);
-        newBtn.on("click", function(event) {
-            //add a new row
-            btn.trigger("click");
-            //var lastRow = self.table.find("tr:last").prev().prev();
-
-            self.configureUpdateFields();
-            self.updateAllFields();
-
-            event.preventDefault();
-            return false;
-        });
     };
 
     //Update all
@@ -735,9 +624,7 @@ ICGC.TC = function() {
 
 }();
 
-
+//This runs the code on the page
 jQuery(document).ready(function($) {
     ICGC.TC.setup();
 });
-
-//Is this the file...?
