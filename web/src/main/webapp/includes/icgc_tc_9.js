@@ -66,8 +66,8 @@ ICGC.DOM = function() {
     };
 
      /* Function which takes a set of items selected by jQuery and calls change on them.
-     * Usage example: 
-     *   ICGC.DOM.initAndChange(jQuery("#ET").parent().parent().find("select"), 
+     * Usage example:
+     *   ICGC.DOM.initAndChange(jQuery("#ET").parent().parent().find("select"),
      *   		function(s) {
      *				return function() {
      *          enableControlForValue(s, "yes", jQuery("#ETD").parent().parent().parent(), false);
@@ -205,7 +205,7 @@ ICGC.STUDYSUBJECT = function() {
 
 }();
 
-// Define TC sub-namesapce
+// Define TC sub-namespace
 ICGC.TC = function() {
 
     var self = {};
@@ -273,21 +273,15 @@ ICGC.TC = function() {
 	| `L`                | Lymph-node        |
 	| `M`                | Metastasis        |
 
-	- Tissue sample number is a descriminator which can be used to descriminate between multiple samples of the same type, (usually) taken on the same day.
+	- Tissue sample number is a discriminator which can be used to discriminate between multiple samples of the same type, (usually) taken on the same day.
 	*/
-    self.ComposeSampleName = function(studySubjectIdentifier, bloodPreparation, bloodSampleNumber, collectionNumber) {
+     self.ComposeSampleName = function(studySubjectIdentifier, tissueType, tissueSource, sourceNumber) {
         var shortenedName = ICGC.STUDYSUBJECT.ShortenStudySubject(studySubjectIdentifier);
-        if (shortenedName === "")
-            return "";
-        if (bloodPreparation === null || bloodPreparation === "")
-            return "";
-        if (collectionNumber === null || collectionNumber === "")
-            return "";
-
-        //Blood sample numbers can be empty in which case they are blank.
-        if (bloodSampleNumber === null) { bloodSampleNumber = "" }
-
-        return shortenedName + "/B/" + bloodPreparation + bloodSampleNumber + "/C" + collectionNumber;
+        if (shortenedName === "") return "";
+        if (tissueType === null || tissueType === "") return "";
+        if (tissueSource === null || tissueSource === "") return "";
+        if (sourceNumber === null || sourceNumber === "") return "";
+        return shortenedName + "/" + tissueType + "/" + tissueSource + sourceNumber;
     };
 
     self.getTableSelector = function() {
