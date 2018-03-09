@@ -353,21 +353,31 @@ ICGC.TC = function() {
         return $inputs;
     };
 
-    self.getBloodPreparationSelector = function(index) {
-        return self.getSelectSelector(pos_BP, index);
+    // Specific cell selectors
+
+    self.getTissueTypeSelector = function(index) {
+        return self.getSelectSelector(pos_TT, index);
     };
 
-    self.getBloodSampleNumberSelector = function(index) {
-        return self.getInputSelector(pos_BSN, index);
+    self.getTissueSourceSelector = function(index) {
+        return self.getSelectSelector(pos_TS, index);
     };
 
-    // These get the entire column
-    self.getBloodPreparationSelectors = function() {
-        return self.getSelectSelectors(pos_BP);
+    self.getTissueSourceNumberSelector = function(index) {
+        return self.getSelectSelector(pos_TSN, index);
     };
 
-    self.getBloodSampleNumberSelectors = function() {
-        return self.getInputSelectors(pos_BSN);
+    // Column selectors
+    self.getTissueTypeSelectors = function() {
+        return self.getSelectSelectors(pos_TT);
+    };
+
+    self.getTissueSourceSelectors = function() {
+        return self.getSelectSelectors(pos_TS);
+    };
+
+    self.getTissueSourceNumberSelectors = function() {
+        return self.getSelectSelectors(pos_TSN);
     };
 
     self.getSampleNameSelector = function(index) {
@@ -378,9 +388,11 @@ ICGC.TC = function() {
         return self.getInputSelectors(pos_SN);
     };
 
+    // Needed so we can sensibly increment the tissue source number
     self.countRows = function() {
         return self.getAllTableRowsSelector().get().length;
     };
+
 
     self.getRowsWhereTheSamplePreparationAppearsArray = function(samplePreperationToSelect) {
 
