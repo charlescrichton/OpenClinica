@@ -219,7 +219,9 @@ ICGC.TC = function() {
         return jQuery.trim(jQuery("#centralContainer > table > tbody > tr > td:eq(1) > h1 > span").text());
     };
 
-/* There are no collections numbers in the TC form 
+/*  There are no collections numbers in the TC form 
+--TODELETE--
+    
     self.getCollectionNumberSelector = function() {
         return jQuery("span[data-id=CollectionNumber_1]").parent().parent().find("input");
     };
@@ -238,7 +240,41 @@ ICGC.TC = function() {
         return jQuery('td.table_cell_noborder > b:contains("Occurrence Number:")').parent().next().text().trim();
 
     };
+--TODELETE--
 */
+
+	/* ### Tissue samples have the format:
+
+	OC/{***site code***}/{***study subject number***}/{**Tissue type**}/{***Tissue source***}{***Tissue source number***}
+
+	E.g. OC/XX/000/E/N1 
+
+	Regexp: `^OC/[A-Z]{2,}/[0-9]{3}/(E|S|L|R)/(N|B|T|G|L|M)[0-9]{1,}$`
+
+	- Site code is a two letter identifier.
+	- Study subject number id a 3 digit number
+	- Tissue types have the following meaning
+
+	| Tissue preparation  code | Meaning          |
+	| ------------------------ | ---------------- |
+	| `E`                      | Endoscopy Tissue |
+	| `S`                      | Surgical Tissue  |
+	| `L`                      | Laparoscopy      |
+	| `R`                      | EMR              |
+
+	- Tissue sources are one of the following
+
+	| Tissue source code | Meaning           |
+	| ------------------ | ----------------- |
+	| `N`                | Normal Oesophagus |
+	| `B`                | Barrett's         |
+	| `T`                | Tumour            |
+	| `G`                | Normal Gastric    |
+	| `L`                | Lymph-node        |
+	| `M`                | Metastasis        |
+
+	- Tissue sample number is a descriminator which can be used to descriminate between multiple samples of the same type, (usually) taken on the same day.
+	*/
     self.ComposeSampleName = function(studySubjectIdentifier, bloodPreparation, bloodSampleNumber, collectionNumber) {
         var shortenedName = ICGC.STUDYSUBJECT.ShortenStudySubject(studySubjectIdentifier);
         if (shortenedName === "")
