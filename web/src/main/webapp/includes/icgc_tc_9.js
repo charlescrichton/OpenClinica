@@ -385,22 +385,36 @@ ICGC.TC = function() {
 
     /* Find the rows where there are identical Tissue Type and Tissue Source
      */
-    self.getRowsWhereTheTissueTypeAppearsArray = function(sampleToSelect) {
+    self.getRowsWhereTheTissueTypeAppearsArray = function(tissueTypeToSelect, tissueSourceToSelect) {
 
-        //We specially return an empty array when there is no sample.
-        if (sampleToSelect === null || sampleToSelect === "") {
+        //We specially return an empty array when provided row information is not complete
+        if (tissueTypeToSelect === null 
+        	|| tissueTypeToSelect === "" 
+        	|| tissueSourceToSelect === null 
+        	|| tissueSourceToSelect==="") {
             return [];
         }
 
         var rows = [];
 
-
         var tissueTypeSelectors = self.getTissueTypeSelectors();
         var tissueSourceSelectors = self.getTissueSourceSelectors();
 
+        var ttarray = [];
         for (var i = 0; i < tissueTypeSelectors.length; i++) {
-            if (self.getTissueTypeSelector(i).val() === sampleToSelect &&
-                self.tissueSourceSelectors(i).val() === sampleToSelect
+        	ttarray = ttarray.concat(self.getTissueTypeSelector(i).val());
+        }
+
+         var tsarray = [];
+        for (var i = 0; i < tissueSourceSelectors.length; i++) {
+        	tsarray = tsarray.concat(self.getTissueSourceSelector(i).val());
+        }
+
+        for (var i = 0; i < tissueTypeSelectors.length; i++) {
+        	var tissueType = self.getTissueTypeSelector(i).val();
+        	var tissueSource = self.getTissueSourceSelector(i).val();
+            if (tissueType === tissueTypeToSelect &&
+                tissueSource === tissueSourceToSelect
             ) {
                 rows = rows.concat(i);
             }
@@ -419,6 +433,30 @@ ICGC.TC = function() {
 
         //Value for no position
         return -1;
+    }
+
+    self.bestNewValue = function(array, currentBest) {
+    	var foundCurrentBest = false;
+    	
+		//var sourceNumber = self.getTissueSourceNumberSelector(index).val();
+		var maxSourceNumber = 1;
+
+         for (var j = array.length - 1; j >= 0; j--) {
+        	var sourceNumber = self.getTissueSourceNumberSelector(array[j]).val();
+
+        	if (sourceNumber !== null && sourceNumber !== "") {
+				if (sourceNumber === ""+currentBest) {
+					foundCurrentBest = true;
+				}
+        		maxSourceNumber = Math.max(maxSourceNumber,sourceNumber);
+    		}
+        }
+
+        if (foundCurrentBest) {
+        	return maxSourceNumber + 1;
+        } else {
+        	return currentBest;
+        }
     }
 
     self.updateFields = function(index) {
@@ -441,25 +479,36 @@ ICGC.TC = function() {
         var sourceNumber = self.getTissueSourceNumberSelector(index).val();
         var oldSampleName = self.getSampleNameSelector(index).val();
 
-        if (allowSourceNumberUpdate) {
-            var rowsWhereTheTissueSampleAppearsArray = self.getRowsWhereTheTissueTypeAppearsArray(sourceNumber);
+        //If there is a tissuetype, a tissue source, but no tissue source number calculate one.
+        if (allowSourceNumberUpdate && 
+        	(tissueType.trim() !== "" 
+        	&& tissueSource.trim() !== "" 
+        	&& sourceNumber.trim() === "")) {
+            
+        	//Work out which rows have matching tissue type and tissue source
+            var rowsWhereTheTissueSampleAppearsArray 
+        		= self.getRowsWhereTheTissueTypeAppearsArray(tissueType,tissueSource);
 
-            //Calculate a source number if rowsWhereTheTissueSampleAppearsArray.length > 1
-            var calculatedTissueSampleSourceNumber = self.positionOfValueInArray(rowsWhereTheTissueSampleAppearsArray, index) + 1;
+            //Work out the ideal value
+            var calculatedTissueSampleSourceNumber 
+            	= self.positionOfValueInArray(rowsWhereTheTissueSampleAppearsArray, index) + 1;
 
-            //Don't display number where there is only one sample
-            //if (rowsWhereTheTissueSampleAppearsArray.length <= 1) {
-            //    calculatedTissueSampleSourceNumber = "";
-            //}
-
-            if (!sourceNumber) {
-                if (sourceNumber !== calculatedTissueSampleSourceNumber) {
-                    var tissueSourceNumberSelector = self.getTissueSourceNumberSelector(index);
-                    tissueSourceNumberSelector.val("" + calculatedTissueSampleSourceNumber);
-                    tissueSourceNumberSelector.change();
-                    sourceNumber = tissueSourceNumberSelector.val();
-                }
+            //Check that this number is not currently in use - if it is then pick a higher number
+            if (calculatedTissueSampleSourceNumber !== 0) {
+            	calculatedTissueSampleSourceNumber 
+            		= self.bestNewValue(
+            			rowsWhereTheTissueSampleAppearsArray, 
+            			calculatedTissueSampleSourceNumber);
+            } else {
+            	//We know there are no others - pick 1.
+            	calculatedTissueSampleSourceNumber = 1;
             }
+
+            //Push the value into the cell
+            var tissueSourceNumberSelector = self.getTissueSourceNumberSelector(index);
+            tissueSourceNumberSelector.val("" + calculatedTissueSampleSourceNumber);
+            tissueSourceNumberSelector.change();
+            sourceNumber = tissueSourceNumberSelector.val();
         }
 
         //Calculate new value
