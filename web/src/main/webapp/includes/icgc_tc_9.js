@@ -397,18 +397,9 @@ ICGC.TC = function() {
 
         var rows = [];
 
+        //Used to work out the number of rows - either of the following should return the same number.
         var tissueTypeSelectors = self.getTissueTypeSelectors();
-        var tissueSourceSelectors = self.getTissueSourceSelectors();
-
-        var ttarray = [];
-        for (var i = 0; i < tissueTypeSelectors.length; i++) {
-        	ttarray = ttarray.concat(self.getTissueTypeSelector(i).val());
-        }
-
-         var tsarray = [];
-        for (var i = 0; i < tissueSourceSelectors.length; i++) {
-        	tsarray = tsarray.concat(self.getTissueSourceSelector(i).val());
-        }
+        //var tissueSourceSelectors = self.getTissueSourceSelectors();
 
         for (var i = 0; i < tissueTypeSelectors.length; i++) {
         	var tissueType = self.getTissueTypeSelector(i).val();
